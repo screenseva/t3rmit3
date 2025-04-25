@@ -1,8 +1,8 @@
 // Terminal management and features
-const Terminal = window.Terminal;
-const FitAddon = window.FitAddon.FitAddon;
-const WebLinksAddon = window.WebLinksAddon.WebLinksAddon;
-const WebglAddon = window.WebglAddon.WebglAddon;
+import { Terminal } from '@xterm/xterm';
+import { FitAddon } from '@xterm/addon-fit';
+import { WebLinksAddon } from '@xterm/addon-web-links';
+import { WebglAddon } from '@xterm/addon-webgl';
 
 class TerminalManager {
     constructor() {

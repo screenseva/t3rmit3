@@ -1,27 +1,20 @@
 {
-  "name": "t3rmit3",
+  "name": "turmite",
   "version": "1.0.0",
-  "description": "A creative coding project implementing Turmites with an interactive web interface",
-  "main": "js/sketch.js",
+  "description": "An interactive cellular automaton simulation of Turmites (including Langton's Ant) built with JavaScript and p5.js.",
+  "main": "SimulationWorker.js",
   "scripts": {
-    "start": "python -m http.server 5500"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack"
   },
-  "keywords": [
-    "turmite",
-    "langton-ant",
-    "cellular-automaton",
-    "creative-coding",
-    "generative-art",
-    "turing-machine",
-    "cyberpunk"
-  ],
+  "keywords": [],
   "author": "",
-  "license": "MIT",
+  "license": "ISC",
+  "devDependencies": {
+    "webpack": "^5.91.0",
+    "webpack-cli": "^5.1.4"
+  },
   "dependencies": {
-    "pixi.js": "^7.3.2",
-    "xterm": "^5.3.0",
-    "xterm-addon-fit": "^0.8.0",
-    "xterm-addon-web-links": "^0.9.0",
-    "xterm-addon-webgl": "^0.16.0"
+    "ditherjs": "^1.1.0"
   }
 }

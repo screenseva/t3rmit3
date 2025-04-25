@@ -1,64 +1,110 @@
-# t3rmit3
+# Turmite Simulation
 
-A creative coding project that implements Turmites (Turing machine + termite) with an interactive web interface. Turmites are universal Turing machines that move on a 2D grid, creating fascinating patterns and behaviors.
+An interactive cellular automaton simulation of Turmites (including Langton's Ant) built with JavaScript and p5.js.
 
 ## Features
 
-- Multiple rule presets including Langton's Ant and custom variations
-- Image-based initialization with intelligent edge detection
-- Real-time visualization with chunked rendering for performance
-- Interactive controls for:
-  - Speed and step size
-  - Grid visualization
-  - Pattern selection
-  - Custom rule creation
-  - Canvas size adjustment
-  - Zoom and follow controls
-- Support for loading and manipulating images
-- Modern, dark-themed UI using Tweakpane
+- Multiple Turmite Rules:
+  - Langton's Ant (classic rule - turn right on white, left on black)
+  - Complex Pattern Generator
+  - Spiral Generator
+  - Random Walk
+  - Highway Builder
+  - ZigZag Pattern
+  - Art Drawer
 
-## Getting Started
+- Customizable Initial Patterns:
+  - Square Block
+  - Cross
+  - Circle
+  - Random
+  - Empty
 
-1. Clone the repository:
-```bash
-git clone https://github.com/yourusername/t3rmit3.git
-cd t3rmit3
+- Visualization Options:
+  - Adjustable cell size
+  - Grid lines toggle
+  - Direction indicators
+  - Customizable Turmite color
+  - Multiple tile states (Black, White, Gray, Dark Gray)
+
+- Controls:
+  - Adjustable simulation speed
+  - Start/Pause
+  - Reset
+  - Image export
+
+## Technical Implementation
+
+### State Representation
+
+Each cell in the simulation grid uses 8 bits to store its state:
+- Bits 7-6: Turmite presence (0xC0)
+- Bit 5: Reserved for speed
+- Bits 4-2: Direction (8 possible directions)
+- Bits 1-0: Tile state (4 possible states)
+
+### Direction System
+
+8-way directional movement:
+```
+0: Top-left     1: Top      2: Top-right
+7: Left         *: Center   3: Right
+6: Bottom-left  5: Bottom   4: Bottom-right
 ```
 
-2. Serve the project using a local web server. For example:
-```bash
-python -m http.server 5500
-```
+### Statistics Tracking
 
-3. Open your browser and navigate to `http://localhost:5500`
+The simulation tracks:
+- Total steps executed
+- Tiles visited/modified
+- Steps per second
+- Current grid size
 
-## Usage
+## Installation & Setup
 
-- **Rule Selection**: Choose from preset rules or create your own custom rules
-- **Image Loading**: Load any image to use as an initial state
-- **Controls**:
-  - Play/Pause: Start or stop the simulation
-  - Step: Advance one step at a time
-  - Speed: Adjust simulation speed
-  - Zoom: Control view magnification
-  - Follow: Keep the turmite centered
-  - Canvas Size: Adjust the drawing area
+### Method 1: Direct Download
+1. Download or clone this repository
+2. Open `turmite.html` in any modern web browser (Chrome, Firefox, Edge, etc.)
+3. No server or compilation required!
 
-## Technical Details
+### Method 2: Using a Local Server
+For more advanced development or to avoid potential CORS issues:
+1. Install a local web server like [Live Server for VS Code](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer) or use Python's built-in server:
+   ```bash
+   python -m http.server
+   ```
+2. Open `http://localhost:8000/turmite.html` (or whichever port your server uses)
 
-The project uses:
-- Vanilla JavaScript (ES6+)
-- PixiJS for efficient rendering
-- Tweakpane for the UI controls
-- HTML5 Canvas for image processing
+## Usage Guide
+
+1. **Getting Started:**
+   - Open `turmite.html` in your browser
+   - Select a rule from the dropdown menu
+   - Choose an initial pattern
+   - Click "Start" to begin the simulation
+
+2. **Controls:**
+   - Use the "Start/Pause" button to control simulation execution
+   - Adjust speed with the slider
+   - Change cell size to zoom in/out
+   - Toggle grid lines for better visibility
+   - Click "Export Image" to save the current state as PNG
+   - Use the color picker to customize the Turmite's appearance
+
+3. **Test Cases:**
+   For quick demonstrations of different configurations, open any file in the `visual_tests` directory.
+
+## Dependencies
+
+- [p5.js](https://p5js.org/) (1.7.0+) - Loaded via CDN, no installation required
+
+## Project Structure
+
+- `sketch.js` - Main simulation logic and visualization
+- `ui.js` - User interface logic
+- `turmite.html` - Main HTML interface
+- `visual_tests/` - Test cases for different configurations
 
 ## License
 
-MIT License - Feel free to use, modify, and distribute this code.
-
-## Acknowledgments
-
-Inspired by:
-- Langton's Ant
-- Turmites and other 2D Turing machines
-- Creative coding community
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
