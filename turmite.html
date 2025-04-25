@@ -4,32 +4,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Add Permissions-Policy headers -->
-    <meta http-equiv="Permissions-Policy" content="interest-cohort=(), browsing-topics=()">
-    <title>Turmite Simulation (PixiJS)</title>
+    <title>Turmite Simulation</title>
     <!-- Libraries -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/7.4.2/pixi.min.js"></script>
-    <!-- Font Awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <!-- Import map for ES modules -->
-    <script type="importmap">
-      {
-        "imports": {
-          "tweakpane": "https://cdn.jsdelivr.net/npm/tweakpane@4.0.5/dist/tweakpane.min.js"
-        }
-      }
-    </script>
-    <!-- Update CSS path to be relative to the root -->
     <link rel="stylesheet" href="/t3rmit3/css/style.css">
 </head>
 <body>
     <div id="app"></div>
-    <!-- Debug container -->
     <div id="debug" style="position: fixed; top: 10px; left: 10px; background: rgba(0,0,0,0.7); color: white; padding: 10px; z-index: 1000;"></div>
 
-    <!-- Load scripts in order with error handling -->
     <script>
-        // Debug function
+        // Basic debug function
         function debug(message) {
             console.log(message);
             const debugDiv = document.getElementById('debug');
@@ -37,13 +23,25 @@
                 debugDiv.innerHTML += message + '<br>';
             }
         }
+
+        // Test if scripts are loading
+        debug('Page loaded');
+        
+        // Test if PixiJS is loaded
+        if (window.PIXI) {
+            debug('PIXI loaded successfully');
+        } else {
+            debug('PIXI not loaded');
+        }
     </script>
 
+    <!-- Load scripts one by one -->
     <script type="module">
         try {
             debug('Loading constants.js...');
-            await import('./js/constants.js');
+            const constants = await import('./js/constants.js');
             debug('constants.js loaded');
+            window.PARAMS = constants.PARAMS;
         } catch (e) {
             debug('Error loading constants.js: ' + e.message);
         }
@@ -62,50 +60,16 @@
     <script type="module">
         try {
             debug('Loading renderer.js...');
-            await import('./js/renderer.js');
+            const renderer = await import('./js/renderer.js');
             debug('renderer.js loaded');
+            
+            // Initialize renderer if possible
+            if (renderer.initializeRenderer && window.PARAMS) {
+                const pixiApp = renderer.initializeRenderer(window.PARAMS);
+                debug('Renderer initialized');
+            }
         } catch (e) {
             debug('Error loading renderer.js: ' + e.message);
-        }
-    </script>
-
-    <script type="module">
-        try {
-            debug('Loading ui.js...');
-            await import('./js/ui.js');
-            debug('ui.js loaded');
-        } catch (e) {
-            debug('Error loading ui.js: ' + e.message);
-        }
-    </script>
-
-    <script type="module">
-        try {
-            debug('Loading palettes.js...');
-            await import('./js/palettes.js');
-            debug('palettes.js loaded');
-        } catch (e) {
-            debug('Error loading palettes.js: ' + e.message);
-        }
-    </script>
-
-    <script type="module">
-        try {
-            debug('Loading image_handler.js...');
-            await import('./js/image_handler.js');
-            debug('image_handler.js loaded');
-        } catch (e) {
-            debug('Error loading image_handler.js: ' + e.message);
-        }
-    </script>
-
-    <script type="module">
-        try {
-            debug('Loading sketch.js...');
-            await import('./js/sketch.js');
-            debug('sketch.js loaded');
-        } catch (e) {
-            debug('Error loading sketch.js: ' + e.message);
         }
     </script>
 </body>
