@@ -1,34 +1,122 @@
+<!-- turmite.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Test Page</title>
+    <title>Turmite Simulation</title>
+    <!-- Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/7.4.2/pixi.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 20px;
-            background-color: #f0f0f0;
+        #app {
+            border: 2px solid red;
+            background-color: #222222;
         }
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            background-color: white;
-            padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        #debug {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            background: rgba(0,0,0,0.7);
+            color: white;
+            padding: 10px;
+            z-index: 1000;
+            max-width: 300px;
+            max-height: 400px;
+            overflow: auto;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Test Page</h1>
-        <p>If you can see this, the deployment is working!</p>
-        <p>Current time: <span id="time"></span></p>
-    </div>
+    <div id="app"></div>
+    <div id="debug"></div>
+
     <script>
-        document.getElementById('time').textContent = new Date().toLocaleString();
+        // Basic debug function
+        function debug(message) {
+            console.log(message);
+            const debugDiv = document.getElementById('debug');
+            if (debugDiv) {
+                debugDiv.innerHTML += message + '<br>';
+            }
+        }
+
+        // Test if scripts are loading
+        debug('Page loaded');
+        
+        // Test if PixiJS is loaded
+        if (window.PIXI) {
+            debug('PIXI loaded successfully');
+        } else {
+            debug('PIXI not loaded');
+        }
+
+        // Add error handler
+        window.onerror = function(msg, url, line, col, error) {
+            debug('Error: ' + msg);
+            debug('URL: ' + url);
+            debug('Line: ' + line);
+            debug('Column: ' + col);
+            if (error && error.stack) {
+                debug('Stack: ' + error.stack);
+            }
+            return false;
+        };
+    </script>
+
+    <!-- Load scripts one by one -->
+    <script type="module">
+        try {
+            debug('Loading constants.js...');
+            const constants = await import('./js/constants.js');
+            debug('constants.js loaded');
+            window.PARAMS = constants.PARAMS;
+            debug('PARAMS initialized: ' + JSON.stringify(window.PARAMS));
+        } catch (e) {
+            debug('Error loading constants.js: ' + e.message);
+            debug('Stack trace: ' + e.stack);
+        }
+    </script>
+
+    <script type="module">
+        try {
+            debug('Loading simulation.js...');
+            await import('./js/simulation.js');
+            debug('simulation.js loaded');
+        } catch (e) {
+            debug('Error loading simulation.js: ' + e.message);
+            debug('Stack trace: ' + e.stack);
+        }
+    </script>
+
+    <script type="module">
+        try {
+            debug('Loading renderer.js...');
+            const renderer = await import('./js/renderer.js');
+            debug('renderer.js loaded');
+            
+            // Initialize renderer if possible
+            if (renderer.initializeRenderer && window.PARAMS) {
+                const pixiApp = renderer.initializeRenderer(window.PARAMS);
+                debug('Renderer initialized');
+                
+                // Add visual feedback
+                const appDiv = document.getElementById('app');
+                if (appDiv) {
+                    appDiv.style.width = window.PARAMS.canvasWidth + 'px';
+                    appDiv.style.height = window.PARAMS.canvasHeight + 'px';
+                    debug('Canvas size set to: ' + window.PARAMS.canvasWidth + 'x' + window.PARAMS.canvasHeight);
+                }
+            } else {
+                debug('Renderer not initialized - missing dependencies');
+                debug('renderer.initializeRenderer exists: ' + (renderer.initializeRenderer ? 'yes' : 'no'));
+                debug('window.PARAMS exists: ' + (window.PARAMS ? 'yes' : 'no'));
+            }
+        } catch (e) {
+            debug('Error loading renderer.js: ' + e.message);
+            debug('Stack trace: ' + e.stack);
+        }
     </script>
 </body>
-</html> 
+</html>
