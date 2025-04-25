@@ -40,37 +40,45 @@
     <script type="module">
         try {
             debug('Loading constants.js...');
-            const constants = await import('./js/constants.js');
+            const constants = await import('/t3rmit3/js/constants.js');
             debug('constants.js loaded');
             window.PARAMS = constants.PARAMS;
+            debug('PARAMS initialized: ' + JSON.stringify(window.PARAMS));
         } catch (e) {
             debug('Error loading constants.js: ' + e.message);
+            debug('Stack trace: ' + e.stack);
         }
     </script>
 
     <script type="module">
         try {
             debug('Loading simulation.js...');
-            await import('./js/simulation.js');
+            await import('/t3rmit3/js/simulation.js');
             debug('simulation.js loaded');
         } catch (e) {
             debug('Error loading simulation.js: ' + e.message);
+            debug('Stack trace: ' + e.stack);
         }
     </script>
 
     <script type="module">
         try {
             debug('Loading renderer.js...');
-            const renderer = await import('./js/renderer.js');
+            const renderer = await import('/t3rmit3/js/renderer.js');
             debug('renderer.js loaded');
             
             // Initialize renderer if possible
             if (renderer.initializeRenderer && window.PARAMS) {
                 const pixiApp = renderer.initializeRenderer(window.PARAMS);
                 debug('Renderer initialized');
+            } else {
+                debug('Renderer not initialized - missing dependencies');
+                debug('renderer.initializeRenderer exists: ' + (renderer.initializeRenderer ? 'yes' : 'no'));
+                debug('window.PARAMS exists: ' + (window.PARAMS ? 'yes' : 'no'));
             }
         } catch (e) {
             debug('Error loading renderer.js: ' + e.message);
+            debug('Stack trace: ' + e.stack);
         }
     </script>
 </body>
