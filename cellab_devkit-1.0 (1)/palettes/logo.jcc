@@ -1,0 +1,7 @@
+7   //  Logo palette
+
+state 0,4 black
+state 1,5 #00FF00
+state 2,6 blue
+state 3 red
+state 7,9 white

@@ -1,0 +1,5 @@
+7   //  Palette for Gasflow
+
+state 0 black       // Background
+state 1 #00FF00     // Gas particles
+state 4,5 yellow    // Walls (ignore overlay particles)

@@ -1,0 +1,7 @@
+7   //  Mite palette
+
+state 0-31 black
+state 32-63 rgb(0, 129, 64)
+state 64-95 rgb(0, 194, 0)
+state 96-127 #00FF00    // CSS "green" is #008000 !
+state 128-255 red

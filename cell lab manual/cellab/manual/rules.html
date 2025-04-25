@@ -1,0 +1,4860 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>The Sample Rules</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<meta name="description" content="Cellular Automata Laboratory" />
+<meta name="author" content="by Rudy Rucker and John Walker" />
+<link rel="stylesheet" href="../../documents/styles/standard_screen.css"
+    type="text/css" />
+<link rel="stylesheet" href="styles/cellab.css" type="text/css" />
+<style type="text/css">
+    blockquote.caption, blockquote.captionc {
+        margin-top: 0px;
+    }
+
+    blockquote.caption p {
+        margin-top: 0px;
+        text-align: justify;
+    }
+
+    blockquote.captionc p {
+        margin-top: 0px;
+        text-align: center;
+    }
+
+    p.bigpic {
+        margin-bottom: 0px;
+        text-align: center;
+    }
+</style>
+<script type="text/javascript" src="../../documents/scripts/externalLinks.js">
+</script>
+</head>
+
+<body class="standard" onload="externalLinks();">
+
+<table style="width: 100%;">
+<tr><td style="width: 15%; vertical-align: middle; text-align: left;">
+<a class="i" href="https://www.fourmilab.ch/cellab/"><img src="icons/caweb_icon.png" class="button"
+    width="82" height="74"
+    alt="Cellular Automata Laboratory" /></a>
+</td>
+<td class="c">
+<h1>Cellular Automata Laboratory</h1>
+</td>
+<td style="width: 15%; vertical-align: middle; text-align: right;">
+<a class="i" href="https://www.fourmilab.ch/"><img src="../../images/logo/swlogo.png" class="b0"
+    width="82" height="74"
+    alt="Fourmilab home" /></a>
+</td>
+</tr>
+</table>
+
+<hr />
+
+<h1 id="i3-CA-rules">The Sample Rules</h1>
+
+<p>
+A collection of sample rules is provided with
+<cite>CelLab</cite>.  These are the rules which are displayed by
+the WebCA demo.  Each of these rules is available as a
+<em>rule</em><span class="tt">.jc</span> file.  For each rule
+there is also a <em>rule</em><span class="tt">.js</span> file
+giving the JavaScript source code for the rule program which can
+be loaded into the Rule Program box to run the rule.  For almost
+every rule, we also provide Java source code which can be
+compiled and run to create the <span class="tt">.jc</span> file
+for the rule.
+</p>
+
+<p>
+Many of our rules are copies or variations of rules to be found
+in the 1987 book, <cite>Cellular Automata Machines</cite>, by
+Tommaso Toffoli and Norman Margolus. For each of our rules, the
+table below gives the most closely related rules from
+<a href="refs.html#Margolus_Toffoli87">[Margolus&amp;Toffoli87]</a>,
+with page number.  Where our rule is identical to the one from
+Margolus &amp; Toffoli, we put an equals sign.
+</p>
+
+<table class="ctr">
+    <tr>
+        <th class="bot">Rule Name</th>
+        <th class="bot">Same?</th>
+        <th class="bot">Margolus &amp; Toffoli<br />
+                        Related Rules</th>
+        <th class="bot">Page</th>
+    </tr>
+    <tr>
+        <td><a href="rules.html#Aurora">Aurora</a></td>
+        <td class="c">&nbsp;</td>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+    </tr>
+    <tr>
+        <td><a href="rules.html#Axons">Axons</a></td>
+        <td class="c">&nbsp;</td>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+    </tr>
+    <tr>
+        <td><a href="rules.html#Balloons">Balloons</a></td>
+        <td class="c">&nbsp;</td>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+    </tr>
+    <tr>
+        <td><a href="rules.html#Banks">Banks</a></td>
+        <td class="c">=</td>
+        <td>Banks</td>
+        <td>42</td>
+    </tr>
+    <tr>
+        <td><a href="rules.html#Bbm">Bbm</a></td>
+        <td class="c">=</td>
+        <td>BBM</td>
+        <td>214</td>
+    </tr>
+    <tr>
+        <td><a href="rules.html#Bob">Bob</a></td>
+        <td class="c">&nbsp;</td>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+    </tr>
+    <tr>
+        <td><a href="rules.html#Bootperc">Bootperc</a></td>
+        <td class="c">&nbsp;</td>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+    </tr>
+    <tr>
+        <td><a href="rules.html#Border">Border</a></td>
+        <td class="c"> =</td>
+        <td class="c"> Border/Hollow</td>
+        <td class="c"> 113</td>
+    </tr>
+    <tr>
+        <td><a href="rules.html#BraiLife">BraiLife</a></td>
+        <td class="c">&nbsp;</td>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+    </tr>
+    <tr>
+        <td><a href="rules.html#Brain">Brain</a></td>
+        <td class="c"> =</td>
+        <td class="c"> Brian's Brain</td>
+        <td class="c"> 47</td>
+    </tr>
+    <tr>
+        <td><a href="rules.html#Byl">Byl and ChouReg</a></td>
+        <td class="c">&nbsp;</td>
+        <td class="c">&nbsp;</td>
+        <td class="c">&nbsp;</td>
+    </tr>
+    <tr>
+        <td><a href="rules.html#Critters">Critters</a></td>
+        <td class="c">=</td>
+        <td class="c">Critters</td>
+        <td class="c">132</td>
+    </tr>
+    <tr>
+        <td><a href="rules.html#Dendrite">Dendrite, DenTim</a></td>
+        <td class="c">&nbsp;</td>
+        <td class="c"> &nbsp;Na&iuml;ve-Diffusion, Dendrite&nbsp;</td>
+        <td class="c"> 84, 168</td>
+    </tr>
+    <tr>
+        <td><a href="rules.html#Earthgas">Earthgas</a></td>
+        <td class="c">&nbsp;</td>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+    </tr>
+    <tr>
+        <td><a href="rules.html#EcoLiBra">EcoLiBra</a></td>
+        <td class="c">&nbsp;</td>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+    </tr>
+    <tr>
+        <td><a href="rules.html#Endworld">Endworld</a></td>
+        <td class="c">=</td>
+        <td>EOW</td>
+        <td>219</td>
+    </tr>
+    <tr>
+        <td><a href="rules.html#Evoloops">Evoloops, EvoloopsAB</a></td>
+        <td class="c">&nbsp;</td>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+    </tr>
+    <tr>
+        <td><a href="rules.html#Faders">Faders</a></td>
+        <td class="c">&nbsp;</td>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+    </tr>
+    <tr>
+        <td><a href="rules.html#Flick">Flick</a></td>
+        <td class="c">&nbsp;</td>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+    </tr>
+    <tr>
+        <td><a href="rules.html#Forest">Forest</a></td>
+        <td class="c">&nbsp;</td>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+    </tr>
+    <tr>
+        <td><a href="rules.html#Fractal">Fractal</a></td>
+        <td class="c"> =</td>
+        <td class="c"> Me-Neither</td>
+        <td class="c"> 132</td>
+    </tr>
+    <tr>
+        <td><a href="rules.html#FredMem">FredMem</a></td>
+        <td>&nbsp;</td>
+        <td class="c"> Parity (w/7 bit Echo)</td>
+        <td class="c"> 31</td>
+    </tr>
+    <tr>
+        <td><a href="rules.html#Gasflow">Gasflow</a></td>
+        <td class="c">&nbsp;</td>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+    </tr>
+    <tr>
+        <td><a href="rules.html#Glooper">Glooper</a></td>
+        <td class="c">&nbsp;</td>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+    </tr>
+    <tr>
+        <td><a href="rules.html#Griff">Griff</a></td>
+        <td class="c">&nbsp;</td>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+    </tr>
+    <tr>
+        <td><a href="rules.html#Gyre">Gyre</a></td>
+        <td class="c">&nbsp;</td>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+    </tr>
+    <tr>
+        <td><a href="rules.html#Heat">Heat, HeatWave</a></td>
+        <td class="c">&nbsp;</td>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+    </tr>
+    <tr>
+        <td><a href="rules.html#HGlass">HGlass</a></td>
+        <td class="c"> =</td>
+        <td class="c"> Hglass</td>
+        <td> 29</td>
+    </tr>
+    <tr>
+        <td><a href="rules.html#Hodge">Hodge</a></td>
+        <td class="c">&nbsp;</td>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+    </tr>
+    <tr>
+        <td><a href="rules.html#Langton">Langton</a></td>
+        <td class="c">&nbsp;</td>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+    </tr>
+    <tr>
+        <td><a href="rules.html#Lant">Lant</a></td>
+        <td class="c">&nbsp;</td>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+    </tr>
+    <tr>
+        <td><a href="rules.html#Life">Life</a></td>
+        <td class="c"> =</td>
+        <td class="c"> Life with Echo</td>
+        <td class="c"> 23</td>
+    </tr>
+    <tr>
+        <td><a href="rules.html#Logic">Logic</a></td>
+        <td class="c">=</td>
+        <td class="c">Logic</td>
+        <td class="c">136</td>
+    </tr>
+    <tr>
+        <td><a href="rules.html#Meltdown">Meltdown</a></td>
+        <td class="c">&nbsp;</td>
+        <td class="c"> Safe-Pass</td>
+        <td class="c"> 78</td>
+    </tr>
+    <tr>
+        <td><a href="rules.html#Mite">Mite</a></td>
+        <td class="c">&nbsp;</td>
+        <td class="c">&nbsp;</td>
+        <td class="c">&nbsp;</td>
+    </tr>
+    <tr>
+        <td><a href="rules.html#Parks">Parks</a></td>
+        <td class="c">&nbsp;</td>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+    </tr>
+    <tr>
+        <td><a href="rules.html#PerfumeT">PerfumeT</a></td>
+        <td class="c"> =</td>
+        <td class="c"> TM-Gas/Walls</td>
+        <td class="c"> 160</td>
+    </tr>
+    <tr>
+        <td><a href="rules.html#PerfumeT">PerfumeX</a></td>
+        <td class="c">&nbsp;</td>
+        <td class="c"> HPP-Gas (w/Wall)</td>
+        <td class="c"> 123</td>
+    </tr>
+    <tr>
+        <td><a href="rules.html#Pond">Pond</a></td>
+        <td class="c">&nbsp;</td>
+        <td class="c"> TM Gas, Circular wave</td>
+        <td class="c"> 131, 172</td>
+    </tr>
+    <tr>
+        <td><a href="rules.html#RainZha">RainZha</a></td>
+        <td class="c">&nbsp;</td>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+    </tr>
+    <tr>
+        <td><a href="rules.html#Ranch">Ranch</a></td>
+        <td class="c">&nbsp;</td>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+    </tr>
+    <tr>
+        <td><a href="rules.html#RevEcoli">RevEcoli</a></td>
+        <td class="c">&nbsp;</td>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+    </tr>
+    <tr>
+        <td><a href="rules.html#Rug">Rug, RugF, RugLap</a></td>
+        <td class="c">&nbsp;</td>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+    </tr>
+    <tr>
+        <td><a href="rules.html#Runny">Runny</a></td>
+        <td class="c">&nbsp;</td>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+    </tr>
+    <tr>
+        <td><a href="rules.html#Sand">Sand</a></td>
+        <td class="c">&nbsp;</td>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+    </tr>
+    <tr>
+        <td><a href="rules.html#Sexyloop">Sexyloop</a></td>
+        <td class="c">&nbsp;</td>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+    </tr>
+    <tr>
+        <td><a href="rules.html#ShortPi">ShortPi</a></td>
+        <td class="c">&nbsp;</td>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+    </tr>
+    <tr>
+        <td><a href="rules.html#Soot">Soot</a></td>
+        <td class="c">&nbsp;</td>
+        <td class="c"> TM-Gas, Dendrite</td>
+        <td class="c"> 131, 168</td>
+    </tr>
+    <tr>
+        <td><a href="rules.html#Spins">Spins</a></td>
+        <td class="c"> =</td>
+        <td class="c"> Spins-Only</td>
+        <td class="c"> 190</td>
+    </tr>
+    <tr>
+        <td><a href="rules.html#SoundCa">SoundCa</a></td>
+        <td class="c">&nbsp;</td>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+    </tr>
+    <tr>
+        <td><a href="rules.html#Sublime">Sublime</a></td>
+        <td class="c"> =</td>
+        <td class="c"> 2D-Brownian</td>
+        <td class="c"> 156</td>
+    </tr>
+    <tr>
+        <td><a href="rules.html#TimeTun">TimeTun</a></td>
+        <td class="c"> =</td>
+        <td class="c"> Time-Tunnel</td>
+        <td class="c"> 52</td>
+    </tr>
+    <tr>
+        <td><a href="rules.html#Turmite">Turmite</a></td>
+        <td class="c">&nbsp;</td>
+        <td class="c">&nbsp;</td>
+        <td class="c">&nbsp;</td>
+    </tr>
+    <tr>
+        <td><a href="rules.html#Venus">Venus</a></td>
+        <td class="c">&nbsp;</td>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+    </tr>
+    <tr>
+        <td><a href="rules.html#Vote">Vote</a></td>
+        <td class="c">&nbsp;</td>
+        <td class="c"> Anneal (w/1 bit Echo)</td>
+        <td class="c"> 41</td>
+    </tr>
+    <tr>
+        <td><a href="rules.html#i3-CA-votedna">VoteDNA</a></td>
+        <td class="c">&nbsp;</td>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+    </tr>
+    <tr>
+        <td><a href="rules.html#Wator">Wator</a></td>
+        <td class="c">&nbsp;</td>
+        <td class="c">&nbsp;</td>
+        <td class="c">&nbsp;</td>
+    </tr>
+    <tr>
+        <td><a href="rules.html#Wind">Wind</a></td>
+        <td class="c">&nbsp;</td>
+        <td class="c">&nbsp;</td>
+        <td class="c">&nbsp;</td>
+    </tr>
+    <tr>
+        <td><a href="rules.html#XTC">XTC</a></td>
+        <td class="c">&nbsp;</td>
+        <td class="c"> HPP-Gas &amp; TM-Gas</td>
+        <td class="c"> 123, 131</td>
+    </tr>
+    <tr>
+        <td><a href="rules.html#Zhabo">Zhabo, Zhabof,<br />
+                             Zhaboff</a></td>
+        <td class="c"> =</td>
+        <td class="c"> Tube-Worms</td>
+        <td class="c"> 83</td>
+    </tr>
+</table>
+
+<p>
+Now I'm going to say a little about each of these rules, taking them
+in alphabetical order.  For each rule, you can press the Play
+button at the right to load the rule into WebCA, ready to run
+by pressing its &ldquo;Start&rdquo; button.
+</p>
+
+<p>
+We also include JavaScript (but not Java) definitions for the
+following &ldquo;minor rules&rdquo; from
+<a href="refs.html#Margolus_Toffoli87">[Margolus&amp;Toffoli87]</a>.
+These rules are presented to illustrate facets of cellular
+automata rule development, but do not exhibit as interesting
+behavior as those described in detail below.  Click on the name
+of the rule to run it in WebCA, where you can examine its
+definition in the Rule program box.
+</p>
+
+<table class="ctr">
+    <tr>
+        <th class="bot">Rule Name</th>
+        <th class="bot">Same?</th>
+        <th class="bot">Margolus &amp; Toffoli<br />
+                        Related Rules</th>
+        <th class="bot">Page</th>
+    </tr>
+    <tr>
+        <th colspan="4" class="l">Unconstrained Growth:</th>
+    </tr>
+    <tr>
+        <td><a href="https://www.fourmilab.ch/cellab/webca/?ruleprog=diamonds"
+            rel="Target:CelLabRunRule">Diamonds</a></td>
+        <td class="c">=</td>
+        <td>Diamonds</td>
+        <td>38</td>
+    </tr>
+    <tr>
+        <td><a href="https://www.fourmilab.ch/cellab/webca/?ruleprog=squares"
+            rel="Target:CelLabRunRule">Squares</a></td>
+        <td class="c">=</td>
+        <td>Squares</td>
+        <td>37</td>
+    </tr>
+    <tr>
+        <td><a href="https://www.fourmilab.ch/cellab/webca/?ruleprog=triangs"
+            rel="Target:CelLabRunRule">Triangs</a></td>
+        <td class="c">=</td>
+        <td>Triangles</td>
+        <td>38</td>
+    </tr>
+    <tr>
+        <th colspan="4" class="l">Constrained Growth:</th>
+    </tr>
+    <tr>
+        <td><a href="https://www.fourmilab.ch/cellab/webca/?ruleprog=lichens"
+            rel="Target:CelLabRunRule">Lichens</a></td>
+        <td class="c">=</td>
+        <td>Lichens</td>
+        <td>40</td>
+    </tr>
+    <tr>
+        <td><a href="https://www.fourmilab.ch/cellab/webca/?ruleprog=lwdeath"
+            rel="Target:CelLabRunRule">Lwdeath</a></td>
+        <td class="c">=</td>
+        <td>&nbsp;Lichens-with-Death&nbsp;</td>
+        <td>40</td>
+    </tr>
+    <tr>
+        <td><a href="https://www.fourmilab.ch/cellab/webca/?ruleprog=oneof8"
+            rel="Target:CelLabRunRule">OneOf8</a></td>
+        <td class="c">=</td>
+        <td>1-Out-of-8</td>
+        <td>39</td>
+    </tr>
+    <tr>
+        <th colspan="4" class="l">Voting:</th>
+    </tr>
+    <tr>
+        <td><a href="https://www.fourmilab.ch/cellab/webca/?ruleprog=majority"
+            rel="Target:CelLabRunRule">Majority</a></td>
+        <td class="c">=</td>
+        <td>Majority</td>
+        <td>41</td>
+    </tr>
+    <tr>
+        <th colspan="4" class="l">Margolus Neighborhood:</th>
+    </tr>
+    <tr>
+        <td><a href="https://www.fourmilab.ch/cellab/webca/?ruleprog=hppgas"
+            rel="Target:CelLabRunRule">Hppgas</a>
+            and
+            <a href="https://www.fourmilab.ch/cellab/webca/?ruleprog=hppgasm"
+            rel="Target:CelLabRunRule">HppgasM</a></td>
+        <td class="c">=</td>
+        <td>HPP-Gas</td>
+        <td>125</td>
+    </tr>
+    <tr>
+        <td>&nbsp;<a href="https://www.fourmilab.ch/cellab/webca/?ruleprog=swapdiag"
+            rel="Target:CelLabRunRule">Swapdiag</a>
+            and
+            <a href="https://www.fourmilab.ch/cellab/webca/?ruleprog=swapdiagm"
+            rel="Target:CelLabRunRule">SwapDiagM</a>&nbsp;</td>
+        <td class="c">=</td>
+        <td>Swap-on-Diag</td>
+        <td>125</td>
+    </tr>
+    <tr>
+        <td><a href="https://www.fourmilab.ch/cellab/webca/?ruleprog=tmgasm"
+            rel="Target:CelLabRunRule">TMgasM</a></td>
+        <td class="c">=</td>
+        <td>TM-Gas</td>
+        <td>131</td>
+    </tr>
+    <tr>
+        <td><a href="https://www.fourmilab.ch/cellab/webca/?ruleprog=tmgas_wallsm"
+            rel="Target:CelLabRunRule">TMgas_WallsM</a></td>
+        <td class="c">=</td>
+        <td>TM-Gas/Walls</td>
+        <td>160</td>
+    </tr>
+    <tr>
+        <td><a href="https://www.fourmilab.ch/cellab/webca/?ruleprog=tron"
+            rel="Target:CelLabRunRule">Tron</a></td>
+        <td class="c">=</td>
+        <td>Tron</td>
+        <td>134</td>
+    </tr>
+</table>
+
+<h3 id="Aurora">
+<a href="https://www.fourmilab.ch/cellab/webca/?ruleprog=aurora"
+    class="i" rel="Target:CelLabRunRule"><img src="icons/play.png"
+    width="32" height="32" class="playbutton"
+    alt="Play" title="Run this rule in WebCA" /></a>
+AURORA
+</h3>
+
+<p>
+<img src="figures/aurora.png" alt="" class="left" width="320" height="200" />
+The worldtype used here is that of a 1D two-neighbor ring. That
+means that EveryCell can see the low four bits of its left
+(west) neighbor and the low four bits of its right (east)
+neighbor. We call these two four bit quantities <em>L</em> and
+<em>R</em> respectively, and call the low four bits of EveryCell's
+own state <em>C</em>. Thus we are looking at a rule where cells
+effectively have sixteen states: binary
+<span class="ttb">0000</span> through binary
+<span class="ttb">1111</span> or decimal 0 through decimal 15.
+</p>
+
+<p>
+The rule for Aurora is a one-dimensional version of the
+<a href="rules.html#Rug">Rug</a> rule:
+EveryCell's new state is taken to be one greater than the neighborhood
+average of <em>L</em>, <em>C</em>, and <em>R</em>. That is, we have
+</p>
+
+<p class="c">
+newstate = ((<em>L</em> + <em>C</em> + <em>R</em>) / 3) + 1
+</p>
+
+<p>
+When a color value reaches 16, it is rounded back down to 0.
+The effect produced is like globby paint running down the
+screen, though really you are seeing &ldquo;one-dimensional
+gliders&rdquo; moving back and forth and interacting.  Programs
+defining the Aurora rule are available in the
+<a href="ruledef-js.html#Aurora-js">JavaScript</a> and
+<a href="ruledef-java.html#Aurora-java">Java</a> languages.
+</p>
+
+<p>
+I called the rule Aurora because when I visited Norman Packard's
+office at the Institute for Advanced Study in 1985, he showed me a
+smoother (eight visible neighbor bits and 255 colors) version of this
+rule and remarked that it looked like the northern lights.
+<br class="cb" />
+</p>
+
+<p>
+Aurora is one of five predefined 1D rules we include as samples, the
+other being <a href="rules.html#Axons">Axons</a>, <a href="rules.html#Parks">Parks</a>,
+<a href="rules.html#ShortPi">ShortPi</a>, and
+<a href="rules.html#SoundCa">SoundCa</a>.<a href="footnote.html#F3_6"><img
+    class="foot" src="icons/footnote.png"
+    height="16" width="16" alt="[Footnote]" /></a>
+</p>
+
+<h3 id="Axons">
+<a href="https://www.fourmilab.ch/cellab/webca/?ruleprog=axons"
+    class="i" rel="Target:CelLabRunRule"><img src="icons/play.png"
+    width="32" height="32" class="playbutton"
+    alt="Play" title="Run this rule in WebCA" /></a>
+AXONS
+</h3>
+
+<p>
+<img src="figures/axons.png" alt="" class="left" width="320" height="200" />
+The very simplest cellular automaton rules are one-dimensional
+rules which have only two states, and where a cell's new state
+is determined wholly by the <i>L</i>+<i>C</i>+<i>R</i> sum of
+the cell and its two nearest neighbors. There are only 16
+distinct rules of this type. The sixteen rules are obtained by the
+sixteen different ways of filling four zeroes and ones into the
+four spaces in the second line of a teensy lookup table:
+</p>
+
+<table class="ctr">
+    <tr>
+        <td class="cp2"><i>L</i>+<i>C</i>+<i>R</i></td>
+        <td class="cp2">  3</td>
+        <td class="cp2">  2</td>
+        <td class="cp2">  1</td>
+        <td class="cp2">  0</td>
+    </tr>
+    <tr>
+        <th>NewState</th>
+        <td class="cp2">  0</td>
+        <td class="cp2">  0</td>
+        <td class="cp2">  1</td>
+        <td class="cp2">  0</td>
+    </tr>
+</table>
+
+<p>
+These rules are spoken of as having a &ldquo;totalistic Wolfram
+Code&rdquo; which is the integer gotten by regarding the four
+bits put into the table as the four bits of a binary integer.
+The table as illustrated holds the bits <b>0010</b>, which is of
+course binary for the number 2. So the illustrated rule has
+totalistic Wolfram code number 2. (See
+<a href="refs.html#Wolfram86">[Wolfram86]</a> for details.)
+<br class="cb" />
+</p>
+
+<p>
+The next level of generality is to look at one-dimensional CA rules of
+only two states whose new state is determined by the LCR contents of
+the cell and its two neighbors. At this next level of generality, we
+pay attention to the positions of the bits. There are 256 distinct
+rules of this type.  The 256 rules are gotten by the 256 different
+ways of filling eight bits into the eight spaces in the second line of
+a tiny lookup table:
+</p>
+
+<table class="ctr">
+    <tr>
+        <td class="cp2t"> LCR</td>
+        <td class="cp2t"> 111</td>
+        <td class="cp2t"> 110</td>
+        <td class="cp2t"> 101</td>
+        <td class="cp2t"> 100</td>
+        <td class="cp2t"> 011</td>
+        <td class="cp2t"> 010</td>
+        <td class="cp2t"> 001</td>
+        <td class="cp2t"> 000</td>
+    </tr>
+    <tr>
+        <th>NewState</th>
+        <td class="cp2">  0</td>
+        <td class="cp2">  0</td>
+        <td class="cp2">  0</td>
+        <td class="cp2">  1</td>
+        <td class="cp2">  0</td>
+        <td class="cp2">  1</td>
+        <td class="cp2">  1</td>
+        <td class="cp2">  0</td>
+    </tr>
+</table>
+
+<p>
+These rules have a &ldquo;Wolfram Code&rdquo; which is the
+integer gotten by regarding the eight bits put into the table as
+an eight bit binary integer.  The table illustrated holds the
+bits <span class="ttb">00010110</span> which is binary for 22.
+So the rule has Wolfram code number 22.
+</p>
+
+<p>
+As it turns out, rule 22 is the same as totalistic rule 2: in each
+case a cell's new state is 1 if and only if there is exactly one
+firing bit among <span class="tt">L</span>, <span class="tt">C</span>,
+and <span class="tt">R</span>.  But of course many
+rules are not equivalent to totalistic rules.
+</p>
+
+<p>
+The rule Axons which we show is this same rule #22 (or totalistic
+rule #2)&hellip;with one extra feature.  Axons is the <em>reversible</em>
+version of rule 22.
+</p>
+
+<p>
+The trick for making Axons &ldquo;reversible&rdquo; is given in
+detail in my discussion of the
+<a href="rules.html#Fractal">Fractal</a> rule below.  For now,
+suffice it to note that, once Axons is running, you can press
+the &ldquo;Swap&rdquo; button in the Map section of the WebCA
+control panel to see the rule start running
+&ldquo;backwards.&rdquo;
+</p>
+
+<p>
+I named this rule Axons after the long nerve fibers known as axons.
+These are up to several feet long, and are coated in a fatty sheath
+that pinches in every now and then. The Axons rule grows long fibers
+that are swathed in pinchy sausage casing, just like the cells. The
+fibers are continuous precisely because this rule is reversible. The
+existence of a firing cell, or of a hole in the cells, can't be
+forgotten (unless you bump into a mask cell). So the fibers bounce and
+tangle, but they never just stop.
+</p>
+
+<p>
+In order that some complexity accumulates, a reversible rule needs
+some input, so I provide for mask cells which periodically pulse cells
+on. The existence of these periodic masks can of course interfere with
+perfect reversibility. In the case of Axons, the mask cells get
+covered over rather soon.
+</p>
+
+<p>
+For the sake of elegance, I could have written Axons as a
+totalistic rule with code 2.  &ldquo;Wow, that's pretty!  What's
+the program?&rdquo; &ldquo;Binary <span class="tt">10</span>.
+The number two.  I wonder if I can patent it.&rdquo; Actually I
+wrote Axons as a general <span class="tt">LCR</span> Wolfram
+rule so that you can try putting different
+<span class="tt">WolfCode</span>s in, recompiling the rule, and
+running the variants.
+</p>
+
+<p>
+If you use <span class="tt">WolfCode</span> 178 you get a really
+neat rule which I call Bamboo.
+</p>
+
+<p>
+Here is the JavaScript rule definition of Bamboo.
+</p>
+
+<pre>
+/*
+
+    A one dimensional rule that only looks at one bit of two
+    neighbors.  We run it as world type 3, which gets one bit from
+    each of 8 neighbors.  The rule is totalistic, meaning that it
+    only looks at the SUM of its neighborhood.  The rule is also
+    reversible, meaning that it saves its past state and XORs its
+    calculated new state with the past state.  A final fillip to
+    make this rule look good is that I use my extra six bits of
+    state as a five bit clock and as a mask indicator.  Whenever
+    the clock counts up to 31, I turn on the bits where mask is
+    on.  The start pattern for this consists of two dots with bit
+    #0 turned on, all the times set to 0, and a pair of dots with
+    mask set to 1.  You can vary the constant WolfCode to get
+    other pictures.
+
+*/
+
+rule.worldtype = 3;         // 1D ring world, 8 neighbors
+rule.patreq = "axons";
+rule.palreq = "mask3";      // Only show low two bits
+
+function axons(oldstate,     l4, l3, l2, l1,
+                                  self,
+                             r1, r2, r3, r4) {
+    var WolfCode = 178;
+
+    var sum, pastSelf, newSelf, newState, time, mask;
+
+    sum = l1 + self + r1;
+    pastSelf = (oldstate &gt;&gt; 1) &amp; 1;
+    newSelf = (WolfCode &gt;&gt; sum) &amp; 1;
+    newState = (self &lt;&lt; 1) | (newSelf ^ pastSelf);
+    time = (oldstate &gt;&gt; 2) &amp; 31;
+    mask = (oldstate &gt;&gt; 7) &amp; 1;
+
+    return (time == 31) ? ((mask &lt;&lt; 7) | newState | mask) :
+                          ((mask &lt;&lt; 7) | ((time + 1) &lt;&lt; 2) | newState);
+}
+</pre>
+
+<h3 id="Balloons">
+<a href="https://www.fourmilab.ch/cellab/webca/?ruleprog=balloons"
+    class="i" rel="Target:CelLabRunRule"><img src="icons/play.png"
+    width="32" height="32" class="playbutton"
+    alt="Play" title="Run this rule in WebCA" /></a>
+BALLOONS
+</h3>
+
+<p>
+<img src="figures/balloons.png" alt="" class="left" width="320" height="200" />
+Balloons was discovered by Brian Silverman using his &ldquo;Phantom
+Fishtank&rdquo; program
+(<a href="refs.html#Silverman87">[Silverman87]</a>).
+Balloons is written so it can be used as a template for making a
+high-resolution version of any interesting rule table you might
+want to try.
+</p>
+
+<p>
+Balloons is driven by Silverman's Brain rule.  If enough firing
+Brain cells are together, they turn on a permanent firing cell.
+These permanent firing cells serve as seeds around which more
+turned-on cells agglutinate.  If a turned on cell is entirely
+surrounded, it changes state, so that one soon gets the effect
+of cells with membranes.  As a final fillip, if there is too
+much excitement at a cell's membrane, the membrane bursts and
+the cell goes over to a &ldquo;dead&rdquo; state which can
+slowly be nibbled away by the ever active Brain rule.
+<br class="cb" />
+</p>
+
+<pre>
+/*
+
+    This realizes one of the RC ruletables.  Any other RC
+    ruletable can be specified in the table below.  The Balloons
+    rule was invented by Brian Silverman.
+
+*/
+
+rule.worldtype = 1;
+rule.ruleName = "balloons";
+rule.palreq = "rc";
+
+function balloons(oldstate,     nw, n  , ne,
+                                w, self, e,
+                                sw, s  , se) {
+    var ruleTable = [
+       /*                      EightSum
+                    0   1   2   3   4   5   6   7   8 */
+    /* State */
+     /* 0 */        0,  0, 15,  0,  0,  0,  5,  0,  0,
+     /* 1 */        0,  0,  0,  0,  0,  0,  0,  0,  0,
+     /* 2 */        0,  0,  0,  0,  0,  0,  0,  0,  0,
+     /* 3 */        0,  0,  0,  0,  0,  0,  0,  0,  0,
+     /* 4 */        4,  4,  8,  4,  4,  4,  4,  4,  4,
+     /* 5 */        5,  5,  5,  5,  5,  7,  7,  9, 11,
+     /* 6 */        2,  2,  2,  2,  2,  2,  2,  2,  2,
+     /* 7 */        5,  5,  5,  5,  5, 13, 13,  9, 11,
+     /* 8 */        8,  8, 10,  8,  8,  8,  8,  8,  8,
+     /* 9 */        2,  2,  2,  2,  2,  9, 13,  9, 11,
+    /* 10 */       10, 10,  0, 10, 10, 10, 10, 10, 10,
+    /* 11 */       14, 14, 14, 14, 14, 14, 14, 14, 11,
+    /* 12 */       12, 12,  4, 12, 12, 12, 12, 12, 12,
+    /* 13 */        6,  6,  6,  6, 13, 13, 13,  9, 11,
+    /* 14 */       14, 14, 14, 12, 14, 14, 14, 14, 14,
+    /* 15 */        2,  2,  2,  2,  2,  2,  2,  2,  2
+       ];
+
+    var eightSum = nw + n + ne + e + se + s + sw + w;
+
+    return ruleTable[(9 * (oldstate &amp; 15)) + eightSum];
+}
+</pre>
+
+<h3 id="Banks">
+<a href="https://www.fourmilab.ch/cellab/webca/?ruleprog=banks"
+    class="i" rel="Target:CelLabRunRule"><img src="icons/play.png"
+    width="32" height="32" class="playbutton"
+    alt="Play" title="Run this rule in WebCA" /></a>
+BANKS
+</h3>
+
+<p>
+<img src="figures/banks.png" alt="" class="left" width="320" height="200" />
+In 1971, Edwin Banks demonstrated
+<a href="refs.html#Banks1">[Banks71]</a> a cellular automaton rule
+using only a single bit of state and looking at just four
+neighbors which was able to implement a universal computer: one
+able to compute any function of Boolean algebra.  The rule can be
+described in just a few lines of code, but allows the creation of
+structures from which an aribtrarily complex computer can be built.
+</p>
+
+<p>
+Everything is built from cells whose state is just 0 or 1.  We
+have used color in these examples to distinguish components built
+from these cells, but the color plays no part in the operation of
+the rule; to see the rule running in its pure form, load the Mask1
+palette.
+</p>
+
+<p>
+<em>Wires</em> (which we color in white) are three cells wide
+and arbitrarily long.  Signals which propagate along them are
+pairs of two black cells arranged on a diagonal; their relative
+orientation determines the direction of propagation along the
+wire.  Signals can propagate along either edge of of the wire. 
+A variety of components can be constructed which can be
+interconnected by wires.  A <em>dead end</em>, shown in yellow,
+simply devours any signals which arrive at it; it is a necessary
+&ldquo;stopper&rdquo; for any signals for which you have no
+further use.  A <em>fan-out</em>, shown in blue, accepts a
+signal from a wire and transmits it on three outbound wires
+90&deg; apart.  A <em>corner</em>, colored in cyan, turns a
+signal 90&deg;, keeping it on the same edge of the wire as
+it rotates.  A <em>clock</em>, green, generates a pulse train of
+signals every 16 generations.  And finally, a <em>logic
+element</em>, red, performs a <em>B</em>&and;(&not;<em>A</em>)
+operation on the signals arriving on its two inputs.
+</p>
+
+<p>
+These primitive operations suffice to construct a
+<a href="https://en.wikipedia.org/wiki/NOR_gate"
+    rel="Target:CelLabAux">NOR gate</a>,
+from which a network that computes any Boolean function can be
+constructed, including a cross-over of signals without
+interference.
+The <a href="https://en.wikipedia.org/wiki/Apollo_Guidance_Computer"
+    rel="Target:CelLabAux">Apollo Guidance Computer</a>
+was built entirely from three-input NOR gates.
+</p>
+
+<p>
+The example shows, at the top, a shift register constructed from
+wires, fan-outs (one used as a corner), corners, and dead-ends,
+circulating a train of signals and emitting them onto two
+orthogonal wires where they are consumed by dead ends.  In the
+middle, a clock feeds signals to a fan-out, which copies them
+to three outgoing wires.  At the bottom, two clocks emit signals
+into a logic element which combines them to produce trains of two
+signals which propagate down an outbound wire.
+</p>
+
+<p>
+For another rule which can be used to implement a universal
+computer, see <a href="rules.html#Logic">Logic</a>.
+<br class="cb" />
+</p>
+
+<h3 id="Bbm">
+<a href="https://www.fourmilab.ch/cellab/webca/?ruleprog=bbm"
+    class="i" rel="Target:CelLabRunRule"><img src="icons/play.png"
+    width="32" height="32" class="playbutton"
+    alt="Play" title="Run this rule in WebCA" /></a>
+BBM
+</h3>
+
+<p>
+<img src="figures/bbm.png" alt="" class="left" width="320" height="200" />
+BBM stands for &ldquo;Billiard-Ball Machine&rdquo;, a realization
+of a <a href="https://en.wikipedia.org/wiki/Billiard-ball_computer"
+    rel="Target:CelLabAux">billiard-ball computer</a> implemented
+as a one-state cellular automaton using the
+<b><a href="ruledef-eval.html#e_margolus">margolus</a></b>
+evaluator.  Particles move and collide much like Xgas in
+the <a href="rules.html#PerfumeT">PerfumeX and PerfumeM</a> rules, but
+while those rules used different states to distinguish gas and
+motionless walls, here the walls and reflecting mirrors are made
+up of stable configurations of cells in the same state as the
+billiard balls.  (They must be carefully constructed and placed
+on the lattice, lest they evaporate into moving particles.) The
+physics is different from that of physical colliding balls: two
+particles colliding head-on each depart at right angles to their
+prior directions of motion, and a particle which hits a mirror or
+wall is always reflected back along its path, regardless of the
+angle of incidence.  Still, odd as it seems, the motion of the
+particles is consistent, conserves particle number, and is
+reversible if all motion vectors are reversed.
+</p>
+
+<p>
+Billiard-ball models are important in the theory of
+<a href="https://en.wikipedia.org/wiki/Reversible_computing"
+    rel="Target:CelLabAux">reversible computing</a>,
+demonstrating that it is theoretically possible to reduce the
+energy dissipated by computing to an arbitrarily low quantity.
+One can construct logic gates from colliding balls, and it
+has been demonstrated that they are sufficiently general
+to allow building a universal computer.  Since our simulation
+is reversible, it is possible to start with a highly-ordered
+state, allow it to become randomized through collisions of
+the balls with walls, mirrors, and one another, and then
+reverse all the velocities and watch the subsequent collisions
+restore the original pattern.  Here is a
+<a href="https://www.fourmilab.ch/cellab/webca/?show=bbmrev"
+    rel="Target:CelLabRunRule">show demonstrating
+reversibility</a> in this rule.
+<br class="cb" />
+</p>
+
+<h3 id="Bob">
+<a href="https://www.fourmilab.ch/cellab/webca/?ruleprog=bob"
+    class="i" rel="Target:CelLabRunRule"><img src="icons/play.png"
+    width="32" height="32" class="playbutton"
+    alt="Play" title="Run this rule in WebCA" /></a>
+BOB
+</h3>
+
+<p>
+<img src="figures/bob.png" alt="" class="left" width="320" height="200" />
+The Bob rule was inspired by the Hodge rule described below; see
+that rule's description for more information.  In the Bob rule,
+I use the standard default WorldType 0 where I only see one bit
+of each of my neighbors, so I must replace the averaging
+&ldquo;Laplacian spread&rdquo; component of Hodge by some other
+trick.  I add the the number of nonzero neighbors to a nonzero
+cell's state.  The patterns aren't that close to the patterns of
+Hodge, but they are interesting, and if you wait awhile you will
+see some Zhabotinsky action in the form of small paired spirals.
+</p>
+
+<p>
+The Bob rule's standard startup is with the Bob pattern, using
+the subtle grayscale Bob palette that incorporates touches of
+yellow and red.  The Bob pattern is a picture of
+&ldquo;Bob&reg;&rdquo;, the chief religious icon of the radical
+mockery scorn religion called
+<a href="http://www.subgenius.com/" rel="Target:CelLabAux">The
+Church of the SubGenius</a>. &ldquo;Bob&rdquo; looks like the
+typical 1950s cartoon Dad.  As the Bob rule dissolves and
+reforms &ldquo;Bob&rdquo;'s visage, he goes through a remarkable
+series of image transformations, demonstrating the terrific
+power of cellular automata for creative image processing.
+<br class="cb" />
+</p>
+
+<p>
+It's also fun, by the way, to feed the &ldquo;Bob&rdquo; pattern
+to a straight averaging rule by
+<a href="https://www.fourmilab.ch/cellab/webca/?ruleprog=owncode&amp;pattern=bob&amp;palette=bob&amp;evaluator=laplace!"
+    rel="Target:CelLabRunRule">loading the <b>laplace</b>
+user evaluator</a>. Laplace turns &ldquo;Bob&rdquo; into a
+urine-stained tabloid newspaper photo of a &ldquo;face on
+Mars.&rdquo;
+</p>
+
+<p>
+If you start the Bob rule from a random screen, it will take three or
+four hundred generations until you start seeing circular centers of
+activity, like bacterial cultures in a petri dish. After a thousand
+generations these centers have taken over.
+</p>
+
+<pre>
+/*
+
+    This is modelled on the Hodgepodge rule of Gerhardt and
+    Schuster, but is not a close enough model to produce a
+    Zhabotinsky reaction except after extremely long run
+    times.
+
+    The start pattern used is the Shroud of Turing visage of
+    "Bob".  Bob is the High Epopt of the Church of the
+    SubGenius. For more information about Bob and the
+    Church, send $1 and a long stamped self-addressed
+    envelope to:
+
+            The SubGenius Foundation
+            Box 181417,
+            Cleveland Heights, OH  44118-1417
+            USA
+
+    The image of Bob is a registered trademark of the Church
+    of the Subgenius and is used by special arrangement with
+    Douglas St. Claire Smith, a.k.a. Ivan Stang.  Inquiries
+    about further usage of Bob's image should be directed to
+    Mr. Smith c/o The SubGenius Foundation.
+
+*/
+
+rule.worldtype = 1;          // 2D torus world
+rule.ruleName = "bob";
+rule.patreq = "bob";
+rule.palreq = "bob";
+
+function bob(oldstate,     nw, n  , ne,
+                           w, self, e,
+                           sw, s  , se) {
+
+    var eightSum = nw + n + ne + e + se + s + sw + w,
+        sickness, newState;
+
+    if (oldstate == 0) {
+        if (eightSum == 0) {
+            newState = 0;
+        } else {
+            newState = eightSum | 1;
+        }
+    } else {
+        sickness = oldstate &gt;&gt; 1;
+        if (sickness == 64) {
+            newState = 0;
+        } else {
+            sickness = sickness + eightSum + 3;
+            if (sickness &gt; 64) {
+                sickness = 64;
+            }
+            newState = (sickness &lt;&lt; 1) | 1;
+        }
+    }
+    return newState;
+}
+</pre>
+
+<h3 id="Bootperc">
+<a href="https://www.fourmilab.ch/cellab/webca/?ruleprog=bootperc"
+    class="i" rel="Target:CelLabRunRule"><img src="icons/play.png"
+    width="32" height="32" class="playbutton"
+    alt="Play" title="Run this rule in WebCA" /></a>
+BOOTPERC
+</h3>
+
+<p>
+<img src="figures/bootperc.png" alt="" class="left" width="320" height="200" />
+The Bootperc rule illustrates the process of
+<a href="https://en.wikipedia.org/wiki/Bootstrap_percolation"
+    rel="Target:CelLabAux">bootstrap percolation</a> in
+statistical mechanics.  The rule is started with a random pattern in
+which some fraction of cells are set to 1 with the others
+zero.  On each generation, zero cells look at their neighbors
+(either 4 for the von Neumann neighborhood or 8 for the Moore
+neighborhood) and, if the number of nonzero neighbors exceeds a
+threshold (2 for the 4-neighbor case, 4 for 8 neighbors), become
+ones.  A cell, once set to one, remains forever in that state.
+</p>
+
+<p>
+When run, one of two things will happen: either the map will
+evolve into a number of isolated domains separated by gaps, or
+else it will <em>percolate</em>&mdash;end up with all cells set
+to 1.  Whether this happens is highly sensitive to the initial
+density of one cells.  Below a critical density, the map will
+almost never percolate, while above it the map will almost
+always end up all ones.  Near the critical density, whether or
+not the map percolates depends upon details of its initial
+random configuration.  The critical density depends upon the
+neighborhood size, and is around 4.5% ones for the four neighbor
+case and 7.5% for eight neighbors.
+</p>
+
+<p>
+Color is used to trace the waves of percolation, but plays no part
+in the operation of the rule.  Initially set cells are displayed in
+white and do not change.  Newly set cells in each generation are in
+green, and cells age over a color gradient from red to dark blue.
+You can see the percolation front proceeding from each nucleation
+site as a green wave leaving the rainbow behind it, with the oldest
+cells in dark blue.  If the map completely percolates, the end state
+will be the white initially set cells on a background of dark blue.
+</p>
+
+<p>
+When you run the rule, try stopping it after it has reached a steady
+state and then use the &ldquo;Random&rdquo; button in the Pattern
+section and its Density field to load patterns with different densities
+and explore how they behave.  The rule is initially set for the
+eight cell Moore neighborhood.  You can change this by editing the
+rule program, changing the setting of the <b>vonnN</b>
+variable, then pressing &ldquo;Generate&rdquo; to update the rule.
+<br class="cb" />
+</p>
+
+<h3 id="Border">
+<a href="https://www.fourmilab.ch/cellab/webca/?ruleprog=border"
+    class="i" rel="Target:CelLabRunRule"><img src="icons/play.png"
+    width="32" height="32" class="playbutton"
+    alt="Play" title="Run this rule in WebCA" /></a>
+BORDER
+</h3>
+
+<p>
+<img src="figures/border.png" alt="" class="left" width="320" height="200" />
+Border is a rule which uses two bits. One of the bits is a
+background &ldquo;cycle&rdquo; bit, and the other bit is a
+visible on/off firing/dead bit. The Cycle bit toggles Border
+between two modes: Flood mode and Hollow mode. In Flood mode,
+Border turns on any cell which is touching a firing cell. In
+Hollow mode, Border turns off any cell which is at the center of
+an all-firing nine-cell neighborhood.
+</p>
+
+<p>
+The effect of Border is that lines keep getting thick, splitting into
+two, having the new pieces get thick and split to make four, and so
+on. Many of the Border patterns are reminiscent of the mathematical
+objects called &ldquo;Cantor sets.&rdquo;
+</p>
+
+<p>
+Border starts from the pattern Square, but it could equally well
+start from a single dot. The rule begins to get exciting when
+the expanding square wave from the center wraps around the
+screen edges and begins to interfere with itself. First the
+pattern wraps top and bottom, and then it wraps right and left;
+unlike CAM-6's 256&times;256 screen, our screen is a rectangle.
+<br class="cb" />
+</p>
+
+<p>
+A good way to watch the interference patterns evolve is to use the
+arrow keys to pan the screen until the interference region is in
+screen center. This means that one fourth of the original square
+pattern is at each screen corner.
+</p>
+
+<p>
+It is interesting to note that no matter how intricate the pattern
+gets, it is still the deterministic outcome of the simple Border rule
+starting on a single Square or Dot.
+</p>
+
+<p>
+The <b>border.js</b> rule definition looks like this:
+</p>
+
+<pre>
+/*
+    This rule alternates between two cycles: In cycle 0,
+    every cell touching a firing cell is turned on.  In
+    cycle 1, any cell which is the center of a block of 9
+    firing cells is turned off.  Bit #0 is the firing bit
+    and bit #7 is the cycle bit.
+*/
+
+rule.worldtype = 1;          // 2D torus world
+rule.patreq = "square";
+rule.palreq = "mask1";
+
+function border(oldstate,     nw, n  , ne,
+                              w, self, e,
+                              sw, s  , se) {
+    var nineSum = nw + n + ne + w + self + e + sw + s + se,
+        cycle = (oldstate &gt;&gt; 7) &amp; 1,
+        newCycle = cycle ^ 1,
+        newSelf = 0;
+
+    switch (cycle) {
+        case 0:
+            newSelf = (nineSum &gt; 0) ? 1 : 0;
+            break;
+
+        case 1:
+            newSelf = (nineSum == 9) ? 0 : self;
+            break;
+    }
+
+    return (newCycle &lt;&lt; 7) | newSelf;
+}
+</pre>
+
+<h3 id="BraiLife">
+<a href="https://www.fourmilab.ch/cellab/webca/?ruleprog=brailife"
+    class="i" rel="Target:CelLabRunRule"><img src="icons/play.png"
+    width="32" height="32" class="playbutton"
+    alt="Play" title="Run this rule in WebCA" /></a>
+BRAILIFE
+</h3>
+
+<p class="bigpic">
+<img src="figures/fig13.png" width="641" height="360" alt="" />
+</p>
+<blockquote class="caption">
+<p>
+<em>The BraiLife rule after 213 generations.
+A hauler is about to hit a butterfly just above and to the right of
+the center of the diamond shape.</em>
+</p>
+</blockquote>
+
+<p>
+When I first started hacking cellular automata on the CAM-6 in
+1987, I couldn't quite see how to think of a completely new
+rule.  So I decided a good way to start might be to try
+combining some of the old rules, particularly the rules
+<a href="rules.html#Life">Life</a> and <a href="rules.html#Brain">Brain</a>.
+</p>
+
+<p>
+Life is very interesting, but it tends to die out. Brain, on the other
+hand, is extremely hard to kill off; if anything, Brain is too
+persistent. So I thought I might try running Life and Brain in
+parallel, using Brain to stimulate Life, and using Life to dampen
+Brain.
+</p>
+
+<p>
+At first I had every firing Brain cell turn on a Life cell, and
+had every firing Life cell turn off a Brain cell, but, run
+fullscreen, this reaction quickly wipes Brain out. You can see
+the fullscreen reaction by loading BraiLife and using the
+<a href="webca.html#bitplane">Bit Plane Editor</a> to clear all
+the planes, set plane 4 to 1, and randomize plane 2.
+</p>
+
+<p>
+Instead of letting Brain and Life interact across the whole
+screen, I set up the BraiLife start pattern as a disk-shaped
+mask in plane #4 and two firing Brain bits in plane #2. This is
+what you see if you load BraiLife and let it run unaltered.
+</p>
+
+<p>
+Note how Brain grows an oriental-carpet-patterned diamond from a
+start of two adjacent firing blocks. Where this diamond sweeps
+across the limb of the central disk, Life cells are turned on
+within the disk. Some of the life manages to boil out into the
+black region outside the disk.
+</p>
+
+<p>
+Graphically, the development of BraiLife makes me think of a UFO
+that hovers near the atmosphere of a fallow planet (these are
+the starting Brain dots). The UFO sets off an energy blast, and
+the shock wave of the blast sweeps across the planet like the
+EMP-spike from an H-bomb. But instead of being destructive, the
+UFO energy turns on living cells in the planetary sea. Some of
+these cells manage to crawl out and flap around in the planetary
+atmosphere. The UFO energy pulse breaks into spacecruising
+creatures who are usually poisoned if they try to return to the
+planet they seeded.
+</p>
+
+<p>
+All this from a disk, two dots, and a few lines of code!
+</p>
+
+<p>
+The way in which BraiLife runs two parallel rules is to cycle
+between doing one and the other. Only the bit in plane #0 is
+visible to neighbors, so each cell alternates between showing
+its firing Life bit in #0 and showing its firing Brain bit in
+#0.
+</p>
+
+<p>
+Here is <b>brailife.js</b>:
+</p>
+
+<pre>
+/*
+
+        This rule runs Life and Brain in parallel and lets them
+        interact only within a certain masked region.  In this region,
+        firing Brain cells turn on Life cells, and firing Life cells
+        keep Brain cells from turning on.
+
+        We use the eight bits of state as follows:
+            Bit #0 is used to show either the Brain
+                   or the Life bit to neighbors;
+            Bit #1 is the Life bit,
+            Bit #2 is the firing Brain bit,
+            Bit #3 is the refractory Brain bit,
+            Bit #4 is the mask bit,and
+            Bit #7 is the cycle bit.
+
+*/
+
+rule.worldtype = 1;
+/* The starting BraiLife pattern has all bit 7s set to 0
+   (for synchronized cycles), has two adjacent cells of
+    plane #2 turned on to start Brain, and has a big disk
+    mask in plane #4. */
+rule.patreq = "brailife";
+/* The brailife.jcc color palette looks at bits 4,3,2, &amp;
+   1.  I got my color palette by disabling planes 0,5,6,7 of
+   the default.jcc and saving it as brailife.jcc. */
+rule.palreq = "brailife";
+
+function brailife(oldstate,     nw, n  , ne,
+                                w, self, e,
+                                sw, s  , se) {
+    var r = 0, l, newL, b, newB, bR, newBR,
+        mask, cycle, newCycle, eightSum;
+
+    eightSum = nw + n + ne + e + se + s + sw + w;
+    cycle = (oldstate &gt;&gt; 7) &amp; 1;
+    mask = (oldstate &gt;&gt; 4) &amp; 1;
+    bR = (oldstate &gt;&gt; 3) &amp; 1;
+    b = (oldstate &gt;&gt; 2) &amp; 1;
+    l = (oldstate &gt;&gt; 1) &amp; 1;
+
+    if (cycle == 0) {
+
+        //  Life update cycle
+
+        if ((eightSum == 3) || ((eightSum == 2) &amp;&amp; (l == 1))) {
+            newL = 1;
+        } else {
+            newL = 0;
+        }
+        //  Turned on by firing Brain cells within region of mask
+        if (mask == 1 &amp;&amp; b == 1) {
+            newL = 1;
+        }
+        newCycle = 1;
+        r = (newCycle &lt;&lt; 7) | (mask &lt;&lt; 4) | (bR &lt;&lt; 3) |
+            (b &lt;&lt; 2) | (newL &lt;&lt; 1) | b;
+    } else {
+
+        //  Brain update cycle
+
+        if (((bR == 0) &amp;&amp; (b == 0)) &amp;&amp; (eightSum == 2)) {
+            newB = 1;
+        } else {
+            newB = 0;
+        }
+        //  Turned off by firing Life cells within region of mask
+        if (l == 1 &amp;&amp; mask == 1) {
+            newB = 0;
+        }
+        newBR = b;
+        newCycle = 0;
+        r = (newCycle &lt;&lt; 7) | (mask &lt;&lt; 4) | (newBR &lt;&lt; 3) |
+            (newB &lt;&lt; 2) | (l &lt;&lt; 1) | l;
+    }
+    return r;
+}
+</pre>
+
+<h3 id="Brain">
+<a href="https://www.fourmilab.ch/cellab/webca/?ruleprog=brain"
+    class="i" rel="Target:CelLabRunRule"><img src="icons/play.png"
+    width="32" height="32" class="playbutton"
+    alt="Play" title="Run this rule in WebCA" /></a>
+BRAIN
+</h3>
+
+<p>
+<img src="figures/brain.png" alt="" class="left" width="320" height="200" />
+The one and only.  There's lots of material on Brain in
+the <a href="ruledef.html"><cite>Rule Definition</cite></a>
+chapter, explaining how to program it in
+<a href="ruledef-js.html#Brain-js">JavaScript</a> or
+<a href="ruledef-java.html#Brain-java">Java</a>.
+</p>
+
+<p>
+To see the Butterfly Gun,
+<a href="https://www.fourmilab.ch/cellab/webca/?ruleprog=brain&amp;pattern=bflygun"
+    rel="Target:CelLabRunRule">load the pattern
+<b>bflygun.jcp</b></a>. My Butterfly Gun starts out with an
+extra east-moving hauler whose purpose is to knock out a
+west-moving hauler which the Gun spits out before getting into
+its standard operation.  I once saw a much smaller butterfly
+gun; I think it only used three outriggers.  If you find a small
+butterfly gun, let me know and we'll put it in the next edition
+of the manual.
+<br class="cb" />
+</p>
+
+<h3 id="Byl">
+<a href="https://www.fourmilab.ch/cellab/webca/?ruleprog=byl"
+    class="i" rel="Target:CelLabRunRule"><img src="icons/play.png"
+    width="32" height="32" class="playbutton"
+    alt="Play" title="Run this rule in WebCA" /></a>
+BYL and CHOUREG
+</h3>
+
+<p>
+<img src="figures/byl.png" alt="" class="left" width="320" height="200" />
+Ever since John von Neumann posed the question in 1949
+whether it would be possible to design a machine which could
+reproduce itself, then proceeded to
+<a href="https://en.wikipedia.org/wiki/Von_Neumann_cellular_automaton"
+    rel="Target:CelLabAux">find a solution</a> in 1952,
+expressed as a cellular automaton which used 29 states per cell,
+an ongoing challenge has been to find simpler automata, both in
+terms of states per cell and the number of cells in the initial
+structure, which are capable of reproduction.  (See the
+discussion of von Neumann's automaton in the
+<cite><a href="chap5.html">Origins of <cite>CelLab</cite></a></cite>
+chapter for additional details.)
+</p>
+
+<p>
+In 1984, Christopher Langton described a self-reproducing automaton
+<a href="refs.html#Langton84">[Langton84]</a> that used just 8
+states per cell and an 86 cell initial pattern which replicates itself
+every 151 generations; see the
+<a href="rules.html#Langton">Langton</a> rule for an implementation.  This
+was further simplified in 1989 by John Byl
+<a href="refs.html#Byl89">[Byl89]</a>, whose design requires 12 cells
+in 6 states and reproduces every 25 generations; this is implemented
+in our <a href="https://www.fourmilab.ch/cellab/webca/?ruleprog=byl"
+    rel="Target:CelLabRunRule">Byl</a> rule.  A further simplification
+was discovered by H.-H. Chou, J. A. Reggia, <em>et al.</em>
+<a href="refs.html#Reggia_etal93">[Reggia&nbsp;et&nbsp;al.93]</a>
+in 1993, and implemented as the <a href="https://www.fourmilab.ch/cellab/webca/?ruleprog=choureg"
+    rel="Target:CelLabRunRule">ChouReg</a> rule.  Its initial
+pattern is only 5 cells, with the replicator using 8 states and
+reproducing itself every 15 generations.
+</p>
+
+<p>
+For the purpose of these rules, reproduction is defined as
+&ldquo;self-directed replication&rdquo;: reproducing the initial
+structure as directed by information contained within the
+structure itself.  This distinguishes such rules from the kind
+of blind &ldquo;reproduction&rdquo; of rules which simply copy
+cells without bound and is analogous to biological reproduction:
+an organism replicates itself by using the instructions in its
+genetic code to assemble a copy of itself, including the
+genome.
+<br class="cb" />
+</p>
+
+<h3 id="Critters">
+<a href="https://www.fourmilab.ch/cellab/webca/?ruleprog=critters"
+    class="i" rel="Target:CelLabRunRule"><img src="icons/play.png"
+    width="32" height="32" class="playbutton"
+    alt="Play" title="Run this rule in WebCA" /></a>
+CRITTERS
+</h3>
+
+<p>
+<img src="figures/critters.png" alt="" class="left" width="320" height="200" />
+This is a simple rule, implemented with the
+<b><a href="ruledef-eval.html#e_margolus">margolus</a></b>
+evaluator, which complements a block of cells unless it contains
+two cells in state 1.  In addition, a block containing three
+ones is rotated 180&deg;.  This has the effect, when started
+with a pattern with a coherent block of cells in state 1, of
+sending out &ldquo;rowers&rdquo; in the vertical and horizontal
+directions, which interact with one another to produce new
+static patterns that remain stable until another rower collides
+with them.  Rowers collide, and can bounce back or take off in
+right angles to their original direction of motion.  Since the
+basic rule complements all states on each generation, we modify
+it, as in the Critter-Cycle rule on p.&nbsp;134, to compensate
+for this by taking the temporal phase into account and using a
+color palette appropriate to each phase.
+<br class="cb" />
+</p>
+
+<h3 id="Dendrite">
+<a href="https://www.fourmilab.ch/cellab/webca/?ruleprog=dendrite"
+    class="i" rel="Target:CelLabRunRule"><img src="icons/play.png"
+    width="32" height="32" class="playbutton"
+    alt="Play" title="Run this rule in WebCA" /></a>
+DENDRITE and DENTIM
+</h3>
+
+<p class="bigpic">
+<img src="figures/fig14.png" width="637" height="398" alt="" />
+</p>
+<blockquote class="caption">
+<p>
+<em>The Dendrite rule. The white &ldquo;gas&rdquo; particles
+&ldquo;freeze&rdquo; to the red teapot shape, forming
+dendrites.</em>
+</p>
+</blockquote>
+
+<p>
+These rules both consist of a drifting &ldquo;gas&rdquo; pattern
+and a &ldquo;frozen&rdquo; seed pattern. The gas alternates
+between cycles of a) diffusing, and b) freezing if it is
+touching a frozen cell. The freezing process produces branching
+little dendrites of frozen cells. This phenomenon is a rough
+model for the physico-chemical process by which so-called
+<em>accretion fractals</em> are formed.
+</p>
+
+<p>
+Dendrite shows a random gas and a frozen teapot; and
+<a href="https://www.fourmilab.ch/cellab/webca/?ruleprog=dentim"
+    rel="Target:CelLabRunRule">DenTim</a> shows a
+Tim-shaped gas and a frozen ant.
+</p>
+
+<p>
+The programs for the rules are the same except that Dendrite
+requests a random initial gas and DenTim requests a Tim-shaped
+initial gas. The programs store the gas bit in plane #7 and the
+frozen-cell bits in plane #6.  The cycle bit is in plane #5.  If
+the cycle bit is 0, we update the gas diffusion; and if the
+cycle bit is 1, we update the freezing.  The visible bit is
+always the bit in plane #0; as we change cycles we alternate
+between showing the gas bit or the freeze bit.  Depending
+whether we are updating Diffuse or Freeze, bit #0 is showing the
+gas bit or the freeze bit.  The rule starts up in cycle 0, so we
+start it up with some visible gas bits in plane #0.  The
+<b>dendrite.jcc</b> color palette we use simply ignores all bits
+except #6 and #7.
+</p>
+
+<p>
+The two rules use a cheap, imperfect method of mimicking gas
+diffusion. The trick is that at each gas update, each cell
+copies the gas value of one of its eight neighbors, the exact
+neighbor to be chosen at random. This is imperfect because it
+may happen that an individual firing gas particle may be copied
+by <em>two or more</em> of its neighbors (in which case one
+particle is splitting into several) or, just as bad, it may
+happen that an individual firing gas particle is copied by
+<em>none</em> of its neighbors (in which case a particle
+disappears). For a really good gas model, we would expect to
+have conservation of particles.
+</p>
+
+<p>
+A gas with particle conservation can in fact be constructed (see
+the rules <a href="rules.html#Sublime">Sublime</a>,
+<a href="rules.html#PerfumeT">PerfumeX, and PerfumeT</a>), and we can indeed
+use these gases to grow dendrites as well (see
+<a href="rules.html#Soot">Soot</a>).
+</p>
+
+<p>
+Why do the frozen cells of the Den&hellip; rules form those
+branching dendrites?  The reason is so simple that it nearly
+evades comprehension: it is much easier for a randomly jostling
+gas particle to bump into one of the dendrite's tips or
+&ldquo;capes&rdquo; than it is for the gas particle to find its
+way up into one of the indentations or &ldquo;estuaries.&rdquo;
+<br class="cr" />
+</p>
+
+<h3 id="Earthgas">
+<a href="https://www.fourmilab.ch/cellab/webca/?ruleprog=earthgas"
+    class="i" rel="Target:CelLabRunRule"><img src="icons/play.png"
+    width="32" height="32" class="playbutton"
+    alt="Play" title="Run this rule in WebCA" /></a>
+EARTHGAS
+</h3>
+
+<p>
+<img src="figures/earthgas.png" alt="" class="left" width="320" height="200" />
+This rule illustrates image processing with a cellular automata
+rule.  We start with a 256 color image of the full Earth taken
+by the crew of Apollo 17 en route to the Moon, then apply the
+<b><a href="ruledef-eval.html#e_randgas">randgas</a></b>
+evaluator, which swaps cells with randomly-chosen neighbors.
+This makes the Earth diffuse away into space as if impish aliens
+had aimed a gravity-cancelling ray at the planet.  Since
+the rule only changes the positions of cells and not their states,
+it may be used on any 256 color image.
+<br class="cb" />
+</p>
+
+<h3 id="EcoLiBra">
+<a href="https://www.fourmilab.ch/cellab/webca/?ruleprog=ecolibra"
+    class="i" rel="Target:CelLabRunRule"><img src="icons/play.png"
+    width="32" height="32" class="playbutton"
+    alt="Play" title="Run this rule in WebCA" /></a>
+ECOLIBRA
+</h3>
+
+<p class="bigpic">
+<img src="figures/fig15.png" width="639" height="399" alt="" />
+</p>
+<blockquote class="captionc">
+<p class="c">
+<em>The EcoLiBra rule, a cross between Life and Brain.</em>
+</p>
+</blockquote>
+
+<p>
+This rule is a cross between <a href="rules.html#Life">Life</a> and
+<a href="rules.html#Brain">Brain</a>.  The basic idea is that the cells are
+divided between dark &ldquo;sea&rdquo; cells and light
+&ldquo;land&rdquo; cells.  We run Brain in the sea, and on land
+we run not Life but AntiLife. All the land cells are normally
+firing cells, and the presence of an active AntiLife cell is
+signaled by having a land cell which is <em>not</em> firing.
+Full
+<a href="chap4.html#EcoLiBra">details on EcoLiBra</a> are in the
+<cite><a href="chap4.html">Cellular Automata Theory</a></cite>
+chapter.
+</p>
+
+<p>
+The name EcoLiBra suggests 1) an ecology of Life and Brain, 2) a
+balanced situation (equilibrium), and 3) the human intestinal
+bacteria <em>Escherichia coli</em>, known as <em>E. coli</em>
+for short. The third connection is perhaps a bit unsavory, but
+remember that <em>E. coli</em> cells are in fact the favorite
+&ldquo;guinea pigs&rdquo; for present day gene splicing
+experiments. As one of the goals of <cite>CelLab</cite> is to
+promote the development of artificial life, the designer gene
+connection is entirely appropriate. I've given EcoLiBra a nice,
+symmetric start pattern, but it also does fine if you use the
+<a href="webca.html#bitplane">Bit Plane Editor</a> to randomize
+all bit planes.
+<br class="cr" />
+</p>
+
+<p>
+Here is the JavaScript code for <b>ecolibra.js</b>:
+</p>
+
+<pre>
+/*
+     This rule runs Brain in the sea and AntiLife on land.  Six or
+     seven firing Brain cells turn a sea cell into land.  Seven
+     "antifiring" Antilife cells turn a land cell into sea.
+*/
+
+rule.worldtype = 1;          // 2D torus world
+rule.patreq = "ecolibra";
+rule.palreq = "default";
+
+function ecolibra(oldstate,     nw, n  , ne,
+                                w, self, e,
+                                sw, s  , se) {
+
+    /*  Here rather than thinking of bits, we think of state numbers.
+
+        State 0 is dead sea
+        State 1 is firing brain in sea
+        State 2 is refractory brain in sea
+        State 3 is dead land
+        State 4 is firing life on land  */
+
+    var newState;
+    var SUM_8 = nw + n + ne + w + e + sw + s + se;
+
+    if ((oldstate &amp; 1) != 0) {
+        newState = 3;
+    } else {
+        newState = 0;
+    }
+
+    if (oldstate == 0) {
+        switch (SUM_8) {
+            case 2:
+                newState = 1;
+                break;
+
+            case 6:
+            case 7:
+                newState = 3;
+                break;
+
+            default:
+                newState = 0;
+                break;
+        }
+    } else if (oldstate == 1) {
+        newState = 2;
+    } else if (oldstate == 2) {
+        newState = 0;
+    } else if (oldstate == 3) {
+        switch (SUM_8) {
+            case 5:
+                newState = 4;
+                break;
+
+            case 1:
+                newState = 0;
+                break;
+
+            default:
+                newState = 3;
+                break;
+        }
+    } else if (oldstate == 4) {
+        if (SUM_8 == 5 || SUM_8 == 6) {
+            newState = 4;
+        } else {
+            newState = 3;
+        }
+    }
+    return newState;
+}
+</pre>
+
+<h3 id="Endworld">
+<a href="https://www.fourmilab.ch/cellab/webca/?ruleprog=endworld"
+    class="i" rel="Target:CelLabRunRule"><img src="icons/play.png"
+    width="32" height="32" class="playbutton"
+    alt="Play" title="Run this rule in WebCA" /></a>
+ENDWORLD
+</h3>
+
+<p>
+<img src="figures/endworld.png" alt="" class="left" width="320" height="200" />
+It is always possible to rewrite a block rule such as
+<a href="rules.html#Bbm">Bbm</a>, which uses the
+<b><a href="ruledef-eval.html#e_margolus">margolus</a></b>
+evaluator, to work in a standard neighborhood, using texture
+bits within the cell's state to keep track of its position and
+temporal phase. Endworld is a rule completely compatible with
+Bbm which uses the standard world type 1 evaluator.  It is
+reversible and works, in part, <em>because</em> it keeps track
+of the previous state of cells.  When you start it, you will see
+the particles evolve, bouncing off one another and becoming
+randomized.  But, if you press the &ldquo;Swap&rdquo; button in
+the Pattern section of the control panel, all of their motions
+will reverse and the original, highly-ordered, pattern will be
+restored.
+</p>
+
+<p>
+Even when the particles have seemingly become disordered, the
+actual state of the map has extremely low entropy.  Because
+updates depend upon the previous state of every cell, there are
+vastly more states in which this order does not exist than those
+in which it does.  Changing a single bit can precipate the
+&ldquo;end of the world&rdquo;.  Start the rule from the
+standard pattern and let it run for a while.  The billiard balls
+bounce around as usual.  Now change a single bit in the map
+without making a corresponding change to its history.  How do
+you do that?   Press &ldquo;Pause&rdquo;, enter
+the command
+&ldquo;<span class="tt">cell&nbsp;^1&nbsp;160&nbsp;100</span>&rdquo;
+in the <a href="webca.html#defshows">Show</a> box and press
+&ldquo;Run&rdquo; to flip the cell in the middle of the map, and
+then press &ldquo;Start&rdquo; to resume.  Your single cell will
+behave as a rift in the space-time continuum: a <em>goof
+bogon</em> which starts spewing out other bogon particles that
+spawn ever more as they collide with existing particles.  Soon
+the entire map will have degenerated into chaos. But the rule
+remains reversible!  Pause, press &ldquo;Swap&rdquo;, then
+restart, and the damage will run back to the original calamity. 
+But since the cell state remains flipped, when it runs past that
+point the chaos will return.  Run the
+<a href="https://www.fourmilab.ch/cellab/webca/?show=endworld"
+    rel="Target:CelLabRunRule">Endworld show</a>
+for a complete example, including repairing the flaw at the
+precise moment it occurred and returning to the point of departure.
+<br class="cb" />
+</p>
+
+<h3 id="Evoloops">
+<a href="https://www.fourmilab.ch/cellab/webca/?ruleprog=evoloops"
+    class="i" rel="Target:CelLabRunRule"><img src="icons/play.png"
+    width="32" height="32" class="playbutton"
+    alt="Play" title="Run this rule in WebCA" /></a>
+EVOLOOPS and EVOLOOPSAB
+</h3>
+
+<p>
+<img src="figures/evoloops.png" alt="" class="left" width="320" height="200" />
+Evoloops were invented by Hiroki Sayama
+<a href="refs.html#Sayama98">[Sayama98]</a>
+as a generalization of Langton's self-reproducing automaton
+(implemented here as the <a href="rules.html#Langton">Langton</a> rule)
+incorporating death and evolution.  When Langton's rule is run in
+a finite space, such as our wrap-around world, the reproducing
+structures eventually collide with one another, breaking the
+reproduction process.  When Evoloops collide, they create a state
+which cannot occur when the structures are reproducing in open
+space, and this state is used to trigger dissolution or death of the
+colliding structure, analogous to death of an organism due to
+exhaustion of resources (in this case, room to expand).  Collision of
+structures may also result in mutation, as new valid structures (which
+may or may not be capable of reproduction) are created.
+</p>
+
+<p>
+When started from a single self-reproducing structure (a generalization
+of Langton's automaton), it replicates until, due to wrap-around, copies
+begin to collide with one another.  Then things get interesting.  Some
+structures become invalid and die, others
+may be static structures or oscillators which do not reproduce, while
+yet others, different from the original, may be able to reproduce themselves.
+Now competition and selection kick in.  A smaller self-reproducing
+structure replicates more quickly, so in a given time (measured in
+terms of generations of the cellular automaton), it will produce more
+offspring.  Its larger ancestors not only are slower to reproduce,
+but are larger &ldquo;targets&rdquo; for collisions which may disrupt
+them.  As the simulation runs (and you'll want to let it run for
+quite a while&mdash;interesting things are still happening 50,000
+generations after the start), you'll generally see large progenitors
+be displaced by smaller descendants which, in turn, are supplanted by
+even smaller and faster-replicating successors, until the smallest
+possible viable replicator comes to dominate the world.  You'll also
+observe structures which do not reproduce or attempt to reproduce but
+create non-viable offspring: these are eventually replaced by the
+successful replicators.
+</p>
+
+<p>
+Precisely the same phenomenon is observed with bacteria.  When in
+competition for finite resources, the fastest-reproducing organism
+will usually prevail, simply by outnumbering and starving the
+others.  An extreme example of this is
+<a href="https://en.wikipedia.org/wiki/Spiegelman%27s_Monster"
+    rel="Target:CelLabAux">Spiegelman's Monster</a> where,
+under extreme laboratory conditions, an organism which
+originally had a genome of 4,500 bases selected itself down
+to just 218 bases.  There is no randomness in the Evoloop
+simulation&mdash;it is entirely deterministic.  From the same
+start, you will always get the same result.
+</p>
+
+<p>
+Another related experiment,
+<a href="https://www.fourmilab.ch/cellab/webca/?ruleprog=evoloopsab"
+    rel="Target:CelLabRunRule">EvoloopsAB</a>,
+demonstrates the process of
+<a href="https://en.wikipedia.org/wiki/Abiogenesis"
+    rel="Target:CelLabAux">abiogenesis</a>, or the origin of life
+from non-living precursors.  Here, we define life as a structure
+capable of self-reproduction.  The EvoloopsAB rule is identical
+to Evoloops, except that it starts with an empty (all zero) map
+and contains three sites which &ldquo;seed&rdquo; the
+map with a random &ldquo;DNA&rdquo; sequence generated by a
+stochastic
+<a href="https://en.wikipedia.org/wiki/Finite-state_machine"
+    rel="Target:CelLabAux">state machine</a>.
+These sequences grow from the seeding
+sites and turn and interact based upon their random sequences,
+but are not capable of reproduction.  But eventually, as they and
+the structures they spawn collide and interact, a replicator will
+be &ldquo;discovered&rdquo; which can continue to reproduce independently
+of the seeds.  You'll often see replicators appear, make one or a
+few copies, and then be wiped out by collision with a growing seed
+or some other structures spawned by the seeds.  But eventually (since
+the seeds are random, the results will differ on every run), one
+or more replicators will become established and come to dominate the
+map.  As before, smaller, faster replicators out-compete their larger
+cousins and, even if they aren't the first to appear, will usually
+become the most common.
+</p>
+
+<p>
+Evoloops is an example of a rule which employs a user evaluator
+to transcend the usual limitations of <cite>CelLab</cite>.  The
+rule needs to see four bits of state in the cell and its four
+neighbors, which adds up to twenty bits and requires a one
+megabyte lookup table, sixteen times larger than the
+<cite>CelLab</cite> standard.  The rule definition and the
+<b>vonn4</b> evaluator it uses create an auxiliary lookup table
+to accommodate the twenty bits of state.  Programmers interested
+in implementing rules with larger state requirements than the
+default should examine the rule and evaluator code to see how
+it's done.
+</p>
+
+<p>
+Complete details of the definition of Evoloops and an analysis
+of their behavior is given in
+<a href="http://necsi.edu/postdocs/sayama/sdsr/download/PhD-sayama.pdf"
+    rel="Target:CelLabAux">Hiroki Sayama's Ph.D. thesis</a> [PDF].
+See <a href="rules.html#Sexyloop">Sexyloop</a> for an extension of Evoloops
+which adds gene transfer between organisms.
+<br class="cb" />
+</p>
+
+<h3 id="Faders">
+<a href="https://www.fourmilab.ch/cellab/webca/?ruleprog=faders&amp;pattern=faderegg"
+    class="i" rel="Target:CelLabRunRule"><img src="icons/play.png"
+    width="32" height="32" class="playbutton"
+    alt="Play" title="Run this rule in WebCA" /></a>
+FADERS
+</h3>
+
+<p>
+<img src="figures/faders.png" alt="" class="left" width="320" height="200" />
+Faders is my pride and joy. I found Faders by playing with the
+rule editor in my original MS-DOS cellular automata program,
+while thinking about the similarities and
+differences between <a href="rules.html#Life">Life</a> and
+<a href="rules.html#Brain">Brain</a>. What Life and Brain have in common is
+the <em>threshold</em> property: in each rule a dead (state 0)
+cell requires a certain number of firing neighbors to get turned
+on. Life requires exactly 3 firing neighbors, Brain requires
+exactly 2. The singular thing about Life is
+<em>persistence</em>: a firing Life cell keeps firing if it has
+either 2 or 3 firing neighbors, (otherwise it dies and goes back
+to state 0). The singular thing about Brain is <em>memory</em>:
+a firing Brain cell goes to a refractory state which "remembers"
+that it used to be firing, and only later does the cell
+transform to state 0, which can be restimulated to fire.
+</p>
+
+<p>
+In Faders I perform a &ldquo;genetic&rdquo; cross between Life
+and Brain by describing a rule which has threshold, persistence,
+<em>and</em> memory. A dead Faders cell requires exactly 2
+firing neighbors to get turned on. A firing Faders cell keeps
+firing if it has exactly 2 firing neighbors. And when a Faders
+cell leaves the firing state it goes into a sequence of
+refractory states. Instead of having just 1 refractory state
+(like Brain), the WebCA Faders has 127 refractory states.
+<br class="cb" />
+</p>
+
+<p>
+This works because Faders is an &ldquo;NLUKY
+rule&rdquo; as <a href="chap4.html#i4-TH-semit">described in the
+Theory chapter</a>.  WebCA can automatically generate and load
+NLUKY ruletables.  For any positive integers n,l,u,k,y with
+l,u,k,y less than 10, use the
+<a href="webca.html#algorule">Algorithmic Rule Specification</a>
+dialogue to enter the values and show the appropriate
+&ldquo;<a href="chap4.html#i4-TH-semit">NLUKY rule</a>&rdquo;.
+</p>
+
+<p>
+The white cells are the firing cells. When Faders has a clear
+screen, it grows rapidly, leaving slowly dissolving trails
+behind. What keeps it coming back is that it can lay down
+&ldquo;eggs&rdquo; or &ldquo;seeds&rdquo; of activity. These
+eggs take the form of three adjacent firing cells configured
+into a small right-angle <b>L</b>-shape. You might call them
+fader eggs. Each cell in one of these three cell fader eggs has
+exactly two firing neighbors, so they persist until the
+refractory color veils dissolve and they can start turning on
+dead neighbors.
+</p>
+
+<p>
+Faders looks good if you start it on our
+<a href="https://www.fourmilab.ch/cellab/webca/?ruleprog=faders&amp;pattern=billbord"
+    rel="Target:CelLabRunRule">Billbord pattern</a>. You can
+start it on any other pattern; even on a
+<a href="https://www.fourmilab.ch/cellab/webca/?ruleprog=faders"
+    rel="Target:CelLabRunRule">random screen</a>. If you do
+start Faders on a random screen, it will look like nothing is
+happening for awhile. Just wait. When you randomize, you fill most
+of the screen with refractory states, but usually there will be some
+of those angle-iron eggs lurking in the haze, and as soon as it clears
+away they'll start spreading order.
+</p>
+
+<p>
+Actually one of the best ways to start Faders is from a simple three
+block L or angle-iron of state 1 blocks. This pattern is stored as
+<b>faderegg.jcp</b>.
+</p>
+
+<p>
+The pattern seems to run endlessly and evolves in interestingly
+different ways according to whether you have WebCA in the plane nowrap
+mode or in the torus wrap mode.  If you want to run it in nowrap mode,
+use the <a href="webca.html#rulemodes">Rule Modes</a> dialogue
+to select it before starting.  The edges of the refractory faders
+patterns have an interesting fractal quality.  The rule keeps laying
+down fader eggs that reseed the center.  If you ran Faders from a
+single three-cell egg in an endless plane, I wonder how soon the
+pattern within some bounded N&times;N central region would repeat.
+For that matter, I wonder how soon it repeats on our screen?  If you
+find out, please write.
+</p>
+
+<p>
+We have Faders set to run with a special Faders color palette, but
+other color palettes can give good results. The color palette called
+<b>autocad.jcc</b> looks particularly good.
+</p>
+
+<p>
+Here is the rule program for Faders. The program is actually
+designed to generate the lookup table for any NLUKY rule,
+according to how the variables at the top are set.
+</p>
+
+<pre>
+/*
+
+    Faders:
+
+    N = 127  L = 2  U = 2  K = 2  Y = 2
+
+    To evaluate any NLUKY rule, just change the parameters
+    in the definition below to the desired values.
+
+*/
+
+rule.worldtype = 1;          // 2D torus world
+rule.palreq = "faders";
+
+function faders(oldstate,     nw, n  , ne,
+                              w, self, e,
+                              sw, s  , se) {
+    var N = 127, L = 2, U = 2, K = 2, Y = 2;
+
+    var SUM_8 = nw + n + ne + w + e + sw + s + se;
+    var n = 0;
+
+    if ((oldstate == 0) &amp;&amp; (L &lt;= SUM_8) &amp;&amp; (SUM_8 &lt;= U)) {
+        n = 1;
+    }
+    if (oldstate == 1) {
+        if ((K &lt;= SUM_8) &amp;&amp; (SUM_8 &lt;= Y)) {
+            n = 1;
+        } else {
+            n = 2;
+        }
+    }
+    if (((oldstate &amp; 1) == 0) &amp;&amp; (0 &lt; oldstate) &amp;&amp; (oldstate &lt; (2 * N))) {
+        n = oldstate + 2;
+    }
+    return n;
+}
+</pre>
+
+<h3 id="Flick">
+<a href="https://www.fourmilab.ch/cellab/webca/?ruleprog=flick"
+    class="i" rel="Target:CelLabRunRule"><img src="icons/play.png"
+    width="32" height="32" class="playbutton"
+    alt="Play" title="Run this rule in WebCA" /></a>
+FLICK
+</h3>
+
+<p>
+<img src="figures/flick.png" alt="" class="left" width="320" height="200" />
+Flick is named after &ldquo;flickercladding,&rdquo; the CA skin
+which covers the robots in my books
+<cite><a href="refs.html#Rucker82">Software</a></cite> and
+<cite><a href="refs.html#Rucker88">Wetware</a></cite>. In Flick, we see
+an AutoShade&reg;d office whose rug is made of flickercladding
+that runs the <a href="rules.html#TimeTun">TimeTun</a> rule. You can
+tell which parts of the picture are &ldquo;rug&rdquo; because
+these cells have their bit #7 set to 1.
+<br class="cb" />
+</p>
+
+<pre>
+/*
+        Flickercladding Interior Decoration
+
+        Conceived by Rudy Rucker
+        Drawn by Gary Wells
+        Modeled with AutoCAD
+        Rendered by AutoShade
+        Perpetrated by Kelvin R. Throop.
+
+        In this rule, we only change the cells whose high
+        bits are on. These cells are updated according to
+        the TimeTun rule.
+*/
+
+rule.worldtype = 1;          // 2D torus world
+rule.patreq = "openplan";
+rule.palreq = "openplan";
+
+function flick(oldstate,     nw, n  , ne,
+                             w, self, e,
+                             sw, s  , se) {
+    var interest, oldSelf, newSelf, r;
+    var SUM_5 = n + w + self + e + s;
+
+    if (!BITSET(7)) {
+        r = oldstate;
+    } else {
+        oldSelf = (oldstate &gt;&gt; 1) &amp; 1;
+        interest = (SUM_5 == 0 || SUM_5 == 5) ? 0 : 1;
+        newSelf = interest ^ oldSelf;
+        r = 0x80 | BF(self, 1) | newSelf;
+    }
+    return r;
+
+    //  Test bit set in oldstate
+    function BITSET(n) {
+        return ((oldstate &gt;&gt; n) &amp; 1) == 1;
+    }
+
+    //  Place a value in a specified bit field.
+
+    function BF(v, p) {
+        return v &lt;&lt; p;
+    }
+}
+</pre>
+
+<h3 id="Forest">
+<a href="https://www.fourmilab.ch/cellab/webca/?ruleprog=forest"
+    class="i" rel="Target:CelLabRunRule"><img src="icons/play.png"
+    width="32" height="32" class="playbutton"
+    alt="Play" title="Run this rule in WebCA" /></a>
+FOREST
+</h3>
+
+<p>
+<img src="figures/forest.png" alt="" class="left" width="320" height="200" />
+Forest is a model of forest fire propagation as described in
+<a href="refs.html#Drossel_Schwabl92">[Drossel&amp;Schwabl92]</a>.
+Trees, in green, catch fire if any of their eight neighbors are
+on fire, and also if struck by lightning with probability
+<em>f</em> (by default 0.00002) each generation.  Burning trees
+become empty cells in the next generation.  Empty cells have a
+probability <em>p</em> (default 0.002) to grow a tree each
+generation.  When the density of trees is low, most lightning
+strikes empty ground or burns only one or a few trees.  As the
+density of fuel grows over time, the forest becomes susceptible
+to cataclysmic wildfires which burn large regions.  Eventually,
+you will see lots of small fires and a few very large
+conflagrations.
+</p>
+
+<p>
+The behavior of the model is highly sensitive to the ratio of
+the parameters <em>f</em> and <em>p</em>, which you can adjust by
+editing the top of the evaluator function.  Counter-intuitively,
+reducing the number of lightning strikes increases the number
+of large fires because it allows fuel to build up which permits
+the rare fire, once started, to propagate widely.  This phenomenon
+is observed in forestry and is managed by controlled burns.
+</p>
+
+<p>
+An age counter is used to display trees in sixteen intensities
+of green based upon their age in generations, and to make flame
+fronts fade after they have passed.  This is simply to make the
+display easier to understand; it plays no part in the behavior
+of the rule.  See the <a href="rules.html#Mite">Mite</a> and
+<a href="rules.html#Wator">Wator</a> rules for other ecological simulations.
+<br class="cb" />
+</p>
+
+<h3 id="Fractal">
+<a href="https://www.fourmilab.ch/cellab/webca/?ruleprog=fractal"
+    class="i" rel="Target:CelLabRunRule"><img src="icons/play.png"
+    width="32" height="32" class="playbutton"
+    alt="Play" title="Run this rule in WebCA" /></a>
+FRACTAL
+</h3>
+
+<p>
+<img src="figures/fractal.png" alt="" class="left" width="320" height="200" />
+Fractal is a simple program which produces nice fractal patterns
+from a square. Each cell holds two bits: the present firing bit
+in plane #0 and a memory bit in plane #1. The rule says to look
+at five bits: the firing bits of your four diagonal neighbors
+and your own memory bit. If an odd number of these five bits are
+on, you turn on, and otherwise you turn off. Before writing down
+your new firing bit value, you store your present firing bit
+value in your memory bit.
+</p>
+
+<p>
+Fractal is a &ldquo;<em>reversible</em>&rdquo; rule which means
+that if at any time you press the &ldquo;Swap&rdquo; button to
+swap the contents of plane #0 with plane #1, Fractal will run
+backwards, returning to its start pattern and proceeding onward
+into negative time.
+</p>
+
+<p>
+Fractal is reversible because the rule for Fractal can be written this
+way:
+<br class="cb" />
+</p>
+
+<p class="c">
+<em>NewSelf</em> = (<em>Parity</em>(<em>Neighborhood</em>)&nbsp;&minus;&nbsp;<em>OldSelf</em>) mod 2
+</p>
+
+<p>
+where <em>Parity</em> is 1 if
+<em>NE</em>+<em>NW</em>+<em>SE</em>+<em>SW</em> is odd and 0 if
+<em>NE</em>+<em>NW</em>+<em>SE</em>+<em>SW</em> is even.  The
+key thing about the equation just given is that, using the rules
+of algebra, we are allowed to swap <em>NewSelf</em> and
+<em>OldSelf</em> and get the equally valid
+equation:<a href="footnote.html#F3_7"><img
+    class="foot" src="icons/footnote.png"
+    height="16" width="16" alt="[Footnote]" /></a>
+</p>
+
+<p class="c">
+<em>OldSelf</em> = (<em>Parity</em>(<em>Neighborhood</em>))&nbsp;&minus;&nbsp;<em>NewSelf</em>) mod 2
+</p>
+
+<p>
+This means that the rule for passing from new to old is the
+<em>same</em> as the rule for passing from old to new.  Let's
+see why this means that pressing the &ldquo;Swap&rdquo; button
+makes Fractal run backwards.
+</p>
+
+<p>
+If it is now time <em>T</em>, and plane #1 holds my screen at
+time <em>T</em>&minus;1, then applying Fractal will: i) compute
+the screen for time <em>T</em>+1 and put this in plane #0, ii)
+meanwhile moving the old time <em>T</em> info from plane #0 into
+plane #1, and then iii) showing planes #0 and #1 on the screen.
+</p>
+
+<p>
+Suppose that I now press &ldquo;Swap&rdquo; to interchange the
+info in planes #0 and #1.  Now the time <em>T</em> info is in
+plane #0 and the time <em>T</em>+1 info is in plane #1.  The
+fractal rule computes the parity of each time <em>T</em> cell's
+neighborhood and subtracts off plane #1 value.  But because we
+pressed &ldquo;Swap&rdquo;, the plane #1 value is the cell
+value for time <em>T</em>+1.  Therefore the equation
+</p>
+
+<p class="c">
+<em>OldSelf</em> = (<em>Parity</em>(<em>Neighborhood</em>)&nbsp;&minus;&nbsp;<em>NewSelf</em>) mod 2
+</p>
+
+<p>
+applies, and the value we compute is indeed <em>OldSelf</em>,
+the value at time <em>T</em>&minus;1!  So now time
+<em>T</em>&minus;1 values are put in plane #0 and time
+<em>T</em> values are saved in plane #1.  The next application
+of the Fractal rule calculates the values for time
+<em>T</em>&minus;2, and so on.
+</p>
+
+<pre>
+    /*
+
+        Based on Me-Neither rule, [Margolus&amp;Toffoli87], p.132
+
+    */
+
+    rule.worldtype = 1;          // 2D torus world
+    rule.patreq = "square";
+
+    function fractal(oldstate,     nw, n  , ne,
+                                   w, self, e,
+                                   sw, s  , se) {
+        var mem, sum, newSelf;
+
+        mem = (oldstate &gt;&gt; 1) &amp; 1;
+        sum = ne + nw + se + sw + mem;
+        newSelf = ((sum &amp; 1) == 1) ? 1 : 0;
+
+        return (self &lt;&lt; 1) | newSelf;
+    }
+</pre>
+
+<h3 id="FredMem">
+<a href="https://www.fourmilab.ch/cellab/webca/?ruleprog=fredmem"
+    class="i" rel="Target:CelLabRunRule"><img src="icons/play.png"
+    width="32" height="32" class="playbutton"
+    alt="Play" title="Run this rule in WebCA" /></a>
+FREDMEM
+</h3>
+
+<p class="subsuper">
+<img src="figures/fredmem.png" alt="" class="left" width="320" height="200" />
+Edward Fredkin invented the &ldquo;parity rule&rdquo; as a very
+simple example of &ldquo;self-reproduction&rdquo; in cellular
+automata.  In the parity rule, a cell takes the sum of its
+neighbors and goes to 1 if the sum is odd, or to 0 if the sum is
+even.  Thus a cell takes on the &ldquo;parity&rdquo; (oddness)
+of its neighborhood.  If the shape of the neighborhood you are
+using includes <em>k</em> cells, then when you feed any small
+plane #0 starting pattern to the parity rule, you will soon have
+<em>k</em> copies of the pattern, and then you'll get
+<em>k</em><sup>2</sup> copies, and so on.
+</p>
+
+<p>
+To make this rule a little more dramatic to look at, we use the extra
+seven planes as memory planes, so that plane #1 remembers plane #0's
+last pattern, plane #2 remembers the pattern before that, and so on.
+</p>
+
+<p>
+It's fun to load a simple pattern in plane #0 and watch what
+Fredmem does with it.
+</p>
+
+<p>
+We've written the rule for a nine-cell neighborhood.  It works equally
+well for a five-cell (N+E+W+S+Self) neighborhood, or even for a
+three-cell (say N+Self+E) neighborhood.  The three cell version with
+only one bit of echo looks neat if you start with a square in one of
+the screen's corners; you get things that look like hypercubes.
+<br class="cb" />
+</p>
+
+<pre>
+/*
+
+    The Fredkin rule with the seven extra bits used as memory
+
+*/
+
+rule.worldtype = 1;          // 2D torus world
+rule.patreq = "square";
+
+function fredmem(oldstate,     nw, n  , ne,
+                               w, self, e,
+                               sw, s  , se) {
+    var SUM_9 = nw + n + ne + w + self + e + sw + s + se;
+
+    return ((oldstate &lt;&lt; 1) &amp; 0xFE) | (SUM_9 &amp; 1);
+}
+</pre>
+
+<h3 id="Gasflow">
+<a href="https://www.fourmilab.ch/cellab/webca/?ruleprog=gasflow"
+    class="i" rel="Target:CelLabRunRule"><img src="icons/play.png"
+    width="32" height="32" class="playbutton"
+    alt="Play" title="Run this rule in WebCA" /></a>
+GASFLOW
+</h3>
+
+<p>
+<img src="figures/gasflow.png" alt="" class="left" width="320" height="200" />
+This rule models particles being carried along in the flow of a
+fluid, like the smoke which is sometimes used in wind tunnels to
+visualize the flow of air around an object being tested.  The
+rule uses the
+<b><a href="ruledef-eval.html#e_gasflow">gasflow</a></b>
+evaluator, which performs random diffusion like
+<a href="rules.html#Sublime">Sublime</a>, but with a twist.  Particles are
+given a bias in favor of moving from left to right, creating a
+flow in that direction.  By default, particles are 25% more
+likely to move to the right than to the left; you can change
+this by editing the evaluator and changing the
+<span class="tt">flow</span> parameter to a value between 0 (no flow:
+random diffusion) and 100 (particles never move to the left)
+and pressing &ldquo;Compile&rdquo; to update the evaluator.
+</p>
+
+<p>
+Using the particles as tracers for pressure, you'll see pressure
+increase on the leading edges of obstacles facing into the flow,
+with regions of low pressure on the lee side.  Note how flow
+diverted around the circle &ldquo;piles up&rdquo; on the two
+vanes downstream of it, which direct most of the flow back
+toward the middle of the map.  The rule runs in a closed toroidal
+world, so particles which leave the map on the right come back in
+at the left.  Particle number is conserved.
+<br class="cb" />
+</p>
+
+<h3 id="Glooper">
+<a href="https://www.fourmilab.ch/cellab/webca/?ruleprog=glooper"
+    class="i" rel="Target:CelLabRunRule"><img src="icons/play.png"
+    width="32" height="32" class="playbutton"
+    alt="Play" title="Run this rule in WebCA" /></a>
+GLOOPER
+</h3>
+
+<p>
+<img src="figures/glooper.png" alt="" class="left" width="320" height="200" />
+This rule was inspired by the hydraulic economic computer in
+Terry Pratchett's novel
+<cite><a href="http://www.amazon.com/dp/0062334999/?tag=fourmilabwwwfour"
+        rel="Target:FourmilabAmazon">Making Money</a></cite>, which, in
+turn was inspired by the real-world
+<a href="https://en.wikipedia.org/wiki/MONIAC"
+    rel="Target:CelLabAux">MONIAC</a> model of the U.K. economy.
+Glooper uses the <b><a href="ruledef-eval.html#e_water">water</a></b>
+evaluator to model the flow of a slightly compressible fluid
+under the force of gravity.  Unlike almost all other <cite>CelLab</cite>
+rules, Glooper is <em>continuous-valued</em>: cells do not take on
+states from 0 to 255, but rather floating-point values with
+more than six decimal places of precision (IEEE single-precision
+floating point), representing the mass of fluid in the cell.  On
+each generation, fluid flow between each cell and its four
+neighbors is calculated based upon their mass content.  The map display
+shows the presence or absence of fluid (but not its continuous
+mass value) in blue and walls, through which fluid cannot flow,
+in yellow.
+</p>
+
+<p>
+Because only the mass, but not the momentum and flow direction
+of the fluid is modeled, the flow is more like that of a highly
+viscous fluid like honey than water.  The same techniques used by
+the <b>water</b> evaluator can be extended to perform more
+faithful <a href="https://en.wikipedia.org/wiki/Finite_element_method"
+    rel="Target:CelLabAux">finite element modeling</a>
+of physical systems all the way to two-dimensional
+<a href="https://en.wikipedia.org/wiki/Computational_fluid_dynamics"
+    rel="Target:CelLabAux">computational fluid dynamics</a>.
+Please see the <a href="rules.html#Wind">Wind</a> rule for an example
+of such a simulation.
+<br class="cb" />
+</p>
+
+<h3 id="Griff">
+<a href="https://www.fourmilab.ch/cellab/webca/?ruleprog=griff"
+    class="i" rel="Target:CelLabRunRule"><img src="icons/play.png"
+    width="32" height="32" class="playbutton"
+    alt="Play" title="Run this rule in WebCA" /></a>
+GRIFF
+</h3>
+
+<p>
+<img src="figures/griff.png" alt="" class="left" width="320" height="200" />
+This rule demonstrates a
+<a href="https://en.wikipedia.org/wiki/Cyclic_cellular_automaton"
+    rel="Target:CelLabAux">cyclic cellular automaton</a>
+as described by David Griffeath in his paper
+<a href="refs.html#Griffeath88">[Griffeath88]</a>.
+Cells take on states from 0 to
+<em>N</em>&minus;1, where <em>N</em> can be any value from 2
+through 256.  The value of <em>N</em> in the rule program defaults
+to 11, but you can edit it in the rule program box and press
+&ldquo;Generate&rdquo; to see how other values behave.
+</p>
+
+<p>
+The rule works by having each cell, in each generation, choose one of
+its eight neighbors at random and compare its state to the cell's own
+state.  If the neighbor cell's state is one greater than that of the
+cell modulo <em>N</em> (which means that if, for example, <em>N</em>
+is 11, the state one greater than 10 is 0), then the cell takes
+on its neighbor's state and is said to have been
+&ldquo;consumed&rdquo;&mdash;these rules are sometimes called
+&ldquo;appetite rules&rdquo;.
+</p>
+
+<p>
+The starting pattern consists of an elliptical arena of mostly
+zero cells with a few sparsely-distributed cells in random
+values, surrounded by a sea of cells with random values.  As the
+rule runs, initially patches of one state will grow outward
+from seeds at the edge into the oval, then interact and enter a
+chaotic turbulent phase.  This will then usually self-organize
+into a Zhabotinsky-like pattern of interacting spirals.  The
+larger the value of <em>N</em>, the larger the spirals: if
+<em>N</em> is a substantial fraction of the size of the map, the
+waves may look more linear than spiral.  Griffeath's original
+rule was deterministic: a cell was consumed if any of its
+neighbors were in the next higher state.  This tended to produce
+sharp-edged waves like our <a href="rules.html#RainZha">RainZha</a> rule.
+Our variant, which randomly chooses a single neighbor to examine
+on each generation, creates more ragged, organic-looking
+patterns, which resemble the growth of bacterial colonies in a
+Petri dish.
+<br class="cb" />
+</p>
+
+<h3 id="Gyre">
+<a href="https://www.fourmilab.ch/cellab/webca/?ruleprog=gyre"
+    class="i" rel="Target:CelLabRunRule"><img src="icons/play.png"
+    width="32" height="32" class="playbutton"
+    alt="Play" title="Run this rule in WebCA" /></a>
+GYRE
+</h3>
+
+<p>
+<img src="figures/gyre.png" alt="" class="left" width="320" height="200" />
+While working on <cite>CelLab</cite>, I've enjoyed a number of
+conversations with William Gosper, who lives not too far away.
+Gosper achieved CA immortality by discovering the Life glidergun
+in 1971. He still takes a sporadically active interest in CAs,
+and he urged me to realize a rule which he thought of. This rule
+is Gosper's Gyre.
+</p>
+
+<p>
+The idea behind Gyre is that we load an initial pattern into the
+plane so that cells can tell which of the four quadrants they
+are in. In each quadrant, the cells pass their plane #0 bits
+around according to a scheme which produces a circling motion
+around the origin. The interest of the pattern arises because if
+I start out with a block of firing cells in one quadrant, the
+block will &ldquo;refract&rdquo; as it passes through the
+quadrant boundaries. Cells which are closer to the origin get to
+the boundary before the more distant cells do, and they pull
+increasingly ahead, drawing the original start pattern into a
+spiral or &ldquo;gyre.&rdquo;
+<br class="cb" />
+</p>
+
+<pre>
+/*
+
+    Rule suggested by William Gosper.  We lay down a mask
+    marking the Cartesian plane's four quadrants (Qs for short)
+    by the numbers 0-3 in the arrangement
+               2  0
+               3  1.
+    And we tell Q0 cells to copy SE, Q1 copy SW, Q2 copy NE, Q3
+    copy NW. A block of cell stuff will refract.
+
+*/
+
+rule.worldtype = 0;          // 2D open world
+rule.patreq = "gyre";
+rule.palreq = "gyre";
+
+function gyre(oldstate,     nw, n  , ne,
+                            w, self, e,
+                            sw, s  , se
+               ) {
+    var r, barrier, quadrant, newSelf = 0;
+
+    barrier = (oldstate &gt;&gt; 3) &amp; 1;
+    quadrant = (oldstate &gt;&gt; 1) &amp; 3;
+
+    //  Barrier cells stay barrier cells
+    if (barrier == 1) {
+        r = 8;
+    } else {
+        switch (quadrant) {
+            case 0:
+                newSelf = se;
+                break;
+
+            case 1:
+                newSelf = sw;
+                break;
+
+            case 2:
+                newSelf = ne;
+                break;
+
+            case 3:
+                newSelf = nw;
+                break;
+        }
+        r = (quadrant &lt;&lt; 1) | newSelf;
+    }
+    return r;
+}
+</pre>
+
+<h3 id="Heat">
+<a href="https://www.fourmilab.ch/cellab/webca/?ruleprog=heat&amp;pattern=heat"
+    class="i" rel="Target:CelLabRunRule"><img src="icons/play.png"
+    width="32" height="32" class="playbutton"
+    alt="Play" title="Run this rule in WebCA" /></a>
+HEAT and HEATWAVE
+</h3>
+
+<p>
+<img src="figures/heat.png" alt="" class="left" width="320" height="200" />
+The Heat rules and the Rug rules are all variations on a
+rule where a cell's new state is based on the average of the
+states around it.  In both Heat and Heatwave, we use the toroidal
+WorldType 10, whose inner loop returns five bits of the cell's old
+state as well as the eleven bit sum of the cell's eight eight-bit
+neighbors.  And in both rules we divide this full eightsum by eight.
+The difference between Heat and
+<a href="https://www.fourmilab.ch/cellab/webca/?ruleprog=heatwave&amp;pattern=heat"
+    rel="Target:CelLabRunRule">HeatWave</a> is that HeatWave adds two to
+the average.
+</p>
+
+<p>
+The special feature of Heat and Heatwave is that some of the
+cells are kept at fixed values. In particular, if a cell's low
+bit is on, the cell is not updated: the cell is simply kept at a
+fixed value. Specifying the cell's fixed value is a bit tricky
+because WorldType 10 only gives you five bits of the cell's
+state. As my purpose in writing Heat was to simulate heatflow
+between two objects of different temperatures, what I do is to
+suppose that the odd states with low five bits 1&ndash;15 are
+fixed at the low values 1 to 15; and that the odd states with
+low five bits 17&ndash;31 are fixed at the high values 128+17 to
+128+31. Relative to a continuous modular ring of 256 eight-bit
+values, 128 is as far as you can get from zero.
+</p>
+
+<p>
+The Heat pattern includes a large assemblage drawn in state
+128+31, as well as a leaning block in state 1. The
+&ldquo;hot&rdquo; assemblage sends out waves of high state, but
+the &ldquo;cool&rdquo; block seems to do nothing. In order to
+see both blocks in action, energize the background by putting in
+some random mid-temperature gas. You can do this by entering the
+<a href="webca.html#bitplane">Bit Plane Editor</a>
+dialogue and using the &ldquo;Initialize Map
+Planes&rdquo; section to fill plane #7 with random bits.
+<br class="cb" />
+</p>
+
+<p>
+If anything, Heat works too well, converging very quickly to a
+boring equilibrium state.  In HeatWave we keep cycling the
+colors of the non-fixed cells.  Ultimately this leads to
+turbulent chaos in the nonfixed regions.
+<a href="https://www.fourmilab.ch/cellab/webca/?ruleprog=heatwave&amp;pattern=startrek"
+    rel="Target:CelLabRunRule">HeatWave looks really
+gorgeous</a> when run with the pattern <b>startrek.jcp</b>, which is
+an AutoCAD line drawing of the starship Enterprise.
+</p>
+
+<p>
+<a href="ruledef-js.html#Heat-js">JavaScript</a> and
+<a href="ruledef-java.html#Heat-java">Java</a> code defining the
+Heat rule is presented in the
+<cite><a href="ruledef.html">Defining Rules</a></cite>
+chapter.
+</p>
+
+<h3 id="HGlass">
+<a href="https://www.fourmilab.ch/cellab/webca/?ruleprog=hglass&amp;pattern=startrek"
+    class="i" rel="Target:CelLabRunRule"><img src="icons/play.png"
+    width="32" height="32" class="playbutton"
+    alt="Play" title="Run this rule in WebCA" /></a>
+HGLASS
+</h3>
+
+<p>
+<img src="figures/hglass.png" alt="" class="left" width="320" height="200" />
+This is a five-neighbor two-state two-dimensional cellular
+automaton found at random by Margolus and Toffoli. It organizes
+a nice sliding flow on a random screen, and it disassembles
+solid starting patterns in an interesting way.
+<br class="cb" />
+</p>
+
+<pre>
+/*
+
+    The Hglass rule from page 29 of Margolus and Toffoli.
+
+*/
+
+rule.worldtype = 1;          // 2D torus world
+
+function hglass(oldstate,     nw, n  , ne,
+                              w, self, e,
+                              sw, s  , se) {
+   var r = 0;
+
+    switch ((16 * e) + (8 * w) + (4 * s) + (2 * n) + self) {
+        case 1: case 2: case 3: case 11: case 21:
+        case 25: case 29: case 30: case 31:
+            r = 1;
+            break;
+
+        default:
+            r = 0;
+            break;
+    }
+    return r;
+}
+</pre>
+
+<h3 id="Hodge">
+<a href="https://www.fourmilab.ch/cellab/webca/?ruleprog=hodge&amp;palette=autocad"
+    class="i" rel="Target:CelLabRunRule"><img src="icons/play.png"
+    width="32" height="32" class="playbutton"
+    alt="Play" title="Run this rule in WebCA" /></a>
+HODGE
+</h3>
+
+<p>
+<img src="figures/hodge.png" alt="" class="left"  width="320" height="200" />
+Hodge is inspired by a cellular automaton rule called &ldquo;the
+Hodgepodge machine,&rdquo;
+(see <a href="refs.html#DewdneyColumn88a">[DewdneyColumn88a]</a>).
+The Hodgepodge rule was invented by Martin Gerhardt and Heike
+Schuster of the University of Bielefeld in West Germany. For
+whatever reason, Gerhardt and Schuster chose to describe their
+rule in terms of the spread of a disease. A cell in state 0 is
+thought of as &ldquo;healthy&rdquo; and a cell in state 128 is
+thought of as truly &ldquo;ill&rdquo;. Cells in states
+1&ndash;127 are thought of as being &ldquo;sick&rdquo; in
+varying degrees. The Hodgepodge rule eventually begins producing
+spirals like the Zhabotinsky reaction.
+</p>
+
+<p>
+The Hodgepodge rule is formulated in terms of two constants
+<em>g</em> and <em>n</em>:
+<br class="cb" />
+</p>
+
+<ol class="spaced">
+    <li><em>Healthy.</em> A cell in state 0 becomes nonzero if
+    it has several nonzero neighbors. The details of how this is
+    done are unimportant.</li>
+
+    <li><em>Sick.</em> For a cell with state between 0 and
+    <em>n</em> begin by calculating the average of the nine
+    states in the cell's neighborhood and then add the fixed
+    constant <em>g</em>.  If the number you get is less than or
+    equal to <em>n</em>, then that is the cell's new state,</li>
+
+    <li><em>Ill.</em> But if the number you get is greater than
+    <em>n</em>, then you round it down to <em>n</em>.  And if a
+    cell is in presently in state <em>n</em>, then its next
+    state is automatically 0.</li>
+</ol>
+
+<p>
+These three conditions are 1) ragged start, 2) Laplacian spread, 3)
+synchronizing cutoff.
+</p>
+
+<p>
+Below is the JavaScript code for Hodge.  The world type 10 is
+tailormade for averaging neighbors.  In this world type we are
+only allowed to see five bits of EveryCell's OldState, so the
+cutoff value <em>n</em> has to be the largest number expressible
+in five bits: 31.  An increment <em>g</em> value of 5 seems to
+work best here.
+</p>
+
+<p>
+Hodge is a lovely rule which converges very rapidly. It looks
+nice with the color palettes Default, AutoCAD, and Ranch.
+Particularly with AutoCAD color, the patterns look extremely
+organic, suggesting successive microtomed cross-sections of a
+human brain.
+</p>
+
+<p>
+Suppose you push the microtome concept and begin thinking of
+Hodge as generating a three dimensional stack of
+planes&mdash;just as a one dimensional rule generates a two
+dimensional spacetime sheet of stacked lines. When you look at
+Hodge (or at other Zhabotinsky reactions) you are seeing very
+striking three dimensional structures; things like paired vortex
+sheets in the surface of a river below a dam, the scroll pair
+stretching all the way down to the river bottom&hellip;to a
+fortuitous inhomogeneity in Hodge's random start.
+</p>
+
+<p>
+Another thought: In three dimensions, a Zhabotinsky reaction would be
+like two paired nautilus shells, facing each other with their lips
+blending. The successive layers of such a growing pattern would build
+up a shape very like&hellip;a fetus!
+</p>
+
+<p>
+Hodge is also interesting if you give it a bilaterally symmetric
+start; this leads to patterns that remind me of fanciful chinese
+lions with popeyes and twin-scroll nostrils.  A good bilaterally
+symmetric start can be gotten by loading the <b>rug.jcp</b>
+pattern in nowrap mode and scrolling part of the pattern off the
+top of the screen.  This leaves the left/right symmetry but
+breaks the up/down symmetry.  This must be done before loading
+Hodge, because world type 10 rules like Hodge do not admit a
+nowrap mode.  Once the pattern is set, feed it to Hodge.  As the
+pattern settles in, try fooling with different color palette
+selections.  Eventually you will get a living pattern, which you
+can save by right clicking on the map display and using your
+browser to save the image.
+</p>
+
+<pre>
+rule.worldtype = 10;         // 2D open semitotalistic rule
+
+function hodge(oldstate, SUM_8) {
+    var temp = 0;
+
+    if (oldstate == 0) {
+        if (SUM_8 &lt; 5) {
+            temp = 0;
+        } else {
+            if (SUM_8 &lt; 100) {
+                temp = 2;
+            } else {
+                temp = 3;
+            }
+        }
+    } else if ((oldstate &gt; 0) &amp;&amp; (oldstate &lt; 31)) {
+        temp = ((SUM_8 &gt;&gt; 3) + 5) &amp; 255;
+    }
+    if (temp &gt; 31) {
+        temp = 31;
+    }
+    if (oldstate == 31) {
+        temp = 0;
+    }
+    return temp;
+}
+</pre>
+
+<h3 id="Lant">
+<a href="https://www.fourmilab.ch/cellab/webca/?ruleprog=lant"
+    class="i" rel="Target:CelLabRunRule"><img src="icons/play.png"
+    width="32" height="32" class="playbutton"
+    alt="Play" title="Run this rule in WebCA" /></a>
+LANT
+</h3>
+
+<p>
+<img src="figures/lant.png" alt="" class="left" width="320" height="200" />
+<a href="https://en.wikipedia.org/wiki/Langton%27s_ant"
+    rel="Target:CelLabAux">Langton's Ant</a> was invented by
+Christopher Langton in 1986.  It is a two-dimensional Turing
+machine with a head (ant) that moves on a map of cells which can
+be in one of two states.  In each generation, the head moves to
+an adjacent cell, inverting the state of the cell it
+departs.  The head can move in one of the four directions in the
+von Neumann neighborhood; the direction it moves is set by the
+current state of the head.  Upon moving to a new cell, the head
+adjusts its direction by turning clockwise if the cell's state
+is zero and counterclockwise if it is one.
+</p>
+
+<p>
+When started with an all-zero map, the head starts by tracing
+out a lacy pattern exhibiting symmetries, but then, as the
+pattern grows, appears to be following a random walk, occasionally
+adding to the borders of the pattern.  After around 10,000
+generations, however, the head will begin to create a
+&ldquo;highway&rdquo; which extends in a diagonal direction in
+a cycle of 104 generations.  This is an example of spontaneous
+emergence of order after a long period of apparently chaotic
+behavior.  If run on an infinite map, the highway would extend
+without bound, but on our wrap-around map, it will eventually
+collide with the original random pattern, producing interesting
+interactions.  All starting configurations which have been
+tested eventually produce a highway, but it has not been proved
+that every possible configuration does so.  It has, however, been
+proved that the pattern always grows without bound in some manner.
+Try starting the rule on the <b>square</b> pattern and watch how
+it evolves into a lattice of ordered highways and burl-like
+intersections.  See the <a href="rules.html#Turmite">Turmite</a> rule for
+another, more complicated, moving-head Turing machine.
+<br class="cb" />
+</p>
+
+<h3 id="Langton">
+<a href="https://www.fourmilab.ch/cellab/webca/?ruleprog=langton"
+    class="i" rel="Target:CelLabRunRule"><img src="icons/play.png"
+    width="32" height="32" class="playbutton"
+    alt="Play" title="Run this rule in WebCA" /></a>
+LANGTON
+</h3>
+
+<p>
+<img src="figures/langton.png" alt="" class="left" width="320" height="200" />
+This is Langton's self-reproducing machine.
+The <a href="chap5.html#i5-HIST-class">inspiration of the Langton rule</a>
+is discussed in the
+<cite><a href="chap5.html">Origins of <cite>CelLab</cite></a></cite>
+chapter; the
+<cite><a href="ruledef-eval.html">User Evaluators</a></cite> section
+describes how the WebCA version of Langton was written.
+</p>
+
+<p>
+The rule runs in a closed toroidal world, and the reproduction
+will eventually stop when wrap-around causes reproducing
+patterns to collide with previously-created ones.  In an
+infinite plane, the patterns would reproduce forever.
+</p>
+
+<p>
+See the <a href="rules.html#Byl">Byl and ChouReg</a> rules for simpler
+self-replicating structures and <a href="rules.html#Evoloops">Evoloops</a>
+for an example of evolution in reproducing patterns and the
+generation of replicators from a non-replicating &ldquo;primordial
+soup&rdquo;.
+<br class="cb" />
+</p>
+
+<h3 id="Life">
+<a href="https://www.fourmilab.ch/cellab/webca/?ruleprog=life&amp;pattern=glidrgun"
+    class="i" rel="Target:CelLabRunRule"><img src="icons/play.png"
+    width="32" height="32" class="playbutton"
+    alt="Play" title="Run this rule in WebCA" /></a>
+LIFE
+</h3>
+
+<p>
+<img src="figures/life.png" alt="" class="left" width="320" height="200" />
+The version of Life we show here echoes plane #0 into plane #1.
+This means that cells will be differentially shaded according to
+whether they have the low two bits:
+</p>
+
+<table class="ctn">
+    <tr>
+        <td class="ttb">00 &nbsp;  </td>
+        <td>Was off and is off</td>
+        <td>Blank</td>
+    </tr>
+    <tr>
+        <td class="ttb">01</td>
+        <td>Was off and is now on &nbsp; </td>
+        <td>Newborn</td>
+    </tr>
+    <tr>
+        <td class="ttb">10</td>
+        <td>Was on and is now off</td>
+        <td>Newly dead</td>
+    </tr>
+    <tr>
+        <td class="ttb">11</td>
+        <td>Was on and is now on</td>
+        <td>Established</td>
+    </tr>
+</table>
+
+<p>
+This particular shading enables the eye to easily pick out the regions
+of greatest activity.  If you would prefer to see vanilla, untinted
+Life, load the color palette <b>mask1</b>, which colors all odd
+states white and all even states black.
+<br class="cb" />
+</p>
+
+<p>
+Two Life patterns interesting to load are
+<a href="https://www.fourmilab.ch/cellab/webca/?ruleprog=life&amp;pattern=rpent"
+    rel="Target:CelLabRunRule"><b>rpent</b></a> and
+<b>glidrgun</b>.  See the <a href="chap4.html"><cite>Theory</cite></a>
+chapter for <a href="chap4.html#i4-TH-life">much info about Life</a>.
+</p>
+
+<h3 id="Logic">
+<a href="https://www.fourmilab.ch/cellab/webca/?ruleprog=logic"
+    class="i" rel="Target:CelLabRunRule"><img src="icons/play.png"
+    width="32" height="32" class="playbutton"
+    alt="Play" title="Run this rule in WebCA" /></a>
+LOGIC
+</h3>
+
+<p>
+<img src="figures/logic.png" alt="" class="left" width="320" height="200" />
+Can you simulate an arbitrary logic circuit with a cellular automaton?
+<em>Yes you can!</em>  Of course, it has been proved that a number of
+cellular automaton rules, as simple as
+<a href="https://en.wikipedia.org/wiki/Rule_110"
+    rel="Target:CelLabAux">Wolfram's Rule 110</a>,
+are
+<a href="https://en.wikipedia.org/wiki/Turing_completeness"
+    rel="Target:CelLabAux">Turing complete</a>
+and hence can perform any deterministic computation.  But often
+the preparation of the initial state for such rules is
+enormously contrived and requires more computation than getting
+the answer out.  It's interesting to see whether a cellular automaton
+can emulate the logical operations upon which we build the
+digital circuits used by our computers and, indeed, it can.
+</p>
+
+<p>
+The Logic rule, which uses the
+<b><a href="ruledef-eval.html#e_margolus">margolus</a></b>
+evaluator, implements the fundamental operations of digital
+logic: the ability to duplicate signals (&ldquo;fanout&rdquo;),
+cross-over signals without interference, <b>invert</b>
+signals (changing one bits into zeroes and vice versa), and the
+<b>and</b> operation (taking two inputs and emitting a one bit
+only if both inputs are ones).  The combination of the operations
+of <b>invert</b> and <b>and</b>
+(<b><a href="https://en.wikipedia.org/wiki/NAND_gate"
+    rel="Target:CelLabAux">NAND</a></b>) suffice to compute
+all of the functions of
+<a href="https://en.wikipedia.org/wiki/Boolean_algebra"
+    rel="Target:CelLabAux">Boolean algebra</a>.
+</p>
+
+<p>
+The sample pattern demonstrates these fundamental logical
+operations.  Wires are shown in blue, bits flowing along the
+wires in red, and isolated bits, which do not move but may
+complement the value of bits passing on adjacent wires are
+displayed in green.  Annotations in grey play no part in the
+evolution of the rule.  Each example is driven by a
+<a href="https://en.wikipedia.org/wiki/Shift_register"
+    rel="Target:CelLabAux">shift register</a> which
+recirculates a pattern and emits it to the output wire.
+</p>
+
+<p>
+It is straightforward to build an
+<a href="https://en.wikipedia.org/wiki/Exclusive_or"
+    rel="Target:CelLabAux">exclusive or</a> (XOR) gate from
+the primitive operations of <b>and</b> and <b>invert</b>.
+Who will be the first to build a
+<a href="https://en.wikipedia.org/wiki/Linear-feedback_shift_register"
+    rel="Target:CelLabAux">linear feedback shift register</a>
+<a href="https://en.wikipedia.org/wiki/Pseudorandom_number_generator"
+    rel="Target:CelLabAux">pseudorandom number generator</a>
+using the primitive operations of the Logic rule?
+</p>
+
+<p>
+See <a href="rules.html#Banks">Banks</a> for an even simpler rule which can
+be used to build a universal computer.
+<br class="cb" />
+</p>
+
+<h3 id="Meltdown">
+<a href="https://www.fourmilab.ch/cellab/webca/?ruleprog=owncode&amp;evaluator=meltdown&amp;pattern=x29&amp;palette=x29"
+    class="i" rel="Target:CelLabRunRule"><img src="icons/play.png"
+    width="32" height="32" class="playbutton"
+    alt="Play" title="Run this rule in WebCA" /></a>
+MELTDOWN
+</h3>
+
+<p>
+<img src="figures/meltdown.png" alt="" class="left" width="320" height="200" />
+Meltdown uses the generic Owncode rule definition and invokes
+the <b><a href="ruledef-eval.html#e_meltdown">meltdown</a></b>
+evaluator which swaps pairs of cells in a column if the
+top cell has a higher state number than the one below it.
+This causes the contents of the map to &ldquo;melt down&rdquo;, with
+the higher valued cells at the bottom and the lower value cells
+above.  This makes a column-by-column histogram of the contents
+of the map.  To run this rule, select the Owncode rule from the
+and the Meltdown evaluator; you can use the Owncode rule to run
+any evaluator which does not require a lookup table.
+<br class="cb" />
+</p>
+
+<h3 id="Mite">
+<a href="https://www.fourmilab.ch/cellab/webca/?ruleprog=mite"
+    class="i" rel="Target:CelLabRunRule"><img src="icons/play.png"
+    width="32" height="32" class="playbutton"
+    alt="Play" title="Run this rule in WebCA" /></a>
+MITE
+</h3>
+
+<p>
+<img src="figures/mite.png" alt="" class="left" width="320" height="200" />
+Mite is a simulation of a predator-prey ecology developed by Dan
+Drake.  It models a strawberry field (the black background)
+being attacked by mites (green) which, in turn, are being eaten
+by predatory mites (red).  Started from a simple pattern of a
+block of prey with a few predators in the center, it evolves
+into a complex and ever-changing landscape where islands of prey
+grow, only to be colonized and devoured by predators with which
+they eventually come into contact. See the
+<a href="rules.html#Forest">Forest</a> and
+<a href="rules.html#Wator">Wator</a> rules for other ecological simulations.
+<br class="cb" />
+</p>
+
+<h3 id="Parks">
+<a href="https://www.fourmilab.ch/cellab/webca/?ruleprog=parks"
+    class="i" rel="Target:CelLabRunRule"><img src="icons/play.png"
+    width="32" height="32" class="playbutton"
+    alt="Play" title="Run this rule in WebCA" /></a>
+PARKS
+</h3>
+
+<p>
+<img src="figures/parks.png" alt="" class="left" width="320" height="200" />
+It is possible to model and carry out any possible computation
+as a two dimensional cellular automaton. It is known that Life,
+in particular, can be used to build a &ldquo;universal
+computer.&rdquo; Streams of gliders act like signals and other
+kinds of patterns act as memory blocks and as logic gates.
+</p>
+
+<p>
+Can one dimensional cellular automata carry out universal
+computation? Yes, if we allow the cells to have many (about a
+hundred) different states.  But can it be done with only
+<em>two</em> states, as in Life? Parks is a totalistic
+one-dimensional, two-state, six-neighbor CA rule that is thought
+to be promising.  As reported in
+<a href="refs.html#Dewdney88">[Dewdney88]</a>, p. 143, James K.
+Park found a bidirectional &ldquo;glider&rdquo; gun for this rule which
+shoots moving patterns out to the right and to the left.
+<br class="cb" />
+</p>
+
+<pre>
+/*
+
+        Park's one dimensional glider gun
+
+        This rule definition is used to demonstrate James K.
+        Park's one dimensional glider gun.  The rule
+        definition program is capable of generating any one
+        dimensional, two-state line automaton with
+        neighborhood radius between 0 and 4, as defined in
+        the chapter titled "One-Dimensional Computers" in:
+
+        The Armchair Universe by A. K. Dewdney: New York,
+        Freeman, 1988.  (ISBN 0-716-71938-X).
+
+        The program is parameterised by the definitions of
+        Radius and CodeNumber given below.  Radius specifies
+        how many cells on either side of the cell being
+        updated are summed with the cell itself.  Radius may
+        range from 0 to 4, the maximum neighborhood allowed
+        by WebCA in two-state mode.  The CodeNumber gives,
+        when expressed in binary, the bit coded new state
+        for each possible sum of the neighborhood.  For
+        example, Park's glider gun exists in the world with
+        Radius 3 and CodeNumber 88 (decimal).  Each cell is
+        then updated by counting the number of on cells in a
+        neighborhood that looks like the following:
+
+              L3   L2  L1  SELF  R1  R2  R3
+
+        This yields a sum of on cells that between 0 and 7.
+        The CodeNumber therefore encodes 8 possible
+        results.  Writing 88 as 8 binary digits, we obtain
+        01011000.  These digits give the new state based on
+        the number of neighbors as follows:
+
+        neighbors on:     7  6  5  4  3  2  1  0
+        New state:        0  1  0  1  1  0  0  0
+
+        If you define rule.patreq, that pattern file will be
+        loaded automatically.  In this example we load
+        Park's glider gun, which consists simply of the
+        pattern of values:
+
+              1 1 1 1 1 1 1 1 1 1 0 1 1
+
+        stored in cells at the centre of the top line of the
+        screen.
+
+        We run this example with a world type of 3. In a
+        toroidal world the gliders created by the glider gun
+        annihilate one another and thus don't mess up the
+        glider gun; in an infinite world they would continue
+        forever.
+*/
+
+rule.worldtype = 3;         // 1D ring world, 8 neighbors
+rule.patreq = "parks";      /* The parks pattern is 1111111111011.
+                               The pattern spews gliders left &amp; right.  */
+rule.palreq = "mask1";
+
+function parks(oldstate,     l4, l3, l2, l1,
+                                  self,
+                             r1, r2, r3, r4) {
+    var Radius = 3;         // Radius of neighborhood (Dewdney's R)
+    var CodeNumber = 88;    // Totalistic action code number
+
+    if ((Radius &gt; 4) || (Radius &lt; 0)) {
+        alert("Hey!!!  Radius must be 0 &lt;= Radius &lt;= 4." +
+              "  You specified Radius = " + Radius);
+        return -1;
+    }
+
+    if (CodeNumber &gt; (1 &lt;&lt; ((Radius * 2) + 2))) {
+        alert("CodeNumber setting of " + CodeNumber +
+                " inconsistent with" +
+              " Radius setting of " + Radius +
+                ".  The maximum valid" +
+              "  CodeNumber for this Radius is " +
+                (1 &lt;&lt; ((Radius * 2) + 2)));
+        return -1;
+    }
+
+    var i, sum;
+    var nbrhood = new Array(9);
+
+    /* Place the neighbor values in an array so that the sum
+       can be calculated in a loop controlled by the setting
+       of Radius. */
+
+    nbrhood[0] = l4;
+    nbrhood[1] = l3;
+    nbrhood[2] = l2;
+    nbrhood[3] = l1;
+ // nbrhood[4] = self;   Not actually used.
+    nbrhood[5] = r1;
+    nbrhood[6] = r2;
+    nbrhood[7] = r3;
+    nbrhood[8] = r4;
+
+    // Count dem bitz in de 'hood.
+
+    sum = self;
+    for (i = 1; i &lt;= Radius; i++) {
+       sum += nbrhood[4 + i] + nbrhood[4 - i];
+    }
+
+    // Return result derived from CodeNumber.
+
+    return ((CodeNumber &amp; (1 &lt;&lt; sum)) != 0) ? 1 : 0;
+}
+</pre>
+
+<h3 id="PerfumeT">
+<a href="https://www.fourmilab.ch/cellab/webca/?ruleprog=perfumex"
+    class="i" rel="Target:CelLabRunRule"><img src="icons/play.png"
+    width="32" height="32" class="playbutton"
+    alt="Play" title="Run this rule in WebCA" /></a>
+PERFUMET, PERFUMEX, PERFUMEM, and PERFUMER
+</h3>
+
+<p>
+<img src="figures/perfume.png" alt="" class="left" width="320" height="200" />
+These four rules show various ways of simulating &ldquo;lattice
+gases.&rdquo; A lattice gas is a simulation of a physical gas
+that represents gas particles by zeroes and ones in a lattice or
+grid.  WebCA is pretty good at showing lattice gas, though other
+ways of simulating lattice gases are possible.
+</p>
+
+<p>
+Our WebCA demos show five kinds of lattice gas in all.  There is the
+&ldquo;na&iuml;ve diffusion&rdquo; lattice gas of
+<a href="rules.html#Dendrite">Dendrite and DenTim</a>.  There is the
+&ldquo;Brownian&rdquo; lattice gas of <a href="rules.html#Sublime">Sublime</a>.
+There are the two Margolus and Toffoli gases I call Xgas and
+Tgas.  PerfumeX and
+<a href="https://www.fourmilab.ch/cellab/webca/?ruleprog=perfumem"
+    rel="Target:CelLabRunRule">PerfumeM</a>
+show Xgas.
+<a href="https://www.fourmilab.ch/cellab/webca/?ruleprog=perfumet"
+    rel="Target:CelLabRunRule">PerfumeT</a>,
+<a href="rules.html#Pond">Pond</a>, and
+<a href="rules.html#Soot">Soot</a> all show Tgas.  The rule
+<a href="rules.html#XTC">XTC</a>
+shows Xgas and Tgas at the same time.
+Finally,
+<a href="https://www.fourmilab.ch/cellab/webca/?ruleprog=perfumer"
+    rel="Target:CelLabRunRule">PerfumeR</a>
+shows a gas with diffusion driven by an external randomizer.
+</p>
+
+<p>
+The main difference between Xgas and Tgas is that Xgas particles
+move along the screen's diagonals and Tgas particles move
+horizontally or vertically along the screen's main axes. In both
+gases, the particles bounce off each other and off the
+barrier cells we call &ldquo;walls&rdquo;.  Tgas bounces cleanly
+off the walls; Xgas does an odd little loop inside a wall when
+it bounces.
+</p>
+
+<p>
+In both Perfume rules we start with two perfume bottles, one
+open and one loosely stoppered.  Each bottle holds a cloud of
+gas.  At startup, the gases simply try to move along the four
+directions that are natural to them.  But then they run into the
+perfume-bottles' walls, bounce off, and begin bouncing off each
+other.  Sooner or later the particles find their way out of the
+bottles and into the &ldquo;room.&rdquo;
+<br class="cb" />
+</p>
+
+<p>
+An important feature to note about the PerfumeT, PerfumeX, and
+PerfumeM rules is that no external randomization is being used.
+The gas particles disperse in clouds, but these clouds are
+strictly a deterministic result of the bouncings induced by the
+irregular shapes of the perfume bottles' walls. The gases are,
+if you will, self-randomizing.  The PerfumeR rule does use an
+external randomizer to determine the direction gas particles
+will move, and produces more realistic diffusion of the gas.
+</p>
+
+<p>
+The particular trick by which the gas motions are achieved was
+developed by Norman Margolus, and
+<a href="chap4.html#i4-TH-lattice">is explained</a> in the
+<a href="chap4.html"><cite>Theory</cite></a> chapter. As these rule
+programs are somewhat lengthy, I won't show them here. Instead
+I'll just list how the bits are used by the rules:
+</p>
+
+<table class="ctn">
+    <tr>
+        <td>Bit  #0</td>
+        <td>  is the machine visible bit for update</td>
+    </tr>
+    <tr>
+        <td>Bit  #1</td>
+        <td>  is used for the gas</td>
+    </tr>
+    <tr>
+        <td>Bit  #2</td>
+        <td>  is the wall</td>
+    </tr>
+    <tr>
+        <td>Bit  #3</td>
+        <td>  is the touch wall in my neighborhood bit</td>
+    </tr>
+    <tr>
+        <td>Bits #4 &amp; #5 &nbsp;</td>
+        <td>  hold a position number between 0 and 3</td>
+    </tr>
+    <tr>
+        <td>Bit  #6</td>
+        <td>  controls the check wall/do gas cycle</td>
+    </tr>
+    <tr>
+        <td>Bit  #7</td>
+        <td>  controls the A/B lattice cycle</td>
+    </tr>
+</table>
+
+<p>
+The PerfumeM rule is identical in operation to PerfumeX, but is
+written using the
+<a href="ruledef-eval.html#e_margolus"><b>margolus</b>
+evaluator</a>, which automatically keeps track of all of the
+housekeeping bits, dramatically simplifies the rule definition
+program, and allows the rule to run almost twice as fast.  If
+you're implementing lattice gas rules, this is generally the way
+to go.  This is the entire definition of the PerfumeM rule.
+</p>
+
+<pre>
+/*
+
+    This is HPP-GAS/WALLS rule from Toffoli &amp; Margolus,
+    discussed (but not given explicitly) in section 15.2, p.
+    159.
+
+    This version uses the "margolus" evaluator, which
+    does all of the spatial and temporal phase for us,
+    allowing us to use the logical relative neighbors.
+
+*/
+
+rule.worldtype = 13;         // 2D torus world, user evaluator
+rule.patreq = "perfumem";
+rule.palreq = "perfumem";
+rule.ocodereq = "margolus";  // Margolus neighborhood
+
+function perfumem(oldstate) {
+
+    //  Extract Margolus relative neighbors from oldstate
+    var CENTER = BITV(0),
+        CW = BITV(14),
+        CCW = BITV(12),
+        OPP = BITV(10);
+    //  You only need these if you care about plane 1 values
+    var CENTERp = BITV(1),
+        CWp = BITV(15),
+        CCWp = BITV(13),
+        OPPp = BITV(11);
+
+    //  Return bit from oldstate
+    function BITV(p) {
+        return (oldstate &gt;&gt; p) &amp; 1;
+    }
+
+    //  Now, after all the boilerplate, this is the entire rule
+
+    return (wall() ? CENTER :
+        (collision() ? CW : OPP)) | (CENTERp &lt;&lt; 1);
+
+    //  Detect a collision between two particles
+    function collision() {
+        return (CENTER == OPP) &amp;&amp;
+               (CW == CCW) &amp;&amp;
+               (CENTER != CW);
+    }
+
+    //  Detect the presence of a wall
+    function wall() {
+        return (CENTERp | CWp | OPPp | CCWp);
+    }
+}
+</pre>
+
+<h3 id="Pond">
+<a href="https://www.fourmilab.ch/cellab/webca/?ruleprog=pond"
+    class="i" rel="Target:CelLabRunRule"><img src="icons/play.png"
+    width="32" height="32" class="playbutton"
+    alt="Play" title="Run this rule in WebCA" /></a>
+POND
+</h3>
+
+<p>
+<img src="figures/pond.png" alt="" class="left" width="320" height="200" />
+Pond is two copies of Tgas. To improve the contrast, we only
+show the cells which hold two particles of gas. Pond's startup
+has a white square of particles immersed in a sea of random
+particles. The particles of the white square spread out,
+bouncing off the other particles and creating a circular
+pressure wave. The fact that the square block produces a
+circular wave is rather striking, suggesting that this
+simulation really is somewhat like a physical system.
+<br class="cb" />
+<br class="cl" />   <!-- Beats me why clear: both doesn't work above  -->
+</p>
+
+<h3 id="RainZha">
+<a href="https://www.fourmilab.ch/cellab/webca/?ruleprog=rainzha"
+    class="i" rel="Target:CelLabRunRule"><img src="icons/play.png"
+    width="32" height="32" class="playbutton"
+    alt="Play" title="Run this rule in WebCA" /></a>
+RAINZHA
+</h3>
+
+<p>
+<img src="figures/rainzha.png" alt="" class="left" width="320" height="200" />
+RainZha is the simplest &ldquo;Zhabotinsky&rdquo; style cellular
+automaton I have found. I call a rule a Zhabotinsky-style rule
+when it spontaneously generates spirals from an initial random
+soup. For reasons I don't yet fully understand,
+Zhabotinsky-style rules are fairly common in the world of
+cellular automata&mdash;perhaps as common as are Sierpi&#324;ski
+gaskets in the world of
+fractals.<a href="footnote.html#F3_8"><img
+    class="foot" src="icons/footnote.png"
+    height="16" width="16" alt="[Footnote]" /></a>
+</p>
+
+<p>
+The program for RainZha is the exactly the same as the Faders
+program listed under the <a href="rules.html#Faders">Faders rule</a>,
+with  <em>N</em>=8, <em>L</em>=2, <em>U</em>=3,<em> K</em>=2,
+and <em>Y</em>=2.  See the <a
+href="chap4.html#i4-TH-semit">discussion of &ldquo;NLUKY&rdquo;
+rules</a> in the <a href="chap4.html"><cite>Theory</cite></a>
+chapter for details. The consequences of larger choices of
+<em>N</em> can be explored in WebCA by loading the Rainzha rule
+program, editing the value of  <em>N</em>, then generating the
+modified rule.  For larger values of <em>N</em> it may take the
+rule too long to Zhabotinsky down.  You can ease up to a larger
+<em>N</em> by repeatedly changing the rule, increasing the
+<em>N</em> value by, say, 10 each time.  If this is done, then
+the old spirals help seed the new ones.
+<br class="cb" />
+</p>
+
+<h3 id="Ranch">
+<a href="https://www.fourmilab.ch/cellab/webca/?ruleprog=ranch"
+    class="i" rel="Target:CelLabRunRule"><img src="icons/play.png"
+    width="32" height="32" class="playbutton"
+    alt="Play" title="Run this rule in WebCA" /></a>
+RANCH
+</h3>
+
+<p>
+<img src="figures/ranch.png" alt="" class="left" width="320" height="200" />
+I designed Ranch using a CAM-6 board in the fall of 1987. The
+idea behind the rule is to run Life and Brain in an environment
+that is partitioned in two by Vote.  Full
+<a href="chap4.html#i4-TH-ranch">details and program listing</a>
+for Ranch are in the <a
+href="chap4.html"><cite>Theory</cite></a> chapter and in
+<a href="refs.html#Rucker89">[Rucker89]</a>.
+</p>
+
+<p>
+Ranch is set to randomize planes #0 and #1 at startup.  This
+illustrates the emergence of a pattern from randomness, but has
+the bad effect of destroying the low two planes of any pattern
+you feed Ranch.  You might want to load the Rule Program for
+Ranch, delete the
+&ldquo;<span class="tt">rule.rseed</span>&rdquo; lines, and re-Generate so
+that you can feed, say, the <b>Tim</b> pattern to it.
+</p>
+
+<p>
+The Ranch color palette <b>ranch.jcc</b> happens to look good
+with many other rules, such as <a href="rules.html#Hodge">Hodge</a>.
+</p>
+
+<h3 id="RevEcoli">
+<a href="https://www.fourmilab.ch/cellab/webca/?ruleprog=revecoli"
+    class="i" rel="Target:CelLabRunRule"><img src="icons/play.png"
+    width="32" height="32" class="playbutton"
+    alt="Play" title="Run this rule in WebCA" /></a>
+REVECOLI
+</h3>
+
+<p>
+<img src="figures/revecoli.png" alt="" class="left" width="320" height="200" />
+This rule was created simply to show that we can define
+reversible four-bit rules just as well as reversible 1-bit rules
+like <a href="rules.html#Fractal">Fractal</a> and
+<a href="rules.html#TimeTun">TimeTun</a>.
+</p>
+
+<p>
+RevEcoli is based on the rule <a href="rules.html#EcoLiBra">EcoLiBra</a>,
+which calculates a new four-bit state on the basis of the
+present neighborhood.  To make our rule reversible, we use the
+high four bits of OldState to store the prior four-bit state
+PastState, and we compute the NewState by the equation:
+<br class="cb" />
+</p>
+
+<p class="c">
+<em>NewState</em> = (16 + <em>EcoLiBra</em>(<em>PresentNeighborhood</em>) &minus; <em>PastState</em>) mod 16
+</p>
+
+<p>
+(We add in the 16 to make sure that the <b>mod</b> operation never gives
+us a negative number.) As was explained in our discussion of the
+Fractal rule above, we can exchange <i>NewState</i> and <i>PastState</i> in this
+equation, and this guarantees reversibility.  To see RevEcoli run
+backwards, start it up, let it run for awhile, and then swap planes
+#0&ndash;#3 with planes #4&ndash;#7 using the
+<a href="webca.html#bitplane">Bit Plane Editor</a>
+dialogue.
+</p>
+
+<p>
+RevEcoli very quickly turns an ordered start into
+<a href="chap4.html#barf">seething dog barf</a>, so it is a bit of
+a surprise to see the original four bit pattern re-emerge.  This
+is even more striking if you create the original start pattern
+yourself.  RevEcoli can turn 16-color images into secret static
+that can be decoded, as long as you know the process is based on
+EcoLiBra!
+</p>
+
+<p>
+Note that the same process can be carried out for any other
+rule. I used EcoLiBra because it was handy, and because EcoLiBra
+does not use the high four bits of
+<span class="tt">OldState</span>. Since these bits were conveniently
+vacant, I use them to store the cell's four bit PastState.
+</p>
+
+<p>
+This suggests a fairly simple encryption scheme which can be
+carried out with our CA.  First you and your partner need to
+agree on i) a number <em>B</em> (&le; 4) of bits for your rule
+to use, ii) a rule <em>F</em> which takes <em>B</em> bits of
+<em>OldState</em> and eight bits of neighbor state and gives a
+<em>B</em>-bit state we call
+<em>F</em>(<em>PresentNeighborhood</em>), iii) the number
+<em>T</em> of steps to run.
+</p>
+
+<p>
+Now you and your partner create a rule RevF defined by
+</p>
+
+<p class="subsuper" style="text-align: center;">
+<em>NewState</em> = (2<sup><em>B</em></sup> + <em>F</em>(<em>PresentNeighborhood</em>) &minus; <em>PastState</em>) mod 2<sup><em>B</em></sup>
+</p>
+
+<p>
+Knowing which <em>F</em> you plan to use is the &ldquo;secret
+key&rdquo; part of the transmission.  There are an effectively
+infinite number of these keys.<a href="footnote.html#F3_9"><img
+    class="foot" src="icons/footnote.png"
+    height="16" width="16" alt="[Footnote]" /></a>
+</p>
+
+<p>
+Once you have RevF, you can send a message by coding your info
+up into a <em>B</em>-bit graphics screen, and running RevF on
+this screen for <em>T</em> steps.  Suppose that, to make things
+easier for your partner, you also go ahead and use the Bit Plane
+Editor to exchange the low <em>B</em> bits of the screen pattern
+with the next higher <em>B</em> bits of the screen pattern. Then
+you save the pattern, as <b>message.jcp</b>, which you send to
+your partner.  Your partner has the <b>revf.jc</b> ruletable all
+set, and can immediately feed <b>message.jcp</b> to RevF.  After
+<em>T</em> cycles, your original pattern will be there on your
+partner's screen.  Try
+<a href="https://www.fourmilab.ch/cellab/webca/?show=crypto"
+    rel="Target:CelLabRunRule">running RevEcoli on the
+<b>crypto</b> pattern</a> and watch what happens!
+</p>
+
+<h3 id="Rug">
+<a href="https://www.fourmilab.ch/cellab/webca/?ruleprog=rug&amp;pattern=rug&amp;palette=autocad"
+    class="i" rel="Target:CelLabRunRule"><img src="icons/play.png"
+    width="32" height="32" class="playbutton"
+    alt="Play" title="Run this rule in WebCA" /></a>
+RUG, RUGF, and RUGLAP
+</h3>
+
+<p>
+<img src="figures/rug.png" alt="" class="left" width="320" height="200" />
+The Rug rules are all averaging rules using the full range of
+256 possible states. For each cell a neighborhood average is
+computed and the new state is the average plus one.
+</p>
+
+<p>
+In general the Rug rules will look better when the wrap is
+turned off. The existence of a fixed zero boundary gives the
+rule some information input to react to. (Recall that in the
+<a href="rules.html#Heat">Heat</a> rules we can fix selected cells by setting
+their low bits to one).
+</p>
+
+<p>
+If you start a Rug rule on a blank screen in open nowrap mode, a
+chaotic carpet will slowly grow inward, eventually filling the
+whole screen. Rug averages the neighboring eight cells, but RugF
+averages only the neighboring four cells.
+<a href="https://www.fourmilab.ch/cellab/webca/?ruleprog=rugf&amp;pattern=rug&amp;palette=autocad"
+    rel="Target:CelLabRunRule">RugF</a> runs faster,
+though its patterns are prone to developing checkerboards.
+<a href="https://www.fourmilab.ch/cellab/webca/?ruleprog=ruglap&amp;pattern=rug&amp;palette=autocad"
+    rel="Target:CelLabRunRule">RugLap</a> is a bit slower than
+Rug because RugLap uses the mathematically correct averaging
+technique for best approximating a solution to Laplace's
+equation:
+<br class="cb" />
+</p>
+
+<p class="c">
+<em>LaplaceAverage</em> = (4 &times; (<em>N</em> + <em>E</em> + <em>S</em> + <em>W</em>) +
+    (<em>NW</em> + <em>NE</em> + <em>SE</em> + <em>SW</em>)) / 20
+</p>
+
+<p>
+Although RugLap cycles slower, it converges to a solution in many
+fewer steps than do Rug and RugF.
+</p>
+
+<p>
+WebCA comes with a saved Rug pattern, the fruit of three hours
+computation of Rug on a blank, nowrap screen. If you press the
+up arrow key a few times you can break the fourway symmetry down
+to a bilateral symmetry. Or you can press the left arrow key a
+few times to shift the pattern as it runs.  Rotate your monitor
+90 degrees and there's a high-res Maxine Headroom!
+</p>
+
+<p>
+Many color palettes look good with Rug. <b>AutoCAD</b> gives it a
+sinister, seething, Giger-like quality.  <b>Stripe</b>,
+<b>Ranch</b>, and <b>Bob</b> are also good color palettes for
+Rug, but best of all is <b>Bleach</b>, a color palette with a
+sixteen cycle gray scale.
+</p>
+
+<p>
+<a href="ruledef-js.html#Rug-js">JavaScript</a> and
+<a href="ruledef-java.html#Rug-java">Java</a>
+code for the Rug rule is given in the <a
+href="ruledef.html"><cite>Defining Rules</cite></a> chapter.
+<b>RugF</b> and <b>RugLap</b> are the same, except that they
+call, respectively, the <b>semi4</b> and <b>lapinc</b>
+evaluators instead of <b>semi8</b>.
+</p>
+
+<h3 id="Runny">
+<a href="https://www.fourmilab.ch/cellab/webca/?ruleprog=owncode&amp;evaluator=runny&amp;pattern=steapot&amp;palette=steapot"
+    class="i" rel="Target:CelLabRunRule"><img src="icons/play.png"
+    width="32" height="32" class="playbutton"
+    alt="Play" title="Run this rule in WebCA" /></a>
+RUNNY
+</h3>
+
+<p>
+<img src="figures/runny.png" alt="" class="left" width="320" height="200" />
+Runny is similar to <a href="rules.html#Meltdown">Meltdown</a>, but here
+the rule is that a cell swaps position with a cell to its south
+only if that cell is in state 0 (which, in most color palettes,
+displays as black).  This has the effect of causing non-black cells
+to move down the map like runny paint, while black cells percolate
+through them to the top of the map.  It causes nonzero cells to pile up
+at the bottom of the map without changing their relative order.
+Runny uses the generic Owncode rule definition and invokes
+the <b><a href="ruledef-eval.html#e_runny">runny</a></b>
+evaluator.  The rule does not examine the states of cells other
+than testing them zero or nonzero, nor
+does it use a lookup table; it may be used on any map.
+<br class="cb" />
+</p>
+
+<h3 id="Sand">
+<a href="https://www.fourmilab.ch/cellab/webca/?ruleprog=sand"
+    class="i" rel="Target:CelLabRunRule"><img src="icons/play.png"
+    width="32" height="32" class="playbutton"
+    alt="Play" title="Run this rule in WebCA" /></a>
+SAND
+</h3>
+
+<p>
+<img src="figures/sand.png" alt="" class="left" width="320" height="200" />
+The Sand rule implements the
+<a href="https://en.wikipedia.org/wiki/Abelian_sandpile_model"
+    rel="Target:CelLabAux">Bak-Tang-Wiesenfeld sandpile model</a>
+<a href="refs.html#BakTang_Wiesenfeld87">[BakTang&amp;Wiesenfeld87]</a>.  In
+each generation, a single grain of sand falls on the cell at the
+center of the map.  When the pile of sand in any cell reaches a height
+of four grains, it becomes unstable and topples, with the four grains it
+contains distributed to its four von Neumann neighbors.  If this process
+results in one of more of the neighbors containing four grains, they in
+turn topple and the process continues until no cell contains four
+grains.  This was the first model discovered which exhibits the property
+of <a href="https://en.wikipedia.org/wiki/Self-organized_criticality"
+    rel="Target:CelLabAux">self-organized criticality</a>.  The system
+exhibits avalanches whose size follows a
+<a href="https://en.wikipedia.org/wiki/Power_law"
+    rel="Target:CelLabAux">power law</a>: many small, local events, and
+a few rare large ones.
+</p>
+
+<p>
+Color is used to represent the number of grains in each cell: grey for
+none, blue for 1, yellow for 2, and red for 3.  Since a cell with four
+grains immediately topples, no cell can contain more than three grains.
+As the pile grows, you will see how the addition of a single grain can
+cause cascades of all sizes.  While you might expect a smoothly growing
+structure, in fact the depth of the sand in the pile exhibits a complex
+fractal pattern that emerges as the pile grows.  The edges of the map
+consume any grains which reach them: they limit the growth of the pile.
+</p>
+
+<p>
+If you're patient and have a high-resolution screen, try running Sand in the
+<a href="https://www.fourmilab.ch/cellab/webca/index_640.html?ruleprog=sand&amp;pattern=blank_640"
+    rel="Target:CelLabRunRule">double-wide simulator</a>&mdash;it will
+produce intricate mandala patterns.  The Sand rule is entirely implemented
+within the <b><a href="ruledef-eval.html#e_sand">sand</a></b> user evaluator.
+This is an interesting mathematical model which has proved useful in
+analyzing emergent processes in a variety of fields.  It does not, however,
+accurately model the behavior of actual piles of sand.
+<br class="cb" />
+</p>
+
+<h3 id="Sexyloop">
+<a href="https://www.fourmilab.ch/cellab/webca/?ruleprog=sexyloopf"
+    class="i" rel="Target:CelLabRunRule"><img src="icons/play.png"
+    width="32" height="32" class="playbutton"
+    alt="Play" title="Run this rule in WebCA" /></a>
+SEXYLOOP
+</h3>
+
+<p>
+<img src="figures/sexyloop.png" alt="" class="left" width="320" height="200" />
+Sexyloop
+<a href="refs.html#Oros_Nehaniv07">[Oros&amp;Nehaniv07]</a>
+is an extension of
+<a href="rules.html#Evoloops">Evoloops</a>
+by Nicholas Oros
+which adds the ability of replicators to exchange
+genetic information.  F-sexyloop
+<a href="refs.html#Oros_Nehaniv09">[Oros&amp;Nehaniv09]</a>
+builds upon the
+mechanism for genetic transfer of the simpler M1 and M2 variants
+of Sexyloop by adding a &ldquo;sex gene&rdquo;, which must be
+present in order for the sending organism to transfer
+its genome to the receiver. This gene is represented by
+a cell in state 9, and can be transferred to the
+receiver along with other genetic material.  The sex
+gene thus behaves like the
+<a href="https://en.wikipedia.org/wiki/Fertility_factor_(bacteria)"
+    rel="Target:CelLabAux">F factor plasmid</a> in bacteria
+which facilitates the transfer of genetic material
+during conjugation.  If a connection is made by an
+organism which lacks the F gene, the connection will
+persist until one or both organisms die, but no gene
+transfer will occur.
+</p>
+
+<p>
+The experiment starts with a single replicator containing a
+sex gene.  As the replicators collide and interact, their
+genomes recombine.  Organisms which end up without a
+sex gene cannot transfer their genome to others.  As with
+<a href="rules.html#Evoloops">Evoloops</a>, smaller and faster-replicating
+mutants usually come to dominate the map.  You will see many
+odd things: sterile organisms mating incessantly without issue,
+networks of mating organisms destroyed by faster-propagating
+competitors, and mutants with curious behavior, such as extending
+long tentacles across the map.  Over time, the population will
+become dominated by organisms which carry the sex gene.  Our standard
+320&times;200 cell map is somewhat small to demonstrate the
+rich behavior of this rule.  If you have a fast computer and
+high-resolution screen, run the rule in the
+<a href="https://www.fourmilab.ch/cellab/webca/index_640.html?ruleprog=sexyloopf&amp;pattern=sexyloopf_640"
+    rel="Target:CelLabRunRule">double-wide simulator</a> to observe
+its evolution in a world with four times as many cells.
+</p>
+
+<p>
+The requirement for a sex gene to be present seems to constrain
+the tendency to rapidly select for the smallest and quickest-reproducing
+organisms&mdash;the very smallest replicating patterns are too small
+to contain a sex gene and hence infect others with their genome.  Compare
+the <a href="https://www.fourmilab.ch/cellab/webca/?ruleprog=sexyloopm2"
+    rel="Target:CelLabRunRule">SexyloopM2 variant</a>, which performs
+gene transfer without the need for a sex gene: it converges much more
+rapidly on a population of the smallest and fastest replicators.
+</p>
+
+<p>
+This is a 12 state rule which, like Evoloops, uses the <b>vonn4</b>
+user evaluator to examine four bits of state of the cell and its
+four neighbors.  The rule is completely deterministic&mdash;there is
+no random input: from a given start, the result will always be the same.
+<br class="cb" />
+</p>
+
+<h3 id="ShortPi">
+<a href="https://www.fourmilab.ch/cellab/webca/?ruleprog=shortpi"
+    class="i" rel="Target:CelLabRunRule"><img src="icons/play.png"
+    width="32" height="32" class="playbutton"
+    alt="Play" title="Run this rule in WebCA" /></a>
+SHORTPI
+</h3>
+
+<p>
+<img src="figures/shortpi.png" alt="" class="left" width="320" height="200" />
+This one dimensional rule is the first rule I could truly call
+my own. I found it while playing with Charles Platt's
+one-dimensional Cell Systems simulator in 1987.
+It uses two bits each from one neighbor on each side.  I run it
+as world type  5 (two bits each from two neighbors on each
+side), although it could be implemented equally well as a world
+type 9 rule (four bits each from one neighbor on each side).
+The rule produces a lively world of many interacting gliders.
+</p>
+
+<p>
+If you have worked with other one dimensional simulators, you will
+initially be confused by the fact that WebCA shows one dimensional rules
+&ldquo;upside down.&rdquo; That is, most simulators work by updating successive
+lines down the screen and then scrolling new lines on from the bottom.
+WebCA does one dimensional rules differently: WebCA always updates the top
+line of the screen and then slides all the screen lines down one to
+make room (scrolling the screen one line is itself a cellular
+automaton operation). So the new lines come into a one dimensional WebCA
+simulation from the top. Thus, where conventional one dimensional
+simulators grow downward, WebCA grows upward.
+</p>
+
+<p>
+Here is the rule definition code.
+<br class="cb" />
+</p>
+
+<pre>
+/*
+
+        A one dimensional rule that only looks at two bits of
+        two neighbors.  We run it as world type 5, which gets
+        two bits from each of four neighbors.  The rule is
+        totalistic, meaning that it only looks at the SUM of its
+        neighborhood.  The first four digits of the totalistic
+        lookup table are the first four digits of pi, taken MOD
+        4.  The next six digits were found by trial and error to
+        make a rule that looks good.
+
+*/
+
+rule.worldtype = 5;          // 1D ring world, 4 neighbors
+
+function shortpi(oldstate,     l2, l1, self, r1, r2) {
+    var r;
+
+    switch (l1 + r1 + (oldstate &amp; 3)) {
+        case 0:  r = 3; break;
+        case 1:  r = 1; break;
+        case 2:  r = 0; break;
+        case 3:  r = 1; break;
+        case 4:  r = 0; break;
+        case 5:  r = 3; break;
+        case 6:  r = 2; break;
+        case 7:  r = 0; break;
+        case 8:  r = 0; break;
+        case 9:  r = 0; break;
+    }
+    return r;
+}
+</pre>
+
+<h3 id="Soot">
+<a href="https://www.fourmilab.ch/cellab/webca/?ruleprog=soot"
+    class="i" rel="Target:CelLabRunRule"><img src="icons/play.png"
+    width="32" height="32" class="playbutton"
+    alt="Play" title="Run this rule in WebCA" /></a>
+SOOT
+</h3>
+
+<p>
+<img src="figures/soot.png" alt="" class="left" width="320" height="200" />
+This program was inspired by
+<a href="refs.html#DewdneyColumn88b">[DewdneyColumn88b]</a>,
+where Dewdney discusses a rule which he calls SloGro. The idea
+behind SloGro is to have three states: blank cells, frozen
+cells, and gas cells. If a gas cell touches a frozen cell it
+becomes a frozen cell. If a gas cell is not touching a frozen
+cell it moves to one of its neighboring cells.
+</p>
+
+<p>
+Dewdney's SloGro is formulated in terms of a gas which moves
+randomly, and which is released into the system only one
+particle at a time. The gas we use in Soot is a many particle
+self-randomizing Tgas. Tgas particles move along the grid's main
+axes, and make ninety degree turns when they encounter another
+particle. The idea of having frozen cells along the boundary
+instead of just at the center is from a follow-up column to
+<a href="refs.html#DewdneyColumn88a">[DewdneyColumn88a]</a>,
+which is where I found the name &ldquo;Soot.&rdquo;
+</p>
+
+<p>
+The meaning of the bits in our implementation of Soot are as
+follows.
+<br class="cb" />
+</p>
+
+<table class="ctn">
+    <tr>
+        <td>Bit  #0</td>
+        <td>  is the machine visible bit for update</td>
+    </tr>
+    <tr>
+        <td>Bit  #1</td>
+        <td>  is used for the gas</td>
+    </tr>
+    <tr>
+        <td>Bit  #2</td>
+        <td>  is the wall</td>
+    </tr>
+    <tr>
+        <td>Bit  #3</td>
+        <td>  is unused</td>
+    </tr>
+    <tr>
+        <td>Bits #4 &amp; #5</td>
+        <td>  hold a position number between 0 and 3</td>
+    </tr>
+    <tr>
+        <td style="vertical-align: top;">Bits #6 &amp; #7 &nbsp;</td>
+        <td>  control the check wall/do gas cycle<br />
+              If 0 do wall, if 1 do lattice A,
+              if 2 do lattice B.</td>
+    </tr>
+</table>
+
+<h3 id="SoundCa">
+<a href="https://www.fourmilab.ch/cellab/webca/?ruleprog=soundca"
+    class="i" rel="Target:CelLabRunRule"><img src="icons/play.png"
+    width="32" height="32" class="playbutton"
+    alt="Play" title="Run this rule in WebCA" /></a>
+SOUNDCA
+</h3>
+
+<p>
+<img src="figures/soundca.png" alt="" class="left" width="320" height="200" />
+This rule is based upon a program in the original MS-DOS release
+of <cite>CelLab</cite> which used a one-dimensional cellular
+automaton to not only generate a display but synthesize sound. 
+The sound is a thing of the past, but this rule allows you to
+explore semitotalistic three-cell four-state 1D rules. Simply
+change the fourteen numbers of the
+<span class="tt">ruleTable</span> to those of the rule you wish
+to run.
+</p>
+
+<p>
+This particular rule shows an interesting kind of behavior: 1D
+oscillatory gliderlike patterns living on a uniform background.  The
+rule shows up particularly clearly if you use the color palette
+<b>mask1</b>.
+<br class="cb" />
+</p>
+
+<pre>
+/*
+
+       This is an implementation of one of the rules from the
+       standalone SoundCa program from the original MS-DOS
+       release.  SoundCa is a semitotalistic rule which
+       looks at two bits each of a cell and its two
+       neighbors.  Depending on what the center cell's state
+       is, the cell reacts differently to the neighborhood
+       sum.  This rule is meant to be used as a template, so
+       that you can key in any such rule that interests
+       you.
+
+*/
+
+rule.worldtype = 5;          // 1D ring world, 4 neighbors
+
+function soundca(oldstate,     l2, l1, self, r1, r2) {
+    var ruleTable = [
+        // For a Sum of:           6   5   4   3   2   1   0
+        /* States 0 and 3 use: */  3,  2,  1,  3,  1,  2,  0,
+        /* States 1 and 2 use: */  0,  1,  0,  3,  3,  1,  0
+    ];
+
+    var sum, index = 0;
+
+    sum = l1 + r1;
+    switch (oldstate &amp; 3) {
+        case 0:
+        case 3:
+            index = 6 - sum;
+            break;
+
+        case 1:
+        case 2:
+            index = 13 - sum;
+            break;
+    }
+    return ruleTable[index];
+
+}
+</pre>
+
+<h3 id="Spins">
+<a href="https://www.fourmilab.ch/cellab/webca/?ruleprog=spins"
+    class="i" rel="Target:CelLabRunRule"><img src="icons/play.png"
+    width="32" height="32" class="playbutton"
+    alt="Play" title="Run this rule in WebCA" /></a>
+SPINS
+</h3>
+
+<p>
+<img src="figures/spins.png" alt="" class="left" width="320" height="200" />
+Spins is an implementation of an
+<a href="https://en.wikipedia.org/wiki/Ising_model"
+    rel="Target:CelLabAux">Ising system</a>, a mathematical
+model used to analyze ferromagnetism.  Each cell models an atom
+which can be in one of two spin states: up or down.  On each
+generation, cells with exactly two neighbors in each state
+(ignoring diagonal neighbors) are considered able to flip
+their state without expending energy, and will flip.  Domains
+will grow and consolidate, but the number of up and down spins
+will remain about the same.
+</p>
+
+<p>
+This rule is reversible.  If you let it run for a while, then pause,
+use the <a href="webca.html#bitplane">Bit Plane Editor</a> to
+invert plane #3, and restart, the rule will run backward to its
+initial configuration.
+<br class="cb" />
+</p>
+
+<h3 id="Sublime">
+<a href="https://www.fourmilab.ch/cellab/webca/?ruleprog=sublime"
+    class="i" rel="Target:CelLabRunRule"><img src="icons/play.png"
+    width="32" height="32" class="playbutton"
+    alt="Play" title="Run this rule in WebCA" /></a>
+SUBLIME
+</h3>
+
+<p>
+<img src="figures/sublime.png" alt="" class="left" width="320" height="200" />
+Sublime models the process by which a solid can evanesce into
+gas. Passing from solid to liquid is of course
+&ldquo;melting,&rdquo; and the technical word for passing
+directly from solid to gas is &ldquo;sublimation.&rdquo; 
+Naphthalene mothballs sublimate without melting into liquid at
+all.  Ice mostly melts, but it sublimates too, especially under
+low atmospheric pressure; that is why the wash dries on the
+clothesline when it's below freezing.
+</p>
+
+<p>
+Our program starts up, by default, with the image of a cyberspace
+ant.  Watch how John Walker's program devours the ant and
+scatters its remains to the wind.
+<a href="https://www.fourmilab.ch/documents/hackants13.html"
+    rel="Target:CelLabAux">Turnabout's fair play!</a>
+</p>
+
+<p>
+<a href="ruledef-java.html#Sublime-js">JavaScript</a> and
+<a href="ruledef-java.html#Sublime-java">Java</a> rule programs
+defining the Sublime rule appear in the
+<a href="ruledef.html"><cite>Defining Rules</cite></a> chapter.
+<br class="cb" />
+</p>
+
+<h3 id="TimeTun">
+<a href="https://www.fourmilab.ch/cellab/webca/?ruleprog=timetun"
+    class="i" rel="Target:CelLabRunRule"><img src="icons/play.png"
+    width="32" height="32" class="playbutton"
+    alt="Play" title="Run this rule in WebCA" /></a>
+TIMETUN
+</h3>
+
+<p class="bigpic">
+<img src="figures/fig16.png" width="640" height="399" alt="" />
+</p>
+<blockquote class="captionc">
+<p class="c">
+<em>The TimeTun rule after several hundred generations..</em>
+</p>
+</blockquote>
+
+<p>
+This is a reversible rule like <a href="rules.html#Fractal">Fractal</a>
+and like <a href="rules.html#RevEcoli">RevEcoli</a>. TimeTun is a two bit
+rule which arises as the reversible version of a one-bit rule
+called Interest.
+</p>
+
+<p>
+Suppose that EveryCell only looks at N, S, E, W, and Self, and
+suppose that EveryCell sets Interest to 0 if all these five bits
+are the same (<em>zero Interest</em> means <em>boring</em>), and
+sets Interest to 1 if any of the five neighboring plane #0 bits
+are different.
+</p>
+
+<p>
+Now our reversible TimeTun rule is:
+</p>
+
+<p class="c">
+<em>NewSelf</em> = <em>Interest</em>(<em>Present Neighborhood</em>) &oplus; <em>PastSelf</em>
+</p>
+
+<p>
+where &oplus; is the Exclusive Or (XOR) operator, which is 1 if its
+two operands differ and 0 if they are the same.  Start TimeTun, let
+it run for a while until it's produced a psychedelic pattern, then
+press the &ldquo;Swap&rdquo; button while it's running.
+<br class="cr" />
+</p>
+
+<h3 id="Turmite">
+<a href="https://www.fourmilab.ch/cellab/webca/?ruleprog=turmite"
+    class="i" rel="Target:CelLabRunRule"><img src="icons/play.png"
+    width="32" height="32" class="playbutton"
+    alt="Play" title="Run this rule in WebCA" /></a>
+TURMITE
+</h3>
+
+<p>
+<img src="figures/turmite.png" alt="" class="left" width="320" height="200" />
+Turmites were described by A. K. Dewdney in his <cite>Scientific
+American</cite> column for September 1989
+<a href="refs.html#DewdneyColumn89">[DewdneyColumn89]</a>.
+Unlike a conventional
+<a href="https://en.wikipedia.org/wiki/Turing_machine"
+    rel="Target:CelLabAux">Turing machine</a>, where a tape moves
+back and forth under a read/write head, Turmites may be
+thought of as Turing machine heads that move around on a plane,
+following a program which tells them, based upon their current
+direction and the content of cells they encounter, how to change
+direction and what to leave in the cell when they depart.  In our
+simulation, there can be up to three different kinds of Turmites
+running simultaneously, each with its own independent program, and
+Turmites can move in any of the eight directions surrounding its
+current position.
+</p>
+
+<p>
+In this demo we start with three identical rectangles of cells in
+state 1, surrounded by cells in state 0.  At the bottom left corner
+of each rectangle is a turmite, each running a different program.
+When the simulation starts, they follow their programs, tracing
+a different course and leaving behind a pattern composed of the
+states the programs instruct them to leave.  You can modify the
+programs followed by the turmites by editing the code in the
+rule program box, pressing &ldquo;Generate&rdquo;, and starting
+the simulation.  The
+<a href="ruledef-eval.html#e_turmite"><b>turmite</b> evaluator</a>
+is generic for all turmites; the specific program followed by
+an individual turmite is given by the lookup table built by
+the rule program.
+<br class="cb" />
+</p>
+
+<h3 id="Venus">
+<a href="https://www.fourmilab.ch/cellab/webca/?ruleprog=venus"
+    class="i" rel="Target:CelLabRunRule"><img src="icons/play.png"
+    width="32" height="32" class="playbutton"
+    alt="Play" title="Run this rule in WebCA" /></a>
+VENUS
+</h3>
+
+<p>
+<img src="figures/venus.png" alt="" class="left" width="320" height="200" />
+Venus is a purely combinatoric CA rule which I found simply by
+playing with various symmetrically arranged rule definitions. We
+hope that the wide distribution of <cite>CelLab</cite> will lead
+to the discovery of many more such unexpectedly interesting
+rules.
+</p>
+
+<p>
+I call it Venus because it produces a pattern that looks like
+what you might see peering out through hanging mosses at
+floating mats of vegetation in a swampy sea.  When I was a child
+this is what science fiction writers thought the surface of the
+planet Venus would be like.
+</p>
+
+<p>
+Here is a listing of the Venus rule.
+<br class="cb" />
+</p>
+
+<pre>
+/*
+                      Venus
+                  by Rudy Rucker
+
+        Start this rule on a random pattern.
+*/
+
+rule.worldtype = 1;          // 2D torus world
+
+function venus(oldstate,     nw, n  , ne,
+                             w, self, e,
+                             sw, s  , se) {
+    var r = 0;
+
+    switch (oldstate &amp; 3) {
+        case 0:
+            r = 2 * (nw ^ sw) + w;
+            break;
+
+        case 1:
+            r = 2 * (nw ^ ne) + n;
+            break;
+
+        case 2:
+            r = 2 * (ne ^ se) + e;
+            break;
+
+        case 3:
+            r = 2 * (se ^ sw) + s;
+            break;
+    }
+    return r;
+}
+</pre>
+
+<h3 id="Vote">
+<a href="https://www.fourmilab.ch/cellab/webca/?ruleprog=vote"
+    class="i" rel="Target:CelLabRunRule"><img src="icons/play.png"
+    width="32" height="32" class="playbutton"
+    alt="Play" title="Run this rule in WebCA" /></a>
+VOTE
+</h3>
+
+<p class="bigpic" id="i3-CA-Fvote">
+<img src="figures/fig17.png" width="639" height="399" alt="" />
+</p>
+<blockquote class="captionc">
+<p class="c">
+<em>The Vote rule, a few generations after a random start.</em>
+</p>
+</blockquote>
+
+<p>
+Vote is a one-bit rule where each cell calculates the NineSum of
+itself and its eight neighbors, and then determines its new
+state on the basis of the NineSum. We can regard this as
+EveryCell conducting a little election between 0 and 1 among the
+nine cells in its neighborhood. If either 0 or 1 wins by a clear
+majority of 6 votes or more out of the nine votes, then that is
+the state which EveryCell will take on. But if either 0 or 1
+wins by a scant, sneaky majority of 5 votes out of the nine,
+then the election is overturned, and EveryCell takes on the
+color of the &ldquo;losing&rdquo; state.  Vote
+<a href="chap4.html#i4-TH-vote">is discussed in more detail</a> in
+the <a href="chap4.html"><cite>Theory</cite></a> chapter.
+</p>
+
+<p>
+The version of Vote shown here uses bit #1 as an
+&ldquo;echo&rdquo; of bit #0. This means that cells will take on
+different colors if they have changed state in the last
+generation. You can keep rerandomizing Vote by pressing the
+&ldquo;Random&rdquo; button in the Map section of the WebCA
+control panel. It's a bit startling to see what organic-looking
+shapes can arise from such a simple rule acting on a rectangular
+grid.
+</p>
+
+<pre>
+/*
+    Gerard Vichniac's modified voting rule.  Like majority
+    voting, but flipped in the middle:
+
+    Number of neighbors        New state
+          0-3                     Off
+           4                      On
+           5                      Off
+          6-9                     On
+
+    (Toffoli &amp; Margolus, section 5.4, page 41)
+
+    In this version, the seven extra bits are used as memory.
+*/
+
+rule.worldtype = 1;          // 2D torus world
+
+function vote(oldstate,     nw, n  , ne,
+                            w, self, e,
+                            sw, s  , se) {
+    var r = 0, NineSum = nw + n + ne + e + se + s + sw + w + self;
+
+    switch (NineSum) {
+        case 0:
+        case 1:
+        case 2:
+        case 3:
+        case 5:
+            r = 0;
+            break;
+
+        case 4:
+        case 6:
+        case 7:
+        case 8:
+        case 9:
+            r = 1;
+            break;
+    }
+    return (self &lt;&lt; 1) | r;
+}
+</pre>
+
+<h3 id="i3-CA-votedna">
+<a href="https://www.fourmilab.ch/cellab/webca/?ruleprog=votedna"
+    class="i" rel="Target:CelLabRunRule"><img src="icons/play.png"
+    width="32" height="32" class="playbutton"
+    alt="Play" title="Run this rule in WebCA" /></a>
+VOTEDNA
+</h3>
+
+<p>
+In this rule I wanted to enhance the effect of the different-colored
+boundaries in Vote; also I wanted to take advantage of all eight bits
+of state. My first idea was to let the Vote rule govern bit #0, and to
+store the last 7 generations in the high 7 bits. As it turns out, this
+course does not make for a rule very much different in appearance from
+Vote with a single bit of memory. So I put in an additional twist: to
+make the high bits more lively than simple memory bits, I keep adding
+the present NineSum to the OldState before shifting it left to put the
+bits out of plane #0 and into memory. Note by the way that numbers
+larger than 255 are taken modulo 256.
+</p>
+
+<p>
+If you look at VoteDNA with the <b>default</b> color palette
+loaded, you will see something like Vote with thick fuzzy
+boundaries. To make the rule look neater, I decided to set the
+color for the &ldquo;inland&rdquo; state equal to black. But
+what is the inland state? It is a state <em>X</em> which is a
+fixed point for the transformation:
+</p>
+
+<p class="c">
+<em>NewX</em> = ((<em>OldX</em> + 9) &times; 2) &minus; 256) + 1
+</p>
+
+<p>
+Replacing <em>NewX</em> and <em>OldX</em> by <em>X</em> and
+solving for <em>X</em>, I got <em>X</em>=237. The
+<b>votedna.jcc</b> color palette was obtained by taking a
+color palette and setting the color for state 237 to black.
+</p>
+
+<p class="bigpic">
+<img src="figures/fig18.png" width="639" height="400" alt="" />
+</p>
+<blockquote class="caption">
+<p>
+<em>The VoteDNA rule, started from the
+pattern shown <a href="rules.html#i3-CA-Fvote">above</a>.
+Pattern has been shifted slightly upward.</em>
+</p>
+</blockquote>
+
+<p>
+VoteDNA makes nice thick strings out of random starts. The color
+patterns that move along the strings have no clear interpretation,
+although they do make me think of electron microscope pictures of
+DNA.
+</p>
+
+<pre>
+/*
+    The Vichniac voting rule with the seven extra bits used
+    as memory, as in VoteMem.  The additional twist here is
+    that we increment the color bits by the NineSum each
+    time.  The inland cells quickly converge to the state X
+    which is a fixed point for the transformation NewX =
+    ((OldX + 9)*2)-256)+1. Replacing NewX and OldX by X and
+    solving, we get X=237. Change the color for state 237 to
+    0 (CGA) or 1,1,1 (VGA), and see that the line of thought
+    is correct, as the internal pinkish inland cells
+    disappear.  What remains are thick, seething boundary
+    bands.  Loading the palette map "votedna" blanks 237
+    automatically.
+*/
+
+rule.worldtype = 1;          // 2D torus world
+rule.palreq = "votedna";
+
+function votedna(oldstate,     nw, n  , ne,
+                               w, self, e,
+                               sw, s  , se) {
+    var NineSum = nw + n + ne + e + se + s + sw + w + self,
+        r = 0;
+
+    switch (NineSum) {
+        case 0:
+        case 1:
+        case 2:
+        case 3:
+        case 5:
+            r = 0;
+            break;
+
+        case 4:
+        case 6:
+        case 7:
+        case 8:
+        case 9:
+            r = 1;
+            break;
+    }
+    return (((oldstate + NineSum) &lt;&lt; 1) &amp; 0xFE) | r;
+}
+</pre>
+
+<h3 id="Wator">
+<a href="https://www.fourmilab.ch/cellab/webca/?ruleprog=wator"
+    class="i" rel="Target:CelLabRunRule"><img src="icons/play.png"
+    width="32" height="32" class="playbutton"
+    alt="Play" title="Run this rule in WebCA" /></a>
+WATOR
+</h3>
+
+<p>
+<img src="figures/wator.png" alt="" class="left" width="320" height="200" />
+Wator was inspired by the &ldquo;Sharks and Fish on the Planet
+Wa-Tor&rdquo; ecosystem simulation described in A. K. Dewdney's
+<cite>The Armchair Universe</cite>,
+<a href="refs.html#Dewdney88">[Dewdney88]</a>, p.&nbsp;239.
+While the original model involved two species: sharks and fish,
+ours incorporates three: shrimp (shown in red), fish (green),
+and sharks (blue)&mdash;newborn creatures are shown in bright
+colors and those older than one step in subdued shades.
+Age is measured in generations of the automata.
+Shrimp breed between the ages of 8 and 12 and die at age 15 if
+not previously eaten.  Fish breed at age 3 and die of starvation
+if they have not eaten a shimp in 5 generations.  Sharks breed at
+age 2 and starve if they haven't eaten a fish for 7 generations.
+(You can change these parameters by editing the top of the
+rule program.)  Every generation, a cell chooses one of its neighbors
+at random.  If an empty cell picks one containing a creature
+of breeding age, it will be filled with a new creature of
+that type.  If a fish and shrimp are neighbors, the fish eats the
+shrimp and resets its hunger counter, with the cell previously
+containing the shrimp now empty.  The same applies for pairs
+of cells containing a shark and fish.  The pair of cells are
+then swapped with one another.
+</p>
+
+<p>
+From a random start, you will usually see a population explosion
+of shrimp, followed by a population explosion of sharks, then the
+emergence of waves of local boom and bust.  A school of fish will
+burgeon as it consumes shrimp, then begin to die as fish in
+the middle, with no access to shrimp, starve.  Then a wave of sharks
+will tear into the school of fish and proliferate.  The original
+Wa-Tor simulation was run on a 80&times;23 grid, and the parameters
+had to be tuned carefully to yield an ecology which did not immediately
+die out in one way or another.  With our much larger 320&times;200
+world, extinction crises tend to be local and eventually replenished
+from other areas of the map.  See the <a href="rules.html#Forest">Forest</a>
+and <a href="rules.html#Mite">Mite</a>
+rules for other ecological simulations.
+<br class="cb" />
+</p>
+
+<h3 id="Wind">
+<a href="https://www.fourmilab.ch/cellab/webca/?ruleprog=wind"
+    class="i" rel="Target:CelLabRunRule"><img src="icons/play.png"
+    width="32" height="32" class="playbutton"
+    alt="Play" title="Run this rule in WebCA" /></a>
+WIND
+</h3>
+
+<p>
+<img src="figures/wind.png" alt="" class="left" width="320" height="200" />
+Almost all of our cellular automata rules have eight bits of state
+per cell: cells take on discrete values between 0 and 255.
+While a single byte state makes for fast simulation, there is
+nothing inherent in cellular automata which limits the amount
+of state a cell can possess, nor need it be limited to integer
+values.  Wind is an extreme example of how far you can go in
+extending the capabilities of WebCA using
+<a href="ruledef-eval.html">user evaluators</a>.  It is a two-dimensional
+simulation of a wind tunnel, using computational fluid dynamics to
+compute the motion of a fluid in which every cell represents a
+position in a lattice of fluid.  Each cell's state is represented
+by twelve floating point numbers which keep track of the microscopic
+density of the cell and its eight neighbors, the overall density
+of the contents of the cell, and the velocity along the <em>x</em> and
+<em>y</em> axes.  In each step, the laws of fluid mechanics are
+applied to update these quantities based on the cell's neighborhood.
+The map is used to display a selected property of the cells: their
+density, <em>x</em> or <em>y</em> velocity, speed, or
+<a href="https://en.wikipedia.org/wiki/Curl_(mathematics)"
+    rel="Target:CelLabAux">curl</a>
+(a measure of the rotation of the fluid within the cell).
+</p>
+
+<p>
+The map is initialized with fluid moving uniformly from left
+to right, encountering impermeable barriers drawn in state
+255 (which is displayed as black).  The map renders the selected
+display parameter (set by the
+<span class="tt">rule.evaluator.display</span> variable at the
+top of the evaluator program&mdash;edit and press &ldquo;Compile&rdquo;
+to change) in a false color display where blue indicates low
+values and red high values.  You can also change the speed of
+fluid flow and its viscosity with variables in the evaluator.
+</p>
+
+<p>
+As the simulation runs, you will often see patterns of turbulent
+flow such as
+<a href="https://en.wikipedia.org/wiki/K%C3%A1rm%C3%A1n_vortex_street"
+    rel="Target:CelLabAux">K&aacute;rm&aacute;n vortex streets</a>
+develop and interact, seeming never to repeat.  A complex pattern
+can produce a display which resembles a Lava Lamp and is as
+pleasing to watch.  Simulations of this type can be prone to
+<a href="https://en.wikipedia.org/wiki/Numerical_stability"
+    rel="Target:CelLabAux">numerical instability</a>.  If you
+try to force the fluid into confined spaces where its velocity
+becomes too great to model in the discrete lattice size, the
+simulation may &ldquo;blow up&rdquo;, and you'll receive an
+alert box notifying you this has happened.  Try reducing the
+flow speed (<span class="tt">rule.evaluator.speed</span>
+at the top of the evaluator) and try again.
+</p>
+
+<p>
+This is an extraordinarily computationally-intense process: far
+more than any of our other rules.  Each generation requires on
+the order of a million floating-point operations. If you have a
+slower machine, an older generation processor with less
+efficient floating point, or you're using a browser with a
+poorly-optimized implementation of JavaScript, this rule can run
+so slowly it may seem the machine has stalled. In particular,
+mobile platforms, many of which trade off floating point
+performance for longer battery life, may be unsuitable to run
+this rule.  On a 3 GHz class processor using the Chrome or Brave
+browsers, I get between 10 and 15 generations per second running
+this rule, which is sufficient to make it appear smooth and
+manifest fluid behavior such as turbulence and vorticity.
+You can increase the speed of the Wind rule by running it on a
+pattern where the top and bottom of the map are barrier cells
+and the fluid is confined to a &ldquo;letterbox&rdquo; in the
+middle; only these cells need be updated, so performance increases
+accordingly.
+Try the <a href="https://www.fourmilab.ch/cellab/webca/?ruleprog=wind&amp;pattern=wind_karman"
+    rel="Target:CelLabRunRule"><b>wind_karman</b> pattern</a>
+for an example.
+</p>
+
+<p>
+This rule and the
+<b><a href="ruledef-eval.html#e_cfd">cfd</a></b> evaluator it
+uses are based upon the
+<a href="http://physics.weber.edu/schroeder/fluids/"
+    rel="Target:CelLabAux">lattice Bernoulli simulation</a>
+developed by
+Prof. <a href="http://physics.weber.edu/schroeder/"
+    rel="Target:CelLabAux">Daniel V. Schroeder</a> of
+Weber State University in Utah.  Here is a
+<a href="http://physics.weber.edu/schroeder/javacourse/LatticeBoltzmann.pdf"
+    rel="Target:CelLabAux">description of the algorithms</a> [PDF]
+used in the simulation.  Please see the copyright notice in the
+evaluator for details on use of this code.
+<br class="cb" />
+</p>
+
+<h3 id="XTC">
+<a href="https://www.fourmilab.ch/cellab/webca/?ruleprog=xtc"
+    class="i" rel="Target:CelLabRunRule"><img src="icons/play.png"
+    width="32" height="32" class="playbutton"
+    alt="Play" title="Run this rule in WebCA" /></a>
+XTC
+</h3>
+
+<p>
+<img src="figures/xtc.png" alt="" class="left" width="320" height="200" />
+XTC is a rule for comparing two kinds of cellular automaton gas:
+Xgas and Tgas. The starting X is made of Xgas, the starting T is
+made of Tgas, and the starting C (for compare) is an overlay of
+Xgas and Tgas. The gasses run in separate planes and do not
+interact with each other; each gas only interacts with itself.
+Xgas moves diagonally (like the strokes of an <b>X</b>), and
+Tgas moves vertically and horizontally (like the strokes of a
+<b>T</b>). In
+<a href="refs.html#Margolus_Toffoli87">[Margolus&amp;Toffoli87]</a>,
+these gasses are called HPP-Gas and TM-Gas, respectively.
+</p>
+
+<p>
+The Tgas lives in plane #1 and the Xgas in plane #2. At any time, one
+of the gasses is copied into plane #0 to be visible to the other
+cells. The rule has four cycles, coded by bits #6 and #7. In cycles 0
+and 1 you are updating Tgas; in cycles 2 and 3 you update Xgas.
+<br class="cb" />
+</p>
+
+<h3 id="Zhabo">
+<a href="https://www.fourmilab.ch/cellab/webca/?ruleprog=zhabo&amp;pattern=zhabo"
+    class="i" rel="Target:CelLabRunRule"><img src="icons/play.png"
+    width="32" height="32" class="playbutton"
+    alt="Play" title="Run this rule in WebCA" /></a>
+ZHABO, ZHABOF, and ZHABOFF
+</h3>
+
+<p>
+<img src="figures/zhabo.png" alt="" class="left" width="320" height="200" />
+A picture of Zhabo appears on the cover of
+<a href="refs.html#Margolus_Toffoli87">[Margolus&amp;Toffoli87]</a>.
+</p>
+
+<p>
+Margolus and Toffoli make a interesting simile between the
+Zhabotinsky reaction and a reef of tubeworms. When a tubeworm
+feels safe, it sticks a plume out of its shell to seine the
+water for food. If a feeding tubeworm senses any disturbance
+nearby (e.g. the presence of several other feeding tubeworms),
+it retracts its plume and waits for a few cycles before feeding
+again.
+</p>
+
+<p>
+In this specific rule, we suppose that each cell has four bits.
+</p>
+
+<table class="ctn">
+    <tr>
+        <td>Bit #0</td>
+        <td>is the feeding bit.</td>
+    </tr>
+    <tr>
+        <td>Bits #1 and #2 &nbsp; &nbsp;</td>
+        <td>are the Time bits.</td>
+    </tr>
+    <tr>
+        <td>Bit #3</td>
+        <td>is the alarm bit.</td>
+    </tr>
+</table>
+
+<p>
+Margolus and Toffoli explain that variations on this rule can be
+gotten by changing the conditions for the Alarm to be set to 1.
+The condition
+&ldquo;<span class="tt">(SUM_8==2)&nbsp;||&nbsp;(SUM_8&gt;3)</span>&rdquo; in the
+program listed below makes the best patterns, but takes a really
+long time (two thousand generations) to develop spirals from a
+random start.  If you instead use the condition
+&ldquo;<span class="tt">(SUM_8&gt;1)</span>,&rdquo; you get tight,
+squarish spirals that converge rapidly.  This fast fast
+Zhabotinsky rule is the
+rule <a href="https://www.fourmilab.ch/cellab/webca/?ruleprog=zhaboff&amp;pattern=rat"
+     rel="Target:CelLabRunRule">Zhaboff</a>.  The merely fast
+Zhabotinsky rule
+<a href="https://www.fourmilab.ch/cellab/webca/?ruleprog=zhabof&amp;pattern=rat"
+     rel="Target:CelLabRunRule">Zhabof</a> uses the condition
+&ldquo;<span class="tt">SUM_8&gt;2</span>.&rdquo; Zhabof progresses not
+very much faster than Zhabo, forming hard-edged patterns.  All
+three of these rules enjoy starting out on the pattern
+<b>rat</b>.  In order to really show Zhabo off, you can start it
+on a full random screen and let it run for an hour.
+<br class="cb" />
+</p>
+
+<p>
+It might be interesting to write a rule which selects among these
+three conditions on the basis of the values of bits #7 and #6, and to
+initialize the pattern with three vertical stripes that hold the
+combos
+<span class="ttb">10</span>,
+<span class="ttb">01</span>, and
+<span class="ttb">00</span>. in bits #7 and #6.
+</p>
+
+<pre>
+/*
+
+    The Zhabotinsky reaction of Margolus &amp; Toffoli
+
+*/
+
+rule.worldtype = 1;          // 2D torus world
+rule.patreq = "zhabo";
+rule.palreq = "zhabo";
+
+rule.tempb = 1;             // Temporal phase
+rule.tempn = 2;
+
+function zhabo(oldstate,     nw, n  , ne,
+                             w, self, e,
+                             sw, s  , se) {
+    var alarm, time, newself;
+    var alarmset;
+
+    var SUM_8 = nw + n + ne + w + e + sw + s + se;
+    alarmset = BITSET(3);
+    time = TPHASE();
+
+    newself = (time == 0) ? 1 : 0;
+
+    time = (time &gt; 0) ? time - 1 : 0;
+
+    if ((self == 1) &amp;&amp; alarmset) {
+       time = 3;
+    }
+
+    alarm = ((SUM_8 == 2) || (SUM_8 &gt; 3)) ? 1 : 0;
+
+    return BF(alarm, 3) | BF(time, 1) | newself;
+
+    //  Return bit set for plane
+    function BIT(p) {
+        return 1 &lt;&lt; p;
+    }
+
+    //  Test if bit p is set in oldstate
+    function BITSET(p) {
+        return (oldstate &amp; BIT(p)) != 0;
+    }
+
+    //  Place a value in a specified bit field
+    function BF(v, p) {
+        return v &lt;&lt; p;
+    }
+
+    //  Return temporal phase of oldstate
+    function TPHASE() {
+        return (oldstate &gt;&gt; rule.tempb) &amp; BITMASK(0, rule.tempn);
+    }
+}
+</pre>
+
+<hr />
+
+<p>
+<a href="webca.html" class="i"><img src="icons/previous.png" width="32" height="32"
+    class="button" alt="Previous" /></a>
+&nbsp; &nbsp;
+<a href="ruledef.html" class="i"><img src="icons/next.png" width="32" height="32"
+    class="button" alt="Next" /></a>
+&nbsp; &nbsp;
+<a href="cellab.html" class="i"><img src="icons/contents.png" width="32" height="32"
+    class="button" alt="Contents" /></a>
+</p>
+
+</body>
+</html>

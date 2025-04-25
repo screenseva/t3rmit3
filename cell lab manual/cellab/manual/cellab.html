@@ -1,0 +1,223 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Cellular Automata Laboratory</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<meta name="description" content="Cellular Automata Laboratory" />
+<meta name="author" content="by Rudy Rucker and John Walker" />
+<link rel="stylesheet" href="../../documents/styles/standard_screen.css"
+    type="text/css" />
+<style type="text/css">
+    ul li.ch {
+        margin-top: 1ex;
+    }
+</style>
+</head>
+
+<body class="standard">
+
+<h1 class="c"><img src="figures/hodgelogo.png" width="500" height="124"
+    alt="Cellular Automata Laboratory" /><br />
+USER GUIDE</h1>
+<h2 class="c"><em>Exploring Cellular Automata</em></h2>
+<h3 class="c">by
+<a href="http://www.rudyrucker.com/">Rudy Rucker</a>
+and <a href="https://www.fourmilab.ch/">John Walker</a></h3>
+
+<hr />
+
+<h2 id="contents">Table of Contents</h2>
+
+<ul>
+    <li><a href="https://www.fourmilab.ch/cellab/">Introduction</a></li>
+
+    <li class="ch"><a href="chap1.html">Getting Started</a>
+    <ul>
+        <li><a href="chap1.html#t1">What Are Cellular Automata?</a></li>
+        <li><a href="chap1.html#t2">Overview</a></li>
+        <li><a href="chap1.html#i1-INTRO-webcademo">Demonstration of WebCA</a></li>
+        <li><a href="chap1.html#t4">Why Cellular Automata? Rudy's Answer</a></li>
+        <li><a href="chap1.html#t5">Why Cellular Automata? John's Answer</a></li>
+        <li><a href="chap1.html#t6">A Sampler of CA Applications</a>
+        <ul>
+            <li><a href="chap1.html#t7">Image Processing and Image Generation</a></li>
+            <li><a href="chap1.html#t8">Biology</a></li>
+            <li><a href="chap1.html#t9">Chemistry</a></li>
+            <li><a href="chap1.html#t10">Physics</a></li>
+            <li><a href="chap1.html#t11">Computer Science</a></li>
+        </ul>
+        </li>
+    </ul>
+    </li>
+
+    <li class="ch"><a href="webca.html">WebCA</a>
+    <ul>
+        <li><a href="webca.html#howitworks">How It Works</a>
+        <ul>
+            <li><a href="webca.html#t2">Cast: Rule Selection.</a></li>
+            <li><a href="webca.html#t3">Scenery: Pattern Selection.</a></li>
+            <li><a href="webca.html#t4">Lighting: Color Palette Selection.</a></li>
+        </ul>
+        </li>
+        <li><a href="webca.html#mapdisp">The Map Display</a></li>
+        <li><a href="webca.html#simctl">Simulator Controls</a></li>
+        <li><a href="webca.html#rulesel">Rule Selection</a></li>
+        <li><a href="webca.html#patsel">Pattern Selection</a></li>
+        <li><a href="webca.html#palsel">Color Palette Selection</a></li>
+        <li><a href="webca.html#ruleprog">Rule Program Loading</a></li>
+        <li><a href="webca.html#evalload">User Evaluator Loading</a></li>
+        <li><a href="webca.html#showload">Loading and Running Shows</a></li>
+        <li><a href="webca.html#dialogues">Dialogues</a>
+        <ul>
+            <li><a href="webca.html#algorule">Algorithmic Rule Specification</a></li>
+            <li><a href="webca.html#rulemodes">Rule Modes</a></li>
+            <li><a href="webca.html#bitplane">Bit Plane Editor</a></li>
+            <li><a href="webca.html#popcen">Population Census</a></li>
+        </ul>
+        </li>
+        <li><a href="webca.html#defshows">Defining Shows</a></li>
+        <li><a href="webca.html#urlquery">URL Query Commands</a></li>
+    </ul>
+    </li>
+    
+    <li class="ch"><a href="rules.html">The Sample Rules</a>
+    <ul>
+        <li><a href="rules.html#Aurora">AURORA</a></li>
+        <li><a href="rules.html#Axons">AXONS</a></li>
+        <li><a href="rules.html#Balloons">BALLOONS</a></li>
+        <li><a href="rules.html#Banks">BANKS</a></li>
+        <li><a href="rules.html#Bbm">BBM</a></li>
+        <li><a href="rules.html#Bob">BOB</a></li>
+        <li><a href="rules.html#Bootperc">BOOTPERC</a></li>
+        <li><a href="rules.html#Border">BORDER</a></li>
+        <li><a href="rules.html#BraiLife">BRAILIFE</a></li>
+        <li><a href="rules.html#Brain">BRAIN</a></li>
+        <li><a href="rules.html#Byl">BYL and CHOUREG</a></li>
+        <li><a href="rules.html#Critters">CRITTERS</a></li>
+        <li><a href="rules.html#Dendrite">DENDRITE and DENTIM</a></li>
+        <li><a href="rules.html#Earthgas">EARTHGAS</a></li>
+        <li><a href="rules.html#EcoLiBra">ECOLIBRA</a></li>
+        <li><a href="rules.html#Endworld">ENDWORLD</a></li>
+        <li><a href="rules.html#Evoloops">EVOLOOPS and EVOLOOPSAB</a></li>
+        <li><a href="rules.html#Faders">FADERS</a></li>
+        <li><a href="rules.html#Flick">FLICK</a></li>
+        <li><a href="rules.html#Forest">FOREST</a></li>
+        <li><a href="rules.html#Fractal">FRACTAL</a></li>
+        <li><a href="rules.html#FredMem">FREDMEM</a></li>
+        <li><a href="rules.html#Gasflow">GASFLOW</a></li>
+        <li><a href="rules.html#Glooper">GLOOPER</a></li>
+        <li><a href="rules.html#Griff">GRIFF</a></li>
+        <li><a href="rules.html#Gyre">GYRE</a></li>
+        <li><a href="rules.html#Heat">HEAT and HEATWAVE</a></li>
+        <li><a href="rules.html#HGlass">HGLASS</a></li>
+        <li><a href="rules.html#Hodge">HODGE</a></li>
+        <li><a href="rules.html#Lant">LANT</a></li>
+        <li><a href="rules.html#Langton">LANGTON</a></li>
+        <li><a href="rules.html#Life">LIFE</a></li>
+        <li><a href="rules.html#Logic">LOGIC</a></li>
+        <li><a href="rules.html#Meltdown">MELTDOWN</a></li>
+        <li><a href="rules.html#Mite">MITE</a></li>
+        <li><a href="rules.html#Parks">PARKS</a></li>
+        <li><a href="rules.html#PerfumeT">PERFUMET, PERFUMEX, PERFUMEM, and PERFUMER</a></li>
+        <li><a href="rules.html#Pond">POND</a></li>
+        <li><a href="rules.html#RainZha">RAINZHA</a></li>
+        <li><a href="rules.html#Ranch">RANCH</a></li>
+        <li><a href="rules.html#RevEcoli">REVECOLI</a></li>
+        <li><a href="rules.html#Rug">RUG, RUGF, and RUGLAP</a></li>
+        <li><a href="rules.html#Runny">RUNNY</a></li>
+        <li><a href="rules.html#Sand">SAND</a></li>
+        <li><a href="rules.html#Sexyloop">SEXYLOOP</a></li>
+        <li><a href="rules.html#ShortPi">SHORTPI</a></li>
+        <li><a href="rules.html#Soot">SOOT</a></li>
+        <li><a href="rules.html#SoundCa">SOUNDCA</a></li>
+        <li><a href="rules.html#Spins">SPINS</a></li>
+        <li><a href="rules.html#Sublime">SUBLIME</a></li>
+        <li><a href="rules.html#TimeTun">TIMETUN</a></li>
+        <li><a href="rules.html#Turmite">TURMITE</a></li>
+        <li><a href="rules.html#Venus">VENUS</a></li>
+        <li><a href="rules.html#Vote">VOTE</a></li>
+        <li><a href="rules.html#3-CA-votedna">VOTEDNA</a></li>
+        <li><a href="rules.html#Wator">WATOR</a></li>
+        <li><a href="rules.html#Wind">WIND</a></li>
+        <li><a href="rules.html#XTC">XTC</a></li>
+        <li><a href="rules.html#Zhabo">ZHABO, ZHABOF, and ZHABOFF</a></li>
+    </ul>
+    </li>
+    
+    <li class="ch"><a href="ruledef.html">Defining Rules</a>
+    <ul>
+        <li><a href="ruledef-js.html">Defining Rules in JavaScript</a>
+        <ul>
+            <li><a href="ruledef-js.html#t1">Rule Modes</a>
+            <ul>
+                <li><a href="ruledef-js.html#t1">StartUp</a></li>
+                <li><a href="ruledef-js.html#t2">Background</a></li>
+                <li><a href="ruledef-js.html#t3">Topology</a></li>
+            </ul>
+            </li>
+        </ul>
+        </li>
+        <li><a href="ruledef-eval.html">Defining User Evaluators</a>
+            <ul>
+                <li><a href="ruledef-eval.html#stdeval">Standard Evaluators</a></li>
+            </ul>
+        </li>
+        <li><a href="ruledef-java.html">Defining Rules in Java</a>
+        <ul>
+            <li><a href="ruledef-java.html#t1">Rule Modes</a>
+            <ul>
+                <li><a href="ruledef-java.html#t1">StartUp</a></li>
+                <li><a href="ruledef-java.html#t2">Background</a></li>
+                <li><a href="ruledef-java.html#t3">Topology</a></li>
+            </ul>
+            </li>
+        </ul>
+        </li>
+    </ul>
+    </li>
+
+    <li class="ch"><a href="chap4.html">Cellular Automata Theory</a>
+    <ul>
+        <li><a href="chap4.html#t1">Neighbors</a></li>
+        <li><a href="chap4.html#i4-TH-vote">Vote and Other Totalistic Rules</a></li>
+        <li><a href="chap4.html#i4-TH-life">Life</a></li>
+        <li><a href="chap4.html#i4-TH-brain">Brain</a></li>
+        <li><a href="chap4.html#i4-TH-semit">Semitotalistic Rules</a></li>
+        <li><a href="chap4.html#i4-TH-ranch">Ranch</a></li>
+        <li><a href="chap4.html#i4-TH-rug">Rug</a></li>
+        <li><a href="chap4.html#i4-TH-lattice">Lattice Gas</a></li>
+    </ul>
+    </li>
+
+    <li class="ch"><a href="chap5.html">Origins of <cite>CelLab</cite></a>
+    <ul>
+        <li><a href="chap5.html#i5-HIST-class">Classical Era: Von Neumann to Gosper</a></li>
+        <li><a href="chap5.html#t1">Cellular Automata, 1985</a></li>
+        <li><a href="chap5.html#t2"><cite>CelLab</cite></a></li>
+        <li><a href="chap5.html#t3">WebCA</a></li>
+    </ul>
+    </li>
+
+    <li class="ch"><a href="refs.html">Bibliography</a></li>
+
+    <li class="ch"><a href="fileform.html">File Formats</a></li>
+
+    <li class="ch"><a href="about.html">About this Edition</a></li>
+    
+    <li class="ch"><a href="https://www.fourmilab.ch/cellab/log/log.html">WebCA Development Log</a></li>
+</ul>
+
+
+<hr />
+
+<p>
+<a href="https://www.fourmilab.ch/cellab/" class="i"><img src="icons/previous.png" width="32" height="32"
+    class="button" alt="Previous" /></a>
+&nbsp; &nbsp;
+<a href="chap1.html" class="i"><img src="icons/next.png" width="32" height="32"
+    class="button" alt="Next" /></a>
+</p>
+
+</body>
+</html>

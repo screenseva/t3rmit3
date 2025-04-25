@@ -1,0 +1,7 @@
+7   // Chou-Reggia Loop
+
+state 1 #00FF00
+state 2 #4040FF
+state 3 cyan
+state 4 yellow
+state 5 white

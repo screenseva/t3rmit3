@@ -1,0 +1,4 @@
+7   //  Grey scale 0-127, repeat twice
+
+mask 0x7F
+state 0-127 black-white

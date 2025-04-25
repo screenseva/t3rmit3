@@ -1,0 +1,164 @@
+
+    /*
+                Cellular Automata Laboratory
+
+                  Document-Specific Styles
+
+    */
+
+    dl.justified, dl.jb dd {
+        text-align: justify;
+    }
+
+    dl.jb dt {
+        margin-top: 1ex;
+        font-weight: bold;
+    }
+    
+    dl.jb dt em {
+        font-weight: normal;
+    }
+
+    dl.bibli dt {
+        margin-top: 1ex;
+    }
+
+    dl.bibli :first-child {
+        margin-top: 0px;
+    }
+
+    img.playbutton {
+        border: 0px;
+        float: right;
+        vertical-align: middle;
+    }
+
+    ol.roman {
+        counter-reset: item;
+        list-style-type: lower-roman;
+    }
+
+    ol.roman li {
+        margin-top: 1ex;
+        text-align: justify;
+    }
+
+    ol.roman :first-child {
+        margin-top: 0px;
+    }
+
+    img.foot {                  /* Footnote marker images */
+        vertical-align: top;
+    }
+
+    ol.spaced li {
+        margin-top: 1ex;
+        text-align: justify;
+        width: 95%;
+    }
+
+    ol.spaced :first-child {
+        margin-top: 0px;
+    }
+
+    p {                         /* Regular paragraphs */
+        text-align: justify;
+    }
+
+    p.subsuper {                /* Text with subscript and superscripts */
+        text-align: justify;
+        line-height: 130%;
+    }
+
+    .subsuper sub, .subsuper sup {  /* Super- and subscripts in p.subsuper */
+        line-height: 0px;
+    }
+    
+    span.n {
+        font-weight: normal;
+    }
+
+    span.tt, h4.tt {
+        font-family: monospace;
+    }
+
+    span.ttb, td.ttb {
+        font-family: monospace;
+        font-weight: bold;
+    }
+    
+    table.ctlut {
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    table.ctlut th {
+        border-style: none;
+        border-bottom: 1px solid black;
+        text-align: center;
+    }
+    
+    table.ctlut td {
+        text-align: center;
+    }
+
+    table.ctn {
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    table.ctr {
+        border-spacing: 1px;
+        border-style: ridge;
+        border-width: 3px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    
+    table.ctr td,th {
+        border-style: inset;
+        border-width: 1px;
+    }
+
+    table.ctr th.bot {
+        vertical-align: bottom;
+    }
+
+    table.ctr td.cp {
+        padding: 4px;
+        text-align: center;
+        width: 33%;
+    }
+
+    table.ctr td.cp2 {
+        padding: 2px;
+        text-align: center;
+    }
+
+    table.ctr td.cp2t {
+        font-family: monospace;
+        padding: 2px;
+        text-align: center;
+    }
+
+    table.ctr,table.ctt td.cp5 {
+        padding: 5px;
+        text-align: center;
+    }
+
+    table.ctt {
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    table.ctt td {
+        font-family: monospace;
+    }
+
+    table.ctt th {
+        border: none;
+    }
+
+    .l {
+        text-align: left;
+    }

@@ -1,0 +1,9 @@
+7   //  Glooper palette
+
+state 0 black   // Air
+state 1 yellow  // Ground
+state 2 blue    // Water (state)
+state 3 rgb(128, 128, 255) // Water (present)
+state 253 yellow // Wall
+state 254 black // Sink
+state 255 white // Source

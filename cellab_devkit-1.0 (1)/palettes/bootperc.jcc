@@ -1,0 +1,14 @@
+7       //  Bootstrap percolation gradient palette
+
+state 0 rgb(0, 0, 1)    // Background
+
+state 1 white           // Originally set cell
+
+//  False colour gradient for age of cell
+state 2-32    rgb(0, 0, 127)   - rgb(0, 0, 252)
+state 33-96   rgb(0, 1, 255)   - rgb(0, 255, 255)
+state 97-159  rgb(4, 255, 251) - rgb(254, 255, 1)
+state 160-222 rgb(255, 251, 0) - rgb(255, 1, 0)
+state 223-250 rgb(252, 0, 0)   - rgb(127, 0, 0)
+
+state 251 #20FF20       // Newest cells

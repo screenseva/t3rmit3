@@ -1,0 +1,657 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>File Formats</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<meta name="description" content="Cellular Automata Laboratory" />
+<meta name="author" content="by Rudy Rucker and John Walker" />
+<link rel="stylesheet" href="../../documents/styles/standard_screen.css"
+    type="text/css" />
+<link rel="stylesheet" href="styles/cellab.css" type="text/css" />
+<style type="text/css">
+</style>
+</head>
+
+<body class="standard">
+
+<table style="width: 100%;">
+<tr><td style="width: 15%; vertical-align: middle; text-align: left;">
+<a class="i" href="https://www.fourmilab.ch/cellab/"><img src="icons/caweb_icon.png" class="button"
+    width="82" height="74"
+    alt="Cellular Automata Laboratory" /></a>
+</td>
+<td class="c">
+<h1>Cellular Automata Laboratory</h1>
+</td>
+<td style="width: 15%; vertical-align: middle; text-align: right;">
+<a class="i" href="https://www.fourmilab.ch/"><img src="../../images/logo/swlogo.png" class="b0"
+    width="82" height="74"
+    alt="Fourmilab home" /></a>
+</td>
+</tr>
+</table>
+
+<hr />
+
+<h1>File Formats</h1>
+
+<p>
+Note: this information is believed accurate as of the time of
+the release of <cite>CelLab</cite>.  It describes internal file
+formats read and written by the program which are not normally
+manipulated by user programs.  These file formats are subject to
+change in future releases of <cite>CelLab</cite>.  If you
+develop programs that manipulate <cite>CelLab</cite> files based
+on this information, please be aware that you may have to modify
+your programs to work with future releases of
+<cite>CelLab</cite>.
+</p>
+
+<p>
+This information is for experienced systems programmers; as long
+as you use <cite>CelLab</cite> and its associated tools, you
+don't need to worry about its file formats.  This information is
+provided in case you want to interface <cite>CelLab</cite> to
+other software via its files.  We can't help you debug programs
+you develop based on this information, but dumping files written
+in these formats with your debugger should help resolve any
+problems.
+</p>
+
+<p>
+That said, onward to the gory details!
+</p>
+
+<h2>PATTERN FILES</h2>
+
+<p>
+Pattern files can be written either in ASCII or binary format.
+Each format can be written either compressed or uncompressed.
+All pattern files are written with an extension of
+<b>.jcp</b>&mdash;the format is determined by examining the
+bytes at the beginning of the file.  All formats represent a
+pattern map consisting of 200 lines, each containing 322 bytes.
+Within each line the first and last bytes are used internally
+within <cite>CelLab</cite>, do not appear on the screen, and can
+be ignored (they're saved in the pattern file because it's
+faster to dump uncompressed binary files with them included).
+Pattern files represent a total of 64,400 bytes (322&times;200),
+stored in various forms.  The top line on the screen appears
+first in the pattern file and the the bottom line last.  Bytes
+within each line are written with the leftmost pixel on the
+screen first and the rightmost pixel last (surrounded, of
+course, by the two extra bytes).
+</p>
+
+<h3 id="PatASCII">ASCII Pattern Files</h3>
+
+<p>
+ASCII pattern files are primarily intended for interchange
+with programming languages which cannot readily process binary files.
+ASCII files always consume more disk space than their binary
+equivalent and take longer to load and save.
+</p>
+
+<h4>Uncompressed ASCII Pattern Files</h4>
+
+<p>
+An uncompressed ASCII pattern file consists simply of a total of
+64,400 hexadecimal numbers, separated by spaces.  Line breaks
+are inserted to limit the length of lines to less than 80
+characters and an extra line break is inserted at the end of
+each of the 200 screen lines.  The hexadecimal numbers are
+written in without leading zeroes or other number format flags.
+Numbers from uncompressed pattern files can be read directly
+with a C format string of
+&ldquo;<span class="tt">%x</span>&rdquo;.  Uncompressed ASCII
+pattern files are huge and take forever to read and write, but
+they're the easiest format to decode.  Here are the first two
+lines of an uncompressed ASCII pattern file representing a
+random map:
+</p>
+
+<pre>
+0 A1 92 F5 C7 F9 DC D 36 8 1B C6 AB 78 42 A BA CE 5E EE FA F7 3F 4E C8
+B6 6F A2 7D AA 7E BE AB 61 94 2 46 8E 23 8B 1 6 B3 32 A3 F0 A5 7 34 81
+</pre>
+
+<h4>Compressed ASCII Pattern Files</h4>
+
+<p>
+Compressed ASCII pattern files are run length encoded&mdash;they
+consist of a sequence of space-separated pairs of numbers: the
+numbers separated by a comma.  The first number gives, in
+decimal, the number of consecutive occurrences of the value
+given, in hexadecimal, by the second number.  New line
+characters are inserted to keep line lengths below 80
+characters.  Data in the pattern map may be compressed across
+lines.  The first character of a compressed ASCII pattern file
+is always an asterisk; this identifies it as a pattern file.
+The following is a compressed pattern file representing a single
+dot with state 237 (which in hexadecimal is 0xED):
+</p>
+
+<pre>
+*32684,0 1,ED 31715,0
+</pre>
+
+<p>
+Note that the numbers total to 64,400, the total number of bytes in
+the map.
+</p>
+
+<h3 id="PatBinary">Binary Pattern Files</h3>
+
+<p>
+Data bytes in binary pattern files are written in the internal
+format used within <cite>CelLab</cite>.  Bytes within
+<cite>CelLab</cite> are rotated one bit to the right so that the
+bit representing Plane 0 appears as the most significant bit of
+each byte.  When you read or write a binary pattern map, you'll
+have to compensate for this by rotating the data one bit to the
+left before interpreting it as a normal state code.
+</p>
+
+<p>
+All binary pattern files have an ASCII colon
+&ldquo;<span class="tt">:</span>&rdquo; (hexadecimal code 3A) as the first
+byte.  The colon is followed by one or more instructions as
+defined in the following table.  The end of the binary pattern
+file is marked by the appearance of an RLEND instruction (byte
+with value 6).  The instruction codes and count bytes that
+follow the instruction are not rotated&mdash;only value bytes
+representing cell states are rotated one bit.
+</p>
+
+<pre>
+        RLUNCOMP = 1      64K of uncompressed data follows
+        RLRUN    = 2      2-257 byte run of value follows
+        RLONEB   = 3      Single byte of specified value follows
+        RLUNCS   = 4      Uncompressed stream follows
+        RLEND    = 6      End of pattern
+        RLLRUN   = 7      Long run &gt; 256 bytes
+        RLLUNCS  = 8      Long uncompressed stream &gt; 256 bytes
+</pre>
+
+<h4>Uncompressed Binary Pattern Files</h4>
+
+<p>
+Uncompressed binary pattern files consist of the initial colon, an
+RLUNCOMP instruction (code 1), followed by 64,400 bytes of pattern map
+data (each byte rotated one bit to the right, as noted above),
+followed by an RLEND (code 6) instruction.  Since pattern maps can be
+loaded and dumped directly from the map with one I/O call,
+uncompressed binary pattern files can be read and written very
+quickly.
+</p>
+
+<h4 id="PatBinComp">Compressed Binary Pattern Files</h4>
+
+<p>
+Compressed binary pattern files begin with the colon and end with an
+RLEND instruction.  The data between these two bytes is a series of
+instructions representing the data in run length compressed form.  The
+interpretation of each instruction and the bytes that follow it is as
+given below:
+</p>
+
+<dl class="justified">
+    <dt>RLRUN <em>Count Value</em></dt>
+        <dd>Store <em>Count</em>&nbsp;+&nbsp;1 bytes of
+                   <em>Value</em> in the next consecutive cells
+                   of the map buffer.</dd>
+
+    <dt>RLLRUN <em>CountHi CountLow Value</em></dt>
+        <dd>Compute <em>Count</em>&nbsp;=&nbsp;((<em>CountHi</em>&nbsp;&times;&nbsp;256)
+                   + <em>CountLow</em>),  then  store
+                   <em>Count</em>&nbsp;+&nbsp;1 bytes of
+                   <em>Value</em> in the next consecutive cells
+                   of the map buffer.</dd>
+
+    <dt>RLONEB <em>Value</em></dt>
+        <dd>Store <em>Value</em> in the next cell of the map buffer.</dd>
+
+    <dt>RLUNCS <em>Count Value[1] Value[2] ... Value[Count+1]</em></dt>
+        <dd>Store the  <em>Count</em>&nbsp;+&nbsp;1 bytes
+                   specified by the <em>Value[n]</em> bytes in
+                   the next cells of the map buffer.</dd>
+
+    <dt>RLLUNCS <em>CountHi CountLow Value[1] Value[2] &hellip; Value[Count+1]</em></dt>
+        <dd>Compute <em>Count</em>&nbsp;=&nbsp;((<em>CountHi</em>&nbsp;&times;&nbsp;256)
+                   + <em>CountLow</em>), then store the
+                   <em>Count</em>&nbsp;+&nbsp;1 bytes specified
+                   by the <em>Value[n]</em> bytes in the next
+                   cells of the map buffer.</dd>
+</dl>
+
+<h2>COLOR PALETTE FILES</h2>
+
+<p>
+Color palette files can be written in ASCII or binary form.  All
+have the default extension of <b>.jcc</b>; the format is
+determined from the contents of the file.  When working with
+color palettes, the standard pattern <b>chroma.jcp</b> can be
+useful; it shows you all of the states in the palette, from 0 to
+255, in a 16&times;16 grid of squares, with states reading from
+left to right, then top to down.  Blocks of 8 squares are
+separated by extra space for easier interpretation.  You can
+load this pattern from the drop-down list in the Pattern URL
+line of the WebCA control panel.
+</p>
+
+<h3 id="PalASCII">ASCII Color Palette Files</h3>
+
+<p>
+ASCII color palette files have a very simple format; they are easy to
+generate manually or programmatically for custom representation of
+states.  The format is as follows.
+</p>
+
+<p>
+The first line contains a single number, the format indicator, which
+can be 2, 3, or 5.  Values signify:
+</p>
+
+<pre>
+        2     VGA Palette file
+        3     Composite (CGA and VGA) palette file
+        5     RGB Palette file (0&ndash;255 intensity)
+</pre>
+
+<p>
+This line is followed by up to 256 lines specifying color
+assignments for states.  If fewer than 256 lines follow the
+format indicator, the color assignments for those states will be
+left as before.  Each line of a VGA palette file specifies the
+red, green, and blue intensities from 0 to 63, separated by
+spaces, for each state.  A composite file supplies both CGA and
+VGA values for each state with the VGA red, green, and blue
+intensities followed by the CGA color index for the state.  The
+CGA color index was used by earlier versions of
+<cite>CelLab</cite> and is now ignored. RGB palette files are
+the same as VGA palette files except that intensities of the
+red, green, and blue components run from 0 to 255.
+</p>
+
+<h3 id="PalProc">Procedural Color Palette Files</h3>
+
+<p>
+Procedural color palette files allow a compact textual
+specification of complex color palettes for rules which
+employ &ldquo;housekeeping bits&rdquo; in their states
+which you don't want to affect the display of the map.
+For example, our <a href="rules.html#PerfumeT">Perfume</a>
+rules use two bit planes to represent the gas and containers,
+but six other planes for internal information.  Crafting
+a palette which displays only the relevant information
+while excluding the other planes can be tedious and
+prone to error.  A procedural palette can get the job
+done in just a few lines.
+</p>
+
+<p>
+A procedural palette file begins with a line containing
+the number &ldquo;7&rdquo;; this indicates it is in
+procedural form.  Subsequent lines are statements as
+follows.  Blank lines and any material after two slashes
+(&ldquo;<span class="tt">//</span>&rdquo;) is ignored and
+may be used for comments.
+</p>
+
+<blockquote>
+<dl class="jb">
+    <dt>mask <em>number</em></dt>
+    <dd>Mask the physical states by ANDing with <em>number</em>.
+        The number is assumed to be in decimal, or hexadecimal
+        if it begins with
+        &ldquo;<span class="tt">0x</span>&rdquo;.
+        If no mask is specified,
+        <span class="tt">0xFF</span> is assumed.  Only one
+        <span class="tt">mask</span> should be specified; if
+        the palette contains more than one, the last mask will
+        be used.</dd>
+        
+    <dt>state <em>statelist</em> <em>color</em>[-<em>color</em>]</dt>
+    <dd>The CSS <em>color</em> specification is assigned to the states
+        in <em>statelist</em>, which is a comma separated list of states,
+        each of which can be a number (again, hexadecimal
+        if preceded by &ldquo;<span class="tt">0x</span>&rdquo;),
+        or a range separated by a hyphen, with an optional
+        increment also preceded by a hyphen.
+        &ldquo;<span class="tt">state</span>&rdquo; may be
+        abbreviated to
+        &ldquo;<span class="tt">s</span>&rdquo;.  If
+        multiple assignments are made to the same state,
+        the last will be used.  If a second color is given,
+        separated by a hyphen from the first, the states
+        in <em>statelist</em> will be filled with a
+        linear gradient starting with the first color and
+        ending with the second.</dd>
+</dl>
+</blockquote>
+
+<p>
+For example, the following is a complete procedural palette
+file for the Perfume rules.
+</p>
+
+<pre>
+    7   //  Procedural palette for the Perfume rules
+    mask 6
+    state 0 black               // Color name
+    s 2 #0000FF                 // Hex RGB specfication
+    state 4,6 rgb(255, 255, 0)  // Decimal RGB
+</pre>
+
+<p>
+You can specify any number of states and ranges on a
+&ldquo;<span class="tt">state</span>&rdquo; declaration:
+</p>
+
+<pre>
+    state 2,3,7-12,0x19-0x21,128-252-4 hsl(120, 60%, 70%)
+</pre>
+
+<p>
+It is permissible to replace the color assignment to a
+state in a subsequent statement.  This is handy in
+cases where you want to specify exceptions to a large
+range.  The following sets all states to grey, then
+assigns different colors to a few states in the range.
+</p>
+
+<pre>
+    state 0-255 grey
+    state 1 red
+    state 17 skyblue
+    state 63-95 yellow-blue
+</pre>
+
+<h3 id="PalBinary">Binary Color Palette Files</h3>
+
+<p>
+Binary color palette files are all precisely 771 bytes long. The
+first three bytes are an ASCII format code of &ldquo;4&rdquo;
+(code 34 hex) or &ldquo;6&rdquo; (code 36 hex), a carriage
+return (0D hex), and a line feed (code 0A hex).  This prologue,
+which identifies the file as being binary format, is followed by
+768 bytes, with consecutive triples of bytes specifying the
+color assignments for the 256 state codes from 0 to 255
+(768&nbsp;=&nbsp;3&nbsp;&times;&nbsp;256).  If the format code
+is &ldquo;4&rdquo;, the three bytes in each triple specify the
+red, green, and blue intensities from 0 through 63.  The first
+byte of each triple also may contain, in its two most
+significant bits, a legacy color index assignment for the state,
+from 0 to 3, which is ignored by WebCA.  If the format code is
+&ldquo;6&rdquo;, the three bytes of the triple give red, green,
+and blue intensities from 0 to 255.
+</p>
+
+
+<h2>RULE DEFINITION FILES</h2>
+
+<p>
+<cite>CelLab</cite> evaluates cellular automata rules by table
+look-up.  The basic content of a rule definition (<b>.jc</b>)
+file is the values to be loaded into the lookup table to define
+the rule.  Rule definitions may also set numerous modes that
+affect the operation of <cite>CelLab</cite>, request the loading
+of patterns, color palettes, and the like.
+</p>
+
+<p>
+Rule definition files are always binary files.  They consist
+of a sequence of instruction codes, each followed by data specific to
+that instruction.  The methods and instruction codes used in rule
+definition files are a very similar to those used in compressed binary
+pattern files.  The instruction codes used in rule definition files
+are as follows:
+</p>
+
+<p>
+<b>Rule lookup table compression instructions:</b>
+</p>
+
+<pre>
+        RLUNCOMP = 1      64K of uncompressed rule follows
+        RLRUN    = 2      2-257 byte run of value follows
+        RLONEB   = 3      Single byte of specified value follows
+        RLUNCS   = 4      Uncompressed stream follows
+        RLCOPYB  = 5      Copy previously specified bank
+        RLEND    = 6      End of rule definition, parameters
+</pre>
+
+<p>
+<b>Rule mode request instructions:</b>
+</p>
+
+<pre>
+        RSHTEXT  = 64     Horizontal texture request
+        RSVTEXT  = 65     Vertical texture request
+        RSRAND   = 66     Random stimulus request
+        RSPAT    = 67     Pattern load request
+        RSPAL    = 68     Palette load request
+        RSEPAT   = 69     Embedded palette address
+        RSEPAL   = 70     Embedded pattern address
+        RSRSEED  = 71     Initial random seed
+        RSOCODE  = 72     Own code load request
+        RSEOCODE = 73     Embedded own code address
+</pre>
+
+<p>
+The lookup table always consists of 65,536 bytes of data (even
+though many rules do not need or use the entire table), and a
+rule definition file always loads every byte of the table.  Each
+byte in the table represents a the new state for a cell when its
+state and that of its neighbors select that cell in the rule
+lookup table.  The cell states in the lookup tables are stored
+in the internal format with Plane 0 as the most significant bit
+and Planes 1 through 7 as the least significant 7 bits (in other
+words, the states are rotated circularly one bit to the right).
+The relationship between the values of the neighbors and the
+lookup table indices for the various settings of worldtype can
+be seen by examining the JavaScript or Java rule generation
+code in the source code supplied with <cite>CelLab</cite>.
+</p>
+
+<p>
+The compression algorithms used keep the size of rule files
+commensurate with the actual data needed by the rule.  First, let's
+examine the instructions used to compress the rule table itself.
+</p>
+
+<dl class="justified">
+    <dt>RLUNCOMP <em>Value[0] Value[1] ... Value[65535]</em></dt>
+        <dd>The entire contents of the lookup table is specified by the
+                   65536 bytes that immediately follow this
+                   instruction. <cite>CelLab</cite> never writes
+                   rules in this format, but it will load rules
+                   written with this instruction; it's provided
+                   as a convenience to external programs that
+                   want to generate rules without all the
+                   complexity of compressing them.</dd>
+
+    <dt>RLRUN <em>Count Value</em></dt>
+        <dd>Store <em>Count</em>&nbsp;+&nbsp;1  bytes of
+                   <em>Value</em> in the next consecutive cells
+                   of the lookup table.</dd>
+
+    <dt>RLONEB <em>Value</em></dt>
+        <dd>Store <em>Value</em> in the next cell of the lookup table.</dd>
+
+    <dt>RLUNCS <em>Count Value[1] Value[2] &hellip; Value[Count+1]</em></dt>
+        <dd>Store the <em>Count</em>&nbsp;+&nbsp;1 bytes
+                   specified by the <em>Value[n]</em> bytes in
+                   the next cells of the rule table.</dd>
+
+    <dt>RLCOPYB <em>Pageno</em></dt>
+        <dd>The rule table is arbitrarily subdivided into 256
+                   byte pages, numbered 0 through 255.  Due to
+                   the structure of rules, often many pages will
+                   be identical.  This instruction copies a
+                   prior page, <em>Pageno</em>, and stores it in
+                   the next 256 bytes of the rule table.</dd>
+</dl>
+
+<p>
+There isn't one uniquely correct way to compress a rule
+table&mdash;rules may be encoded in various ways, but the
+contents of the lookup table will be identical after the rule is
+loaded.
+</p>
+
+<p>
+The following instructions specify modes which the rule can
+set.  The RLEND instruction both specifies modes and marks the
+end of the rule definition; it is required.  All of the other
+mode request instructions are optional&mdash;if they are not
+specified the default values are used.  These instructions
+convey the rule requests made by calls to the various
+<span class="tt">set</span>&hellip; method invocations in the
+<span class="tt">jcruleModes</span> method of a Java rule program or
+setting the variables with the corresponding names in a
+JavaScript rule program.  Please refer to the documentation of
+these variables for details on their interpretation.
+</p>
+
+<dl class="justified">
+    <dt>RLEND <em>worldtype randdens auxplane</em></dt>
+        <dd>This instruction marks the end of the rule
+            definition and conveys in the three bytes that
+            follow the instruction code the settings the rule
+            definition function stored in <em>worldtype,
+            randdens,</em> and <em>auxplane</em>.  These values
+            were used by earlier versions of <cite>CelLab</cite>
+            and are now ignored. The process of loading a rule
+            is ended after this instruction is processed
+            (although if the file is a saved experiment, pattern
+            and palette information may be present in the file
+            following the RLEND instruction).</dd>
+
+    <dt>RSHTEXT <em>texthb texthn</em></dt>
+        <dd>Requests horizontal texture of <em>texthn</em> bits,
+            starting at plane number
+            <em>texthb</em>.</dd>
+
+    <dt>RSVTEXT <em>textvb textvn</em></dt>
+        <dd>Requests vertical texture of <em>textvn</em> bits,
+           starting at plane number
+           <em>textvb</em>.</dd>
+
+    <dt>RSRAND <em>randb randn</em></dt>
+        <dd>Requests random input each generation.
+            <em>Randn</em> bits of random input are
+            stored with the least significant bit in
+            plane <em>randb</em>.</dd>
+
+    <dt>RSRSEED <em>rseedb rseedn rseedp</em></dt>
+        <dd>Requests that an initial random seed be stored when
+            the rule is loaded or a new pattern is loaded
+            while this rule is in effect.  The least
+            significant bit of the random seed is stored
+            in plane <em>rseedb</em> and <em>rseedn</em>
+            bits of seed are stored.  The setting of
+            <em>rseedp</em> controls the density of the
+            seed&mdash;a value of 255 results in half the bits
+            being zeroes, 0 generates all zeroes, and
+            intermediate values vary the density between
+            these limits.</dd>
+
+    <dt>RSPAT <em>nlen name[0] name[1] &hellip; name[nlen-1]</em> 0</dt>
+        <dd>The value of <em>nlen</em> gives the length,
+            including the terminating zero, of a file
+            name which <cite>CelLab</cite> will attempt
+            to load as a pattern file after loading the
+            rule.</dd>
+
+    <dt>RSPAL <em>nlen name[0] name[1] &hellip; name[nlen-1]</em> 0</dt>
+        <dd>The value of <em>nlen</em> gives the length,
+            including the terminating zero, of a file
+            name which <cite>CelLab</cite> will attempt
+            to load as a color palette file after loading
+            the rule.</dd>
+
+    <dt>RSOCODE <em>nlen name[0] name[1] &hellip; name[nlen-1]</em> 0</dt>
+        <dd>The value of <em>nlen</em> gives the length,
+            including the terminating zero, of a file name which
+            <cite>CelLab</cite> will attempt to load as a
+            user evaluator file after loading the rule.</dd>
+
+    <dt>RSEPAT <em>addr[0] addr[1] addr[2] addr[3]</em></dt>
+        <dd>The four bytes that follow give the address, written
+            with the least significant byte first and the
+            most significant byte last, of a compressed
+            binary format pattern file embedded within
+            this <b>.jc</b> file somewhere after the
+            RLEND instruction.  After the rule table is
+            loaded, <cite>CelLab</cite> will load that
+            embedded pattern.  This is used to encode
+            patterns within saved experiments.</dd>
+
+    <dt>RSEPAL <em>addr[0] addr[1] addr[2] addr[3]</em></dt>
+        <dd>The four bytes that follow give the address, written
+            with the least significant byte first and the
+            most significant byte last, of a binary color
+            palette file embedded within this <b>.jc</b>
+            file somewhere after the RLEND instruction.
+            After the rule table is loaded,
+            <cite>CelLab</cite> will load that embedded
+            color palette.  This is used to encode color
+            palettes within saved experiments.</dd>
+
+    <dt>RSEOCODE <em>addr[0] addr[1] addr[2] addr[3]</em></dt>
+    <dd>The four bytes that follow give the address, written with
+        the least significant byte first and the most
+        significant byte last, of user own code embedded within
+        this <b>.jc</b> file somewhere after the RLEND
+        instruction.  This facility was used by earlier MS-DOS
+        and Windows versions of <cite>CelLab</cite> but is now
+        obsolete; the instruction is ignored.</dd>
+</dl>
+
+<p>
+Rule definition files are the most complex of the files used by
+<cite>CelLab</cite>, but if you get confused about their format,
+you can always examine the source code of the Java rule maker to
+resolve any questions.
+</p>
+
+<h2 id="popcen">POPULATION CENSUS LOG FILES</h2>
+
+<p>
+<a href="webca.html#popcen">Population census</a>
+log files consist of ASCII records in CSV
+format indicating the population of cells in each state at the
+time the log entry was made, whether manually or by an automatic
+dump every so many generations.  Each record occupies a line in
+the file and each record is of the form:
+</p>
+
+<p class="c">
+    <em>generation</em><span class="tt">,</span><em>state</em><sub>1</sub><span class="tt">,</span><em>count</em><sub>1</sub><span class="tt">,</span>&hellip;
+</p>
+
+<p class="subsuper">
+Where <em>generation</em> is the generation number at which the
+population census was taken. the <em>state</em><sub><em>n</em></sub> and
+<em>count</em><sub><em>n</em></sub> pairs give the number of cells in
+each state.  States which have a <em>count</em> of zero are
+omitted.  All numbers are decimal.
+</p>
+
+<hr />
+
+<p>
+<a href="refs.html" class="i"><img src="icons/previous.png" width="32" height="32"
+    class="button" alt="Previous" /></a>
+&nbsp; &nbsp;
+<a href="about.html" class="i"><img src="icons/next.png" width="32" height="32"
+    class="button" alt="Next" /></a>
+&nbsp; &nbsp;
+<a href="cellab.html" class="i"><img src="icons/contents.png" width="32" height="32"
+    class="button" alt="Contents" /></a>
+</p>
+
+</body>
+</html>

@@ -1,0 +1,7 @@
+7   //  Procedural palette for Forest rule
+
+state 0 #160b03                 // Empty cell
+state 1-61-4 #008000-#00FF00    // Living trees, by age
+state 3 orange                  // Burning tree
+state 4-64-4 orange-#160b03     // Aftermath of fire
+

@@ -1,0 +1,997 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>User Evaluators</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<meta name="description" content="Cellular Automata Laboratory" />
+<meta name="author" content="by Rudy Rucker and John Walker" />
+<link rel="stylesheet" href="../../documents/styles/standard_screen.css"
+    type="text/css" />
+<link rel="stylesheet" href="styles/cellab.css" type="text/css" />
+<script type="text/javascript" src="../../documents/scripts/externalLinks.js">
+</script>
+</head>
+
+<body class="standard" onload="externalLinks();">
+
+<table style="width: 100%;">
+<tr><td style="width: 15%; vertical-align: middle; text-align: left;">
+<a class="i" href="https://www.fourmilab.ch/cellab/"><img src="icons/caweb_icon.png" class="button"
+    width="82" height="74"
+    alt="Cellular Automata Laboratory" /></a>
+</td>
+<td class="c">
+<h1>Cellular Automata Laboratory</h1>
+</td>
+<td style="width: 15%; vertical-align: middle; text-align: right;">
+<a class="i" href="https://www.fourmilab.ch/"><img src="../../images/logo/swlogo.png" class="b0"
+    width="82" height="74"
+    alt="Fourmilab home" /></a>
+</td>
+</tr>
+</table>
+
+<hr />
+
+<h1>User Evaluators</h1>
+
+<p>
+This section contains quite advanced material and should not be
+tackled until you a) have a thorough familiarity with
+<cite>CelLab</cite> and b) understand JavaScript programming.
+</p>
+
+<p>
+The section arose because Rudy kept asking me to add new modes to the
+basic program. First he wanted a one-dimensional mode. Then he
+wanted a mode that can see more than one bit of neighbor state so he
+could do the Rug rule. Each of these changes involved
+adding new code to the main simulator program, which meant I had to keep
+remaking all the rulemakers. And each addition only stimulated more
+requests. What a drag&hellip;.
+</p>
+
+<p>
+In order to get out of the business of adding custom evaluator
+after custom evaluator, and to completely open the
+architecture of the program, rendering it extensible almost
+without bound, I implemented &ldquo;user evaluators&rdquo;.
+These allow any user to write his own custom inner loop for any
+kind of automaton he wishes and have it executed as the update
+rule by WebCA, retaining all of the facilities of the program
+including the lookup table. This facility is intended for
+experienced JavaScript programmers only, but the way in which it
+is integrated with WebCA allows new evaluators to
+be coded and run with WebCA. Thus WebCA can get smarter without
+the need to post updated versions.
+</p>
+
+<p>
+We have used this facility already to implement several interesting
+new evaluators. One performs the optimal solution of Laplace's
+equation in the plane. A second implements a general-purpose von
+Neumann neighborhood where each cell can see 3 bits of state from each
+of its neighbors and four bits of local state. A third implements
+Langton's self-reproducing creature.
+</p>
+
+
+<h2 id="javascript">Defining User Evaluators in JavaScript</h2>
+
+<p>
+The rules for JavaScript user evaluators are
+detailed and highly rigid, but once you understand them the actual job
+of coding an evaluator is not all that difficult.  First, let's
+examine it from a rule definition standpoint.
+<span id="Vonpar">Consider the following
+JavaScript rule definition:</span>
+</p>
+
+<pre>
+/*
+
+    3 bit parity rule for von Neumann neighborhood implemented
+    with the vonn3 user evaluator.
+
+*/
+
+rule.worldtype = 13;            // 2D torus world
+rule.patreq = "square";
+rule.ocodereq = "vonn3";
+
+function vonpar(oldstate) {
+    return (oldstate &amp; 7) ^
+           ((oldstate &gt;&gt; 3) &amp; 7) ^
+           ((oldstate &gt;&gt; 6) &amp; 7) ^
+           ((oldstate &gt;&gt; 9) &amp; 7);
+}
+</pre>
+
+<p>
+This is a parity rule that works on 3 bits of state in the von
+Neumann neighborhood.  Since this is a neighborhood option not
+built into WebCA, the rule definition invokes an
+user evaluator called &ldquo;<b>vonn3</b>&rdquo; which
+implements that custom neighborhood.  It sets <span
+class="tt">rule.worldtype</span> to 13 to select a toroidal
+world (it would be 12 if open), and a generic look-up table in
+which the meaning of the entries is totally up to the user
+evaluator's implementation.  The <b>vonn3</b> user evaluator,
+implemented in the file <b>vonn3.js</b> is requested by setting
+&ldquo;<span class="tt">rule.ocodereq</span>&rdquo; to its file
+name (less the &ldquo;<span class="tt">.js</span>&rdquo;, which is
+assumed).  User evaluators defined with world types 12 and 13
+work with rule definition functions called directly with the raw
+lookup table index in <span class="tt">oldstate</span>; the rest
+of the rule definition function arguments are undefined.  The
+meaning of the 16 bits of <span class="tt">oldstate</span> is
+defined by the user evaluator itself.  For <b>vonn3</b> the
+assignments are as follows:
+</p>
+
+<table class="ctr">
+    <tr>
+        <th>&nbsp;<span class="tt">oldstate</span> bits&nbsp;</th>
+        <th>&nbsp;Meaning&nbsp;</th>
+    </tr>
+    <tr>
+        <td class="cp2"> 2 &ndash; 0</td>
+        <td class="cp2"> South</td>
+    </tr>
+    <tr>
+        <td class="cp2"> 5 &ndash; 3</td>
+        <td class="cp2"> East</td>
+    </tr>
+    <tr>
+        <td class="cp2"> 8 &ndash; 6</td>
+        <td class="cp2"> West</td>
+    </tr>
+    <tr>
+        <td class="cp2"> 11 &ndash; 9</td>
+        <td class="cp2"> North</td>
+    </tr>
+    <tr>
+        <td class="cp2"> 15 &ndash; 12</td>
+        <td class="cp2"> Self</td>
+    </tr>
+</table>
+
+<p>
+Thus, as advertised, 3 bits from each neighbor and four local
+bits are visible (the local bits aren't used in this rule
+definition).  Since only <span class="tt">oldstate</span> is
+passed, the <span class="tt">vonpar</span> function extracts the
+neighbors itself from <span class="tt">oldstate</span>.  It
+calculates the new value and returns it in the conventional
+manner.
+</p>
+
+<p>
+When this rule definition is loaded into WebCA, it searches for
+the file <b>vonn3.js</b> and loads it as a user evaluator.
+</p>
+
+<p>
+So what are these mysterious user evaluators, and how do I go
+about writing one?  Listen up, sharpen your coding stick, and
+get ready to be initiated into the gory details of the innards
+of WebCA.  First of all, a user evaluator is mechanically a
+JavaScript function which is called to update each cell in the
+map for every generation of the rule's execution. The evaluator
+is, in essence, the &ldquo;inner loop&rdquo; that updates the
+state of cells in the state map.  There is no measurable speed
+penalty when using a custom evaluator rather than a built-in
+evaluator of the same complexity.  Obviously, if you do lots of
+computation within the evaluator, WebCA will slow down
+accordingly.
+</p>
+
+<p id="vonn3">
+Let's examine the definition for the <b>vonn3.js</b> user
+evaluator.
+</p>
+
+<pre>
+/*  User evaluator for von Neumann neighborhood with
+    3 bits of state visible from each neighbor and 4 bits
+    of local state.
+
+    Neighborhood is:
+
+            N
+          W C E
+            S
+
+    and index to the lookup table is:
+
+        CCCCNNNW WWEEESSS
+*/
+
+function vonn3(cells, phyx, phyy, p, lut) {
+    var self = cells[p];
+    var north = cells[p &minus; phyx];
+    var south = cells[p + phyx];
+    var east = cells[p + 1];
+    var west = cells[p &minus; 1];
+
+    return lut[((self &amp; 0xF) &lt;&lt; 12) |
+               ((north &amp; 7) &lt;&lt; 9) |
+               ((west &amp; 7) &lt;&lt; 6) |
+               ((east &amp; 7) &lt;&lt; 3) |
+                (south &amp; 7)];
+}
+</pre>
+
+<p>
+This code appears puzzling until we explain some things about the
+arguments with which the evaluator function is called
+and the handling of the state map.
+</p>
+
+<p>
+The job of each call on the evaluator function is to update the cell
+whose index in the <span class="tt">cells</span> array (the
+old state map) whose index is given by <span class="tt">p</span>,
+returning the new state of the cell which will be stored into
+the new state map for the next generation.  The
+<span class="tt">cells</span> array is a linear vector of cells,
+arranged as <span class="tt">phyy</span> lines of
+<span class="tt">phyx</span> rows.  Neighbors of the cell being
+updated are accessed by arithmetic on the cell's index in
+the array as performed by the assignment statements at
+the top of the function.  You don't have to worry about
+wrap-around or whether the <span class="tt">rule.worldtype</span> is
+open or closed; that is handled by duplicating cells around the edges
+of the map which are updated automatically before the user evaluator
+is called.
+</p>
+
+<p>
+When <span class="tt">p</span> is pointing to a given cell, its
+neighbors may be found by the following expressions:
+</p>
+
+<table class="ctr">
+    <tr>
+        <td class="cp2t">NW</td>
+        <td class="cp2t">N</td>
+        <td class="cp2t">NE</td>
+    </tr>
+    <tr>
+        <td class="cp2t">W</td>
+        <td class="cp2t">C</td>
+        <td class="cp2t">E</td>
+    </tr>
+    <tr>
+        <td class="cp2t">SW</td>
+        <td class="cp2t">S</td>
+        <td class="cp2t">SE</td>
+    </tr>
+</table>
+
+<p></p>
+
+<table class="ctt">
+    <tr>
+        <th>Neighbor</th>
+        <th>Address expression</th>
+    </tr>
+    <tr>
+        <td class="c">NW</td>
+        <td>&nbsp;&nbsp;&nbsp;p-(phyx+1)</td>
+    </tr>
+    <tr>
+        <td class="c">N</td>
+        <td>&nbsp;&nbsp;&nbsp;p-phyx</td>
+    </tr>
+    <tr>
+        <td class="c">NE</td>
+        <td>&nbsp;&nbsp;&nbsp;p-(phyx-1)</td>
+    </tr>
+    <tr>
+        <td class="c">W</td>
+        <td>&nbsp;&nbsp;&nbsp;p-1</td>
+    </tr>
+    <tr>
+        <td class="c">C</td>
+        <td>&nbsp;&nbsp;&nbsp;p</td>
+    </tr>
+    <tr>
+        <td class="c">E</td>
+        <td>&nbsp;&nbsp;&nbsp;p+1</td>
+    </tr>
+    <tr>
+        <td class="c">SW</td>
+        <td>&nbsp;&nbsp;&nbsp;p+(phyx-1)</td>
+    </tr>
+    <tr>
+        <td class="c">S</td>
+        <td>&nbsp;&nbsp;&nbsp;p+phyx</td>
+    </tr>
+    <tr>
+        <td class="c">SE</td>
+        <td>&nbsp;&nbsp;&nbsp;p+(phyx+1)</td>
+    </tr>
+</table>
+
+<p>
+While all of our standard patterns assume a 320&times;200 cell map,
+the simulator will actually work on a map of any size.  You should
+always use the <span class="tt">phyx</span> and
+<span class="tt">phyy</span> dimension arguments so your
+evaluators will as well.
+</p>
+
+<p>
+If you wish to supply modal information to the rule, you can
+encode 8 bits of information in the
+&ldquo;<span class="tt">rule.reqauxp</span>&rdquo; variable in the rule
+definition function.  For user evaluator rules this cell does not
+cause any special treatment of plane 1, but instead is simply
+passed to the evaluator function in this variable.  The
+interpretation of this value is totally up to the evaluator.
+</p>
+
+<p>
+The built-in logic that calls your user evaluator takes care of
+toroidal wrap around and supplying zero neighbors for open
+worlds.  As long as your evaluator addresses the neighbors with
+the expressions given above, it doesn't have to worry about
+wraparound or world type.  When used with an evaluator, the
+lookup table has no predefined meaning&mdash;it's simply 64K of
+data to which the evaluator assigns its own interpretation. 
+Consequently, JavaScript or Java rule definitions which use user
+evaluators must be coded with an understanding of what the
+evaluator expects to find in the lookup table.  (Note that if
+you really want to go off the deep end, there isn't any reason
+own code can't <em>change</em> the lookup table as it's
+running.) Some evaluator functions don't even need the lookup
+table at all.
+<span id="i3-CA-Laplace">For example, here's a definition of
+<b>laplace.js</b></span> which solves the Laplace equation
+in the plane using the formula:
+</p>
+
+<p class="c">
+<i>New</i> = ((<i>N</i> + <i>S</i> + <i>E</i> + <i>W</i>) &times; 4 +
+    (<i>NW</i> + <i>NE</i> + <i>SW</i> + <i>SE</i>)) / 20
+</p>
+
+<pre>
+/*  User evaluator for the Laplace averaging.  All
+    computation is in the code: no lookup table is
+    used.  */
+
+function laplace(cells, phyx, phyy, p, lut) {
+    //  Compute Laplace average of neighbors
+    //      LaplaceAverage = (4 &times; (N + E + S + W) +
+    //      (NW + NE + SE + SW)) / 20
+    var s = 0;
+
+    s += cells[p &minus; phyx];           // n
+    s += cells[p &minus; 1];              // w
+    s += cells[p + 1];              // e
+    s += cells[p + phyx];           // s
+    s *= 4;
+
+    s += cells[p &minus; (phyx + 1)];     // nw
+    s += cells[p &minus; (phyx &minus; 1)];     // ne
+    s += cells[p + (phyx &minus; 1)];     // sw
+    s += cells[p + (phyx + 1)];     // se
+
+    return Math.floor((s + 10) / 20);
+}
+</pre>
+
+<p>
+Since this code computes the new value arithmetically from the
+neighbor cells, it doesn't bother with the lookup table. A
+JavaScript or Java rule definition that called it would just
+always return zero from its rule definition function.
+</p>
+
+<p>
+User evaluators should be short, sweet, and simple. Evaluators
+of the complexity shown here run at speeds comparable to the
+built in rule evaluators of WebCA. If you need to
+do lots of computation, try to find a way to reduce it to table
+lookup or else you're likely to be disappointed at how fast your
+rule executes.
+</p>
+
+<p>
+For an example of what can be done with a user evaluator, please refer
+to the definition of
+<a href="rules.html#Langton">Langton's self-reproducing machine</a>.  The
+evaluator for this rule (essentially identical to the
+<b>vonn3</b> example given above) is defined in
+<b><a href="https://www.fourmilab.ch/cellab/webca/evaluators/langton.js"
+    rel="Target:CelLabAux">evaluators/langton.js</a></b>.
+The rule definition which generates the
+complicated lookup table used by the evaluator is defined in the
+JavaScript file <b><a href="https://www.fourmilab.ch/cellab/webca/ruledefs/langton.js"
+    rel="Target:CelLabAux">ruledefs/langton.js</a></b>.
+</p>
+
+<p>
+If you have a lookup table that you'd like to run with several
+different evaluators, you can explicitly load an evaluator
+from the WebCA control panel.  You can see a list of
+<a href="ruledef-eval.html#stdeval">standard evaluators</a> in the drop-down list
+on the Evaluator URL line.
+</p>
+
+<p>
+As you come to master the craft of evaluator design, your
+horizons will suddenly broaden as you come to realize the extent that
+WebCA places you in control. Appropriate code, written with a
+thorough understanding of the internal environment seen by the
+evaluator, can implement such things as:
+</p>
+
+<ul>
+    <li>Optimized evaluation, skipping inactive regions at high
+        speed.</li>
+    <li>Position-sensitive evaluation, for example preserving
+        a constant frame on the screen.</li>
+    <li>Non-state inputs (random numbers, etc.).</li>
+    <li>Non-local neighbors.</li>
+    <li>Temporal phase (for example, alternating block rules).</li>
+    <li>Continuous-valued cells.</li>
+</ul>
+
+<p>
+Your imagination and JavaScript coding skills are truly the
+only limits to what you can accomplish with user evaluators.
+</p>
+
+<h3>Evaluator Local Storage</h3>
+
+<p>
+Sometimes an evaluator will need some storage, usually constants
+but sometimes variables, which persists over multiple calls
+on the evaluator.  Initializing these variables on every call
+to the evaluator would be costly in compute time and slow down
+the simulator: for a standard map of 320&times;200 cells the
+evaluator function is called 64,000 times for <em>each generation</em>
+of the automaton.  WebCA provides an object named
+<span class="tt">rule.evaluator</span> where evaluators can
+keep such information.  Variables are initialized by code in the
+prologue to the evaluator, before the declaration of the evaluator
+function.  This code is executed only once, when the evaluator is
+initially loaded, and variables it creates can be accessed on
+subsequent calls to the evaluator function.
+</p>
+
+<p>
+For example, one of our evaluators simulates diffusion of a
+gas by randomly selecting a neighbor of a particle and swapping
+the particle with it.  To do this efficiently, we need a table
+of the offsets of the neighbors from the current cell.
+Creating this array for every call on the evaluator would
+dramatically slow down the simulation, so we declare the
+array in the prologue as follows:
+</p>
+
+<pre>
+//  Indices of neighbors for random propagation direction
+rule.evaluator.nindex = [ &minus;(map[0].phyx + 1), &minus;map[0].phyx, &minus;(map[0].phyx &minus; 1),
+                                  &minus;1,                                1,
+                           (map[0].phyx &minus; 1),  map[0].phyx,  (map[0].phyx + 1) ];
+
+function gasflow(cells, phyx, phyy, p, lut) {
+                        &#8942;
+</pre>
+
+<p>
+then, within the <span class="tt">gasflow</span> evaluator
+function, code can reference the
+<span class="tt">rule.evaluator.nindex[]</span> array, which
+will already have been initialized before the evaluator is
+called the first time.  Storage in <span class="tt">rule.evaluator</span>
+is released when another evaluator is loaded.  (Note that when
+the prologue is executed, the evaluator function arguments
+have not been set, so the assignment which creates the
+<span class="tt">rule.evaluator.nindex</span> array must
+obtain the physical width of the map directly using
+<span class="tt">map[0].phyx&nbsp;+&nbsp;1</span>, etc.)
+</p>
+
+<h3>Evaluator Notification Functions</h3>
+
+<p>
+While most evaluators need do nothing more than update the current
+cell, some may need to special processing, for example at the start
+and/or end of each generation.  While it is possible to test for
+this by examining the <span class="tt">p</span> argument to
+detect the first or last cell, making this test for every cell
+slows down the evaluator.  WebCA allows an evaluator to register
+notification functions for such events by assigning functions to
+the following variables in <span class="tt">rule.evaluator</span>.
+</p>
+
+<h4 class="tt">generationStart</h4>
+
+<p>
+The function will be called for each generation, before the
+evaluator function is called to update the first cell.  For
+example, to perform some processing before each generation,
+you'd add code like the following to the prologue of the
+evaluator.
+</p>
+
+<pre>
+rule.evaluator.generationStart = function () {
+    //  Perform processing before generation
+};
+</pre>
+
+<h4 class="tt">generationEnd</h4>
+
+<p>
+The function is called once each generation, after the last cell
+has been updated by evaluator function.
+</p>
+
+<h4 class="tt">generationFirst</h4>
+
+<p>
+The function is called before the very first time the evaluator
+is called, before its <span class="tt">generationStart</span>
+function, if any.  A variable named
+<span class="tt">rule.evaluator.generationFirstDone</span>
+is set true to indicate the <span class="tt">generationFirst</span>
+function has been called.  If the evaluator sets it back to
+<span class="tt">false</span>,
+<span class="tt">generationFirst</span> will be called again on the
+next invocation of the evaluator.
+</p>
+
+<h4 class="tt">onChange</h4>
+
+<p>
+The function will be called whenever a new rule or pattern is
+loaded, with a string argument of
+&ldquo;<span class="tt">rule</span>&rdquo; or
+&ldquo;<span class="tt">pattern</span>&rdquo;
+to indicate which has changed.
+</p>
+
+<h2 id="stdeval">Standard Evaluators</h2>
+
+<p>
+The following evaluators, defined as described above, are
+available on the WebCA server.  You can load them from your rule
+definition programs, or explicitly from the drop-down list in
+the <a href="webca.html#evalload">Evaluator</a> section of the
+WebCA control panel by entering the name in the &ldquo;Evaluator
+URL&rdquo; box and pressing &ldquo;Load&rdquo;.  If one of the
+standard evaluators does not meet your needs, you still may find
+one which is close enough to serve as a starting point which you
+can modify into one that does.  Source code for all of the
+standard evaluators is included in the
+<a href="https://www.fourmilab.ch/cellab/index.html#devkit"><cite>CelLab</cite>
+Development Kit</a> in the <span class="tt">evaluators</span>
+directory.
+</p>
+
+<p>
+In discussing the evaluators, we will use the following
+terminology to refer to a cell's neighbors.  The cell the
+evaluator is updating, EveryCell, is denoted by
+<span class="tt">C</span>, and
+is surrounded by eight adjacent cells, named by the points of
+the compass.
+</p>
+
+<table class="ctr">
+    <tr>
+        <td class="cp"><span class="tt">NW</span></td>
+        <td class="cp"><span class="tt">N</span></td>
+        <td class="cp"><span class="tt">NE</span></td>
+    </tr>
+    <tr>
+        <td class="cp"><span class="tt">W</span></td>
+        <td class="cp"><span class="tt">C</span></td>
+        <td class="cp"><span class="tt">E</span></td>
+    </tr>
+    <tr>
+        <td class="cp"><span class="tt">SW</span></td>
+        <td class="cp"><span class="tt">S</span></td>
+        <td class="cp"><span class="tt">SE</span></td>
+    </tr>
+</table>
+
+<h3 id="e_cfd">cfd</h3>
+
+<p>
+This is a two-dimensional computational fluid dynamics
+simulator which runs as an evaluator.  Each cell's state is
+represented by twelve floating-point values which specify the
+density and velocity of the fluid within it and its neighbors.
+This evaluator is used by the <a href="rules.html#Wind">Wind</a>
+rule; see its documentation for details and attribution of
+the work upon which it is based.  This evaluator is extremely
+computationally intense, and requires a high-performance
+machine and browser implementation of JavaScript to run at
+an acceptable speed.  The evaluator does not use the lookup
+table, and examines the map only to determine the location of
+obstacles (indicated as cells with state 255) to fluid flow.
+</p>
+
+<h3 id="e_forest">forest</h3>
+
+<p>
+This is a special purpose evaluator built to support the
+<a href="rules.html#Forest">Forest</a> sample rule.  It is
+unlikely to be useful for any other purpose.
+</p>
+
+<h3 id="e_gasflow">gasflow</h3>
+
+<p>
+This evaluator implements gas flow
+through randomness, and is used by the
+<a href="rules.html#Gasflow">Gasflow</a> sample rule.  It is
+configured by variables in the prologue section.  Cells which
+have the bit set in
+<span class="tt">wall</span> are impermeable walls; set to
+zero to disable walls.  Every <span class="tt">percent</span>
+of generations (0&ndash;100), cells will be displaced in a
+random direction, swapping with their neighbors.  The
+<span class="tt">flow</span> parameter (0&ndash;100)
+gives the percent bias a cell has not to flow in the
+directions specified in the <span class="tt">nogo</span>
+array (by default configured for left to right flow).  The
+lookup table is not used.  This rule conserves particle
+number.
+</p>
+
+<h3 id="e_gaswall">gaswall</h3>
+
+<p>
+This evaluator simulates gas diffusion
+through randomness.  It is configured by variables
+in the prologue section.  Cells which have the bit set in
+<span class="tt">wall</span> are impermeable walls; set to
+zero to disable walls.  Every <span class="tt">percent</span>
+of generations (0&ndash;100), cells will be displaced in a
+random direction, swapping with their neighbors.The
+lookup table is not used.  This rule conserves particle
+number.  This evaluator is equivalent to <b>gaswall</b>
+with <span class="tt">flow</span> set to zero, and is used
+in the <a href="rules.html#PerfumeT">PerfumeR</a> sample
+rule.
+</p>
+
+<h3 id="e_langton">langton</h3>
+
+<p>
+This evaluator is used by the <a href="rules.html#Langton">Langton</a>
+self-reproducing sample rule, but can be used whenever you need to
+see three bits of state from the four neighbors
+<span class="tt">N</span>,
+<span class="tt">E</span>,
+<span class="tt">S</span>,
+<span class="tt">W</span>, plus
+four bits of your own state,
+<span class="tt">C</span>.  The lookup table index is assembled
+with bits as follows.
+</p>
+
+<p class="c">
+<span class="tt">C C C C N N N E &nbsp; E E S S S W W W</span>
+</p>
+
+<h3 id="e_laplace">laplace <span class="n">and</span> lapinc</h3>
+
+<p>
+These evaluators compute the Laplace average of their
+eight surrounding neighbors with the formula:
+</p>
+
+<p class="c">
+<em>new</em> = ((<em>N</em> + <em>S</em> + <em>E</em> +
+    <em>W</em>) &times; 4 + (<em>NW</em> + <em>NE</em> +
+    <em>SW</em> + <em>SE</em>)) / 20
+</p>
+
+<p>
+The <b>laplace</b> evaluator returns <em>new</em>, while <b>lapinc</b>
+returns <em>new</em>+1.  Neither uses the lookup table.  The
+<a href="rules.html#Rug">RugLap</a> sample rule uses <b>lapinc</b>.
+You can use <b>laplace</b> when you need a more accurate
+average than that provided by world type 10.
+</p>
+
+<h3 id="e_margolus">margolus <span class="n">and</span> margolusp</h3>
+
+<p>
+The Margolus neighborhood is discussed in the
+<a href="chap4.html#i4-TH-lattice">Lattice Gas</a> section of the
+<cite><a href="chap4.html">Theory</a></cite> chapter.  It is
+possible to implement a lattice gas in the standard WebCA
+world type 0 or 1 by devoting bits in the cells' states to
+keep track of horizontal, vertical, and temporal phase, then
+writing out special cases in the rule program to handle all of
+the possibilities.  Our <a href="rules.html#PerfumeT">PerfumeT</a>
+and PerfumeX rules are examples of this technique.
+</p>
+
+<p>
+While it is possible to do this, the complexity of keeping track
+of the phases and handling the special cases can dwarf that of the
+actual rule.  The PerfumeX rule definition, for example, is 200
+lines of JavaScript, most devoted to twiddling bits and enumerating
+cases, with only a few actually expressing the rule.  Further, using
+bits in the cell state to keep track of phase makes them unavailable
+to the rule definition, which may wish to use them for other purposes.
+</p>
+
+<p>
+The <b>margolus</b> evaluators eliminate this complexity by keeping
+track of phase externally, in the evaluator, without bothering the
+rule program with such details.  Rewritten to use the <b>margolus</b>
+evaluator, the PerfumeM rule (identical in results to PerfumeX)
+is just 35 lines of code, of which 10 express the entire rule.
+</p>
+
+<p>
+How does this work?  Well, recall that in the Margolus neighborhood,
+neighbors are denoted by the relationship to the current cell, in its
+position in the block for the present generation, by their rotation
+from the cell:
+<span class="tt">CW</span> (clockwise),
+<span class="tt">CCW</span> (counterclockwise), or
+<span class="tt">OPP</span> (opposite).
+</p>
+
+<p>
+The <b>margolus</b> evaluator computes a lookup table index in
+which the lower eight bits are the state of the current cell
+and the high eight bits are composed of the states of the
+four relative Margolus neighbors and the vertical and horizontal
+phases as follows:
+</p>
+
+<p class="c">
+<span class="tt">CW1 CW0 CCW1 CCW0 OPP1 OPP0 V H</span>
+</p>
+
+<p>
+where the &ldquo;<span class="tt">1</span>&rdquo; and
+<span class="tt">0</span>&rdquo; denote bit planes of the neighbors
+(thus you get to see two bits of the state of the neighbors)
+and &ldquo;<span class="tt">V</span>&rdquo; and
+&ldquo;<span class="tt">H</span>&rdquo; the vertical and
+horizontal phases (which will be 1 for odd numbered rows and
+columns, respectively, and 0 for those with even numbers).
+Many rules won't need the &ldquo;<span class="tt">V</span>&rdquo;
+or &ldquo;<span class="tt">H</span>&rdquo; bits, but they're
+supplied just in case.
+</p>
+
+<p>
+The index computed by <b>margolusp</b> is almost the same:
+</p>
+
+<p class="c">
+<span class="tt">CW1 CW0 CCW1 CCW0 OPP1 OPP0 0 P</span>
+</p>
+
+<p>
+where &ldquo;<span class="tt">P</span>&rdquo; is the temporal
+phase: 0 for even-numbered generations and 1 for odd-numbered
+generations.  Due to the limit of 16 bits on lookup table indices,
+it isn't possible to simultaneously supply vertical, horizontal,
+and temporal phase to a rule, but if it's needed, a housekeeping
+bit can be devoted to keeping track of the phase not supplied
+by the evaluator.
+</p>
+
+<h3 id="e_meltdown">meltdown</h3>
+
+<p>
+This evaluator causes the cells in a map to &ldquo;melt down&rdquo;
+into a histogram at the bottom, sorted by their states.  You can
+run it with the null Owncode rule to create a column by column
+histogram of the results of running another rule.  This evaluator
+is similar to the <span class="tt">SAFE-PASS</span> rule
+described in
+<a href="refs.html#Margolus_Toffoli87">[Margolus&amp;Toffoli87]</a>,
+p.&nbsp;78.  It uses neither the lookup table nor housekeeping bits in
+the cells.
+</p>
+
+<h3 id="e_randgas">randgas</h3>
+
+<p>
+Simulates random gas diffusion by swapping cells with randomly
+chosen neighbors.  The prologue variable <span class="tt">percent</span>
+gives the probability (0&ndash;100) that a cell will be swapped
+in a generation.  It is identical to <b>gaswall</b> with
+<span class="tt">wall</span> set to zero.  No lookup table is used,
+and the evaluator does not examine the states of cells.  This
+evaluator is used by the <a href="rules.html#Earthgas">Earthgas</a>
+sample rule.
+</p>
+
+<h3 id="e_randnabe">randnabe</h3>
+
+<p>
+A cell from among the eight neighbors of a cell is chosen at
+random, and its state and the state of the current cell are used
+to form a 16 bit lookup table index with the neighbor's cell in
+the top 8 bits and the cell's state in the bottom 8 bits.  The
+value at this index in the lookup table becomes the cell's new
+state.  The <b>randnabe</b> evaluator is used in the
+<a href="rules.html#Griff">Griff</a> sample rule.
+</p>
+
+<h3 id="e_randswap">randswap</h3>
+
+<p>
+One of the cell's eight neighbors is chosen at random, and new
+values for the cell and its neighbor are taken from the lookup
+table at indices formed by the neighbor's state in the high
+byte and the cell's state in the low byte (for the cell) and
+with the order of the two bytes reversed (for the neighbor).
+Then the cell and the neighbor are physically interchanged in
+the map.  This evaluator is used by the
+<a href="rules.html#Wator">Wator</a> sample rule.
+</p>
+
+<h3 id="e_runny">runny</h3>
+
+<p>
+Simulates runny paint by causing nonzero state cells to run down
+the map through areas of zero cells until they all collect at the
+bottom.  Unlike <b>meltdown</b>, the cells at the bottom are not
+sorted by their states, but remain in their original vertical
+order.  This is an example of an evaluator which updates the
+entire map at once, rather than cell by cell.
+</p>
+
+<h3 id="e_sand">sand</h3>
+
+<p>
+Performs the recursive evolution of the sandpile model for the
+<a href="rules.html#Sand">Sand</a> rule.  Each generation adds
+a grain of sand to the center of the map and then propagates
+any avalanches which result.  No lookup table is used.
+</p>
+
+<h3 id="e_semi4">semi4 <span class="n">and</span> semi8</h3>
+
+<p>
+Computes the sum of the four neighbors of the cell (<b>semi4</b>)
+or eight neighbors (<b>semi8</b>) and returns the value from
+the lookup table with that index.  The sample rule
+<a href="rules.html#Rug">Rug</a> uses <b>semi8</b> and
+RugF uses <b>semi4</b>.
+</p>
+
+<h3 id="e_turmite">turmite</h3>
+
+<p>
+This is a special purpose evaluator built to support the
+<a href="rules.html#Turmite">Turmite</a> sample rule.  It is
+unlikely to be useful for any other purpose.
+</p>
+
+<h3 id="e_vonn3">vonn3</h3>
+
+<p>
+Computes a lookup table index composed of three bits of
+state from the four neighbors and four bits of state from
+the cell, arranged as follows:
+</p>
+
+<p class="c">
+<span class="tt">C C C C N N N W &nbsp; W W E E E S S S</span>
+</p>
+
+<h3 id="e_vonn4">vonn4</h3>
+
+<p>
+Computes a lookup table index composed of four bits of
+state from each of the four neighbors and four bits of state from
+the cell, arranged as follows:
+</p>
+
+<p class="c">
+<span class="tt">C C C C &nbsp; N N N N W W W W &nbsp; E E E E  S S S S</span>
+</p>
+
+<p>
+If you've been reading carefully, you're probably exclaiming,
+&ldquo;<em>Wait a minute!</em>  You told me lookup table indices
+are sixteen bits, but here you have a twenty-bit index!&rdquo;
+Indeed&hellip;.  The <b>vonn4</b> evaluator is an example of
+an evaluator which uses an <em>auxiliary lookup table</em> which
+can be larger than the standard 64K lookup table used by most
+other evaluators.  In this case the lookup table is one megabyte
+in length, allowing it to be addressed with a 20 bit index.  The
+auxiliary lookup table is stored in the <b>rule.program.lutaux</b> array
+and must be computed and stored there by the rule definition program
+which uses the <b>vonn4</b> evaluator.  To understand how to write
+rules definitions and evaluators that use an auxiliary lookup table,
+see the source code for <b><a href="https://www.fourmilab.ch/cellab/webca/evaluators/vonn4.js"
+    rel="Target:CelLabAux">evaluators/vonn4.js</a></b> and
+<b><a href="https://www.fourmilab.ch/cellab/webca/ruledefs/vonpar4.js"
+    rel="Target:CelLabAux">ruledefs/vonpar4.js</a></b>, a four
+bit per cell parity rule that uses <b>vonn4</b>, in the
+<cite>Cellab</cite> Development Kit. The <b>vonn4</b> evaluator
+is used by the <a href="rules.html#Evoloops">Evoloops</a>
+standard rule.  The <b>vonn4ab</b> evaluator is a modified
+version of <b>vonn4</b> used by EvoloopsAB; it is unlikely to be
+useful with any other rule.
+</p>
+
+<h3 id="e_water">water</h3>
+
+<p>
+The <b>water</b> evaluator is intended to demonstrate how far
+off the deep end you can go with user evaluators. 
+Appropriately, it is intended to simulate fluid flow, although
+more one with a high viscosity such as honey as opposed to water
+(since the momementum of the fluid is not taken into account). 
+It is based upon a simulation originally written in Java by
+Janis Elsts (W-Shadow) and
+<a href="http://w-shadow.com/blog/2009/09/01/simple-fluid-simulation/"
+    rel="Target:CelLabAux">described on his Web log</a>.
+</p>
+
+<p>
+The evaluator is used in the
+<a href="rules.html#Glooper">Glooper</a>
+sample rule which, unlike almost all of our other rules, is a
+<em>continuous</em> rule. Cells, instead of having discrete
+values between 0 and 255, take on values with more than six
+significant digits of precision (IEEE single-precision floating
+point), which represent the mass of fluid in each cell. 
+Compressibility, the force of gravity, the pressure of a column
+of fluid, and lateral flow among cells with different pressures
+are taken into account.
+</p>
+
+<p>
+You can draw complex &ldquo;water works&rdquo; and watch the
+fluid flow through them.  If you're interested in implementing
+ambitious projects such as computational fluid dynamics in
+<cite>CelLab</cite>, <b>water</b> shows you how to go about
+it, and <b>cfd</b> demonstrates what can be achieved.
+</p>
+
+<h3 id="owncode_rule">The Owncode Rule Definition</h3>
+
+<p>
+Many evaluators work directly on the state map and do not require
+a lookup table.  For such rules, the only function served by the
+rule definition program is to specify the evaluator, pattern,
+palette, and rule modes.  When you're developing and experimenting
+with such evaluators, there's no need to write a rule definition
+for each one.  WebCA supplies a generic rule definition named
+Owncode (available both as a compiled <b>.jc</b> file and a
+JavaScript rule program) which sets the world type to 13 but does
+nothing else.  You can then manually load your evaluator, pattern,
+palette (if desired) and set any rule modes you require with the
+<a href="webca.html#rulemodes">Rule Modes</a> dialogue.
+</p>
+
+<hr />
+
+<p>
+<a href="ruledef-js.html" class="i"><img src="icons/previous.png" width="32" height="32"
+    class="button" alt="Previous" /></a>
+&nbsp; &nbsp;
+<a href="ruledef-java.html" class="i"><img src="icons/next.png" width="32" height="32"
+    class="button" alt="Next" /></a>
+&nbsp; &nbsp;
+<a href="cellab.html" class="i"><img src="icons/contents.png" width="32" height="32"
+    class="button" alt="Contents" /></a>
+</p>
+
+</body>
+</html>

@@ -1,0 +1,10 @@
+7   //  Wator palette
+
+state 0-255 black
+state 1 red                     // Newborn shrimp
+state 2 rgb(202, 255, 202)      // Newborn fish
+state 3 rgb(202, 202, 255)      // Newborn shark
+
+state 5-253-4 rgb(101, 20, 0)   // Aging shrimp
+state 6-254-4 rgb(60, 255, 76)  // Aging fish
+state 7-255-4 rgb(72, 125, 255) // Aging shark

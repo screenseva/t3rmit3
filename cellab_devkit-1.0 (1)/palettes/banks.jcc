@@ -1,0 +1,10 @@
+7   //  Banks' Computer
+
+state 0 black
+
+state 1 white   // Wire
+state 3 #00FF00 // Clock
+state 5 blue    // Fan-out
+state 7 red     // Logic element
+state 9 yellow  // Dead end
+state 11 cyan   // Inside to inside curve

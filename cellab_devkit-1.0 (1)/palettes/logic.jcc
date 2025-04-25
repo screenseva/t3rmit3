@@ -1,0 +1,35 @@
+7   // Palette for the Logic rule
+
+//  These are the main states for cells
+state 0 black       // No wire or bit
+state 1 #00FF00     // Bit not on a wire
+state 2 blue        // Wire with no bit
+state 3 red         // Wire carrying bit
+
+//  These statements declare colours which show the
+//  cell state as above, ignoring the wire count which is
+//  encoded in the high nybble.  They take effect if not
+//  overridden by those below, which are uncommented when
+//  debugging patterns.
+state 0x11-0x41-0x10 #00FF00    // Bit not on a wire
+state 0x12-0x42-0x10 blue       // Wire with no bit
+state 0x13-0x43-0x10 red        // Wire carrying bit
+
+//  The following states are diagnostic states used when
+//  debugging patterns.  They identify cells by the number
+//  of wires found in the block in each generation.  Enabling
+//  these helps when debugging new patterns and making sure
+//  you properly align things with block boundaries.  Comment
+//  them out for production which will allow the previous
+//  statements which ignore the wire count to prevail.
+//state 0x12 purple
+//state 0x22 blue
+//state 0x23 red
+//state 0x32 #00FF00
+//state 0x33 blue
+//state 0x42 gray
+//state 0x43 white
+
+//  Cells in states between 0xF0 and 0xFF are completely
+//  ignored by the rule and may be used for static annotations.
+state 0xF0 #E0E0E0

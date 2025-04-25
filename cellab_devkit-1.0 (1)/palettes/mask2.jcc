@@ -1,0 +1,6 @@
+7   // Mask2
+
+mask 3
+
+state 0,1 black
+state 2,3 white

@@ -1,0 +1,1231 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>WebCA</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<meta name="description" content="Cellular Automata Laboratory" />
+<meta name="author" content="by Rudy Rucker and John Walker" />
+<link rel="stylesheet" href="../../documents/styles/standard_screen.css"
+    type="text/css" />
+<link rel="stylesheet" href="styles/cellab.css" type="text/css" />
+<style type="text/css">
+</style>
+<script type="text/javascript" src="../../documents/scripts/externalLinks.js">
+</script>
+</head>
+
+<body class="standard" onload="externalLinks();">
+
+<table style="width: 100%;">
+<tr><td style="width: 15%; vertical-align: middle; text-align: left;">
+<a class="i" href="https://www.fourmilab.ch/cellab/"><img src="icons/caweb_icon.png" class="button"
+    width="82" height="74"
+    alt="Cellular Automata Laboratory" /></a>
+</td>
+<td class="c">
+<h1>Cellular Automata Laboratory</h1>
+</td>
+<td style="width: 15%; vertical-align: middle; text-align: right;">
+<a class="i" href="https://www.fourmilab.ch/"><img src="../../images/logo/swlogo.png" class="b0"
+    width="82" height="74"
+    alt="Fourmilab home" /></a>
+</td>
+</tr>
+</table>
+
+<hr />
+
+<h1>WebCA</h1>
+
+<p>
+WebCA is a comprehensive simulator for one- and two-dimensional
+cellular automata which runs within a Web page, using the
+features of HTML5 and the JavaScript language.  It requires a
+modern Web browser which supports these features.  You may
+wish to <a href="https://www.fourmilab.ch/cellab/webca/?show=demo"
+    rel="Target:CelLabRunRule">launch WebCA</a> in another
+browser window to experiment with it as you read this
+chapter.
+</p>
+
+<h2 id="howitworks">How It Works</h2>
+
+<p>
+If you haven't watched the <a href="https://www.fourmilab.ch/cellab/webca/?show=demo"
+    rel="Target:CelLabRunRule">WebCA demo</a>
+yet, please do so before reading any further.  Watching the demo
+is like watching a series of selected short subjects at the
+movies, but what you see are <em>not</em> movies.  In computer
+graphics terminology, a &ldquo;movie&rdquo; is a sequence of
+pictures which have been saved one by one in the computer
+memory, and then displayed in rapid succession&mdash;like a
+slideshow.  But when you watch the WebCA demo you see a festival
+of one-act computer &ldquo;plays,&rdquo; where a
+&ldquo;play&rdquo; is something that is happening right now in
+real time inside your machine.  Live action that you can reach
+into and alter.
+</p>
+
+<p>
+Even to call our little vignettes &ldquo;plays&rdquo; is a bit
+misleading. Traditionally, a play has a script which specifies
+everything that will happen. But when you invent a cellular
+automaton rule you do not know, in any very detailed sense, what
+is going to happen.  The demos may be plays, but they do
+not have scripts. No, the way we specify a demo is simply by
+describing i) Cast, ii) Scenery, and iii) Lighting.
+</p>
+
+<h3 id="cast">Cast: Rule Selection</h3>
+
+<p>
+The cast of a WebCA play really has but one character.  You
+might call him/her EveryCell.  EveryCell's personality this time
+around is specified by a rule program which is used to describe
+in a general way how EveryCell will behave.  The rule program is
+written in JavaScript or Java, and when this program is run
+(only once, normally) it creates a permanent rule table. The
+rule table is a lookup table which specifies in exhaustive
+detail how EveryCell will react to every possible specific
+situation.
+</p>
+
+<p class="subsuper">
+How many situations can EveryCell distinguish?  EveryCell has 8
+bits of personal state (memories, predilections, outside noise),
+and EveryCell can see one bit of each of his/her eight
+neighbors.  So an EveryCell situation consists of 16 bits: 8
+bits of personal state and 8 bits of neighborhood information.
+Each bit can be either 0 or 1, so this means that there are
+2<sup>16</sup> = (2<sup>6</sup>) &times; (2<sup>10</sup>) = 64K
+situations.  (Never forget that 2<sup>10</sup> is around a
+thousand&mdash;1024 exactly, but close enough to a thousand to
+be called &ldquo;K&rdquo; for &ldquo;kilo&rdquo;.)
+</p>
+
+<p>
+So I can specify EveryCell's personality in wrackingly omniscient
+detail by listing a long table which gives the value of a variable
+as a function of EveryCell's personal eight-bit
+&ldquo;<span class="tt">oldstate</span>&rdquo; and of the eight neighborhood bits&mdash;one bit from each
+neighbor&mdash;which EveryCell can see. Why can't EveryCell see all eight
+bits of each neighbor? Hey, dude, get real. How much do <em>you</em> know about
+<em>your</em> neighbors?
+<a href="footnote.html#F3_1"><img class="foot" src="icons/footnote.png"
+    height="16" width="16" alt="[Footnote]" /></a>
+</p>
+
+<p>
+So the lookup table can be thought of as having 64K lines
+something like the following:
+</p>
+
+<table class="ctlut">
+    <tr>
+        <th style="border-bottom: 1px solid black;"> &nbsp; <span class="tt">oldstate</span> &nbsp;</th>
+        <th>NW</th>
+        <th>N</th>
+        <th>NE</th>
+        <th>E</th>
+        <th>SE</th>
+        <th>S</th>
+        <th>SW</th>
+        <th>W</th>
+        <th><span class="tt">newstate</span></th>
+    </tr>
+    <tr>
+        <td>00000000</td>
+        <td>   0</td>
+        <td>   0</td>
+        <td>   0</td>
+        <td>   0</td>
+        <td>   0</td>  
+        <td>   0</td>
+        <td>   0</td>
+        <td>   0</td>
+        <td>00000000</td>
+    </tr>
+    <tr>
+        <td colspan="10">&#8942;</td>
+    </tr>
+    <tr>
+        <td>00000000</td>
+        <td>   0</td>
+        <td>   0</td>
+        <td>   0</td>
+        <td>   0</td>
+        <td>   0</td>  
+        <td>   1</td>
+        <td>   1</td>
+        <td>   1</td>
+        <td>00000001</td>
+    </tr>
+    <tr>
+        <td colspan="10">&#8942;</td>
+    </tr>
+    <tr>
+        <td>10000010</td>
+        <td>   1</td>
+        <td>   0</td>
+        <td>   0</td>
+        <td>   1</td>
+        <td>   0</td>  
+        <td>   1</td>
+        <td>   0</td>
+        <td>   1</td>
+        <td>10000111</td>
+    </tr>
+    <tr>
+        <td colspan="10">&#8942;</td>
+    </tr>
+    <tr>
+        <td>11111111</td>
+        <td>   1</td>
+        <td>   1</td>  
+        <td>   1</td>
+        <td>   1</td> 
+        <td>   1</td>  
+        <td>   1</td>
+        <td>   1</td>
+        <td>   1</td>
+        <td>00001111</td>
+        </tr>
+</table>
+
+<p>
+As the index lines are always the same, all that the lookup
+table really needs to store is the <span class="tt">newstate</span>
+value.  Compiled rules stored in <b>.jc</b> files are compressed
+and often much smaller than the full 64K lookup table.
+</p>
+
+<h3 id="t3">Scenery: Pattern Selection</h3>
+
+<p>
+Some of the rules are capable of self-organizing an interesting
+configuration from a random start.  They build their own
+scenery.
+<a href="rules.html#i3-CA-votedna">VoteDNA</a>,
+<a href="rules.html#Brain">Brain</a>, and
+<a href="rules.html#Hodge">Hodge</a> are rules like this. Other
+rules will only look interesting if their starting pattern is
+something simple, like a square or a line drawing. They need a
+prop to work with.
+<a href="rules.html#FredMem">FredMem</a>,
+<a href="rules.html#TimeTun">TimeTun</a>, and
+<a href="rules.html#Heat">HeatWave</a> are mildly
+demanding rules like this.  Still other rules are primadonnas
+that need very special scenery to work right.  The
+<a href="rules.html#PerfumeT">Perfume</a> rules
+and the
+<a href="rules.html#Dendrite">Den&hellip;</a>
+rules are examples of this; in these rules,
+the starting scene has random particles to act like gas
+molecules, and fixed shapes to act like walls or objects. An
+invisible aspect of the starting Perfume pattern is that a
+checkerboard pattern is loaded into bits #4 and #5.
+</p>
+
+<p>
+WebCA comes with a diverse selection of start patterns that you can load
+directly.  You can also create your own customized start patterns by
+drawing them with a paint or image processing program and converting
+them to WebCA pattern files with tools you can download and run on
+your computer.
+</p>
+
+<p>
+The WebCA map contains 320&times;200 cells which, to be easier
+to see, are zoomed out into a screen of 640&times;400
+pixels, with one byte (eight bits) of state information per
+pixel, so a <b>.jcp</b> pattern file codes up 64,000 bytes of
+information (about the same amount as a 64K <b>.jc</b>
+ruletable).  WebCA uses data compression to reduce the size of
+the files where possible; <b>faderegg.jcp</b> needs only 23
+bytes and <b>tim.jcp</b> takes 23,457.
+</p>
+
+<p>
+You can see a list of the available pattern files
+in the the drop down list in the <a href="webca.html#patsel">Pattern Selection</a>
+part of the control panel.
+</p>
+
+<p>
+Aside from the pattern part of the &ldquo;scenery,&rdquo; WebCA
+also lets you set the topology.  In particular, you can turn
+screenwrap on and off.  In wrap mode, a pattern which moves off
+the screen's right will come back on the screen's left.  WebCA
+refers to wrap mode as &ldquo;torus screen&rdquo; because a
+torus is a doughnut shape, and if you were to actually paste the
+screen's left side to its right side and its top side to its
+bottom side you would get an inner-tube torus shape.  WebCA
+calls the nowrap mode &ldquo;open&rdquo; or &ldquo;plane&rdquo;
+screen because when there is no wrap and the edges are set to
+zero, it is as if the screen is a patch in an endless
+surrounding plane of blank cells.  There are also some one
+dimensional topologies, where the &ldquo;torus&rdquo; and
+&ldquo;plane&rdquo; become the &ldquo;ring&rdquo; and the
+&ldquo;line.&rdquo;
+</p>
+
+<h3 id="t4">Lighting: Color Palette Selection.</h3>
+
+<p>
+Each pixel's color corresponds to the current state of the cell it
+stands for.  Watching the patterns go by, you are comprehending the
+behavior of a system with 64,000 independent elements.  Although
+cellular automata do not absolutely need to be presented as graphics
+displays, this method takes advantage of human vision's excellent
+pattern-recognition abilities.  Choosing the right lighting, or
+color palette, can bring out different structures and details of a
+rule. The process is akin to staining a slide to be looked at through
+a microscope.
+</p>
+
+<p>
+EveryCell can have any state value from 0 to 255, and you can select
+any color you like for each of the 256 states.  Colors are defined
+by their red, green, and blue (RGB) intensities in the range from
+0 to 255.
+</p>
+
+<p>
+WebCA has color palette files with extension <b>.jcc</b>.
+You can create your own color palette files with a text editor,
+using one of the existing files as a pattern.
+</p>
+
+<p>
+Color palette files are saved in a 7K readable ASCII format or
+in an incomprehensible compressed binary 700 byte format.  To
+save download time, all our <b>.jcc</b> files are compressed
+binary.  To reconstitute one of them, use the &ldquo;Dump&rdquo;
+button in the <a href="webca.html#palsel">Color Palette Selection</a>
+section of the control panel to write it to the Dump box in
+ASCII format.  You can then copy and paste it into your text
+editor and modify it as you wish.
+</p>
+
+<p>
+The default color palette <b>default.jcc</b>, which is used if nothing
+different is requested, looks like this:
+</p>
+
+<pre>
+5 ; R   G   B
+    0   0   0 ;   0
+    0 255   0 ;   1
+    0   0 255 ;   2
+  255   0   0 ;   3
+  255 255   0 ;   4
+    0 255 255 ;   5
+  255   0 255 ;   6
+  255 255 255 ;   7
+   &#8942;  &#8942;   &#8942;     &#8942;
+  255   0  16 ; 253
+  255   0  12 ; 254
+  255   0   4 ; 255
+</pre>
+
+<p>
+Each row of a <b>.jcc</b> file represents the color for one
+state. The first three columns show the intensity of Red, Green,
+and Blue to use.  Anything to the right of a semicolon is a
+comment, which WebCA ignores.  The initial
+&ldquo;<span class="tt">5</span>&rdquo; of <b>default.jcc</b>
+means that this file is in ASCII format and uses RGB intensities
+from 0 to 255.
+</p>
+
+<p>
+One of the key uses of color palette files is to make a
+particular rule's &ldquo;bookkeeping&rdquo; bits invisible. For
+instance, in a rule which uses some of the bits to keep track of
+which cycle it is in, you want to make sure that the alternation
+of the cycle bits is &ldquo;invisible.&rdquo; If, for example,
+your bit #7 alternates between 0 and 1 to tell EveryCell which
+cycle it is in, then you want to have a color palette whose top
+half (states 128&ndash;255) is a copy of its bottom half (states
+0&ndash;127), so that a cell's color is unaffected by whether or
+not its bit #7 is 0 or 1.
+</p>
+
+<p>
+More creative uses of color palettes are also possible, particularly in
+connection with rules such as Faders or Rug,
+which cycle through many states.
+</p>
+
+<h2 id="mapdisp">The Map Display</h2>
+
+<p>
+At the top of the WebCA page is the display which shows the state
+map.  Each cell is displayed by looking up its state in the
+current color palette and displaying the red, green, and blue
+(RGB) intensities given by the palette.  For two-dimensional
+world types, each cell is represented by a dot in the map display.
+For one-dimensional world types, the current state of the
+automaton is displayed in the top line, with subsequent lines
+showing the history of earlier generations.
+</p>
+
+<p>
+For closed world types, the map logically wraps around at the edges:
+left to right and top to bottom for two-dimensional rules and
+left to right for one-dimensional rules.  For open world types, the
+map is considered surrounded by an infinite sea of cells in state
+zero.
+</p>
+
+<p>
+When the mouse cursor is within the map, you can use the arrow
+keys to scroll the map up, down, left, and right.  Each press of
+an arrow key scrolls the map by one cell, or ten cells if the
+Shift key is depressed.  For closed world types, the map wraps
+around as you scroll; for open world types, zero cells are
+shifted in and cells shifted off the edge are lost.
+</p>
+
+<h2 id="simctl">Simulator Controls</h2>
+
+<p class="c">
+<img src="figures/webca_simctl.png" width="667" height="56"
+    alt="WebCA: Simulator controls" />
+</p>
+
+<p>
+Below the map are a set of buttons which control the operation
+of the simulator.  The &ldquo;Start&rdquo; button starts the
+simulation.  While the simulation is running, the legend of
+the button changes to &ldquo;Pause&rdquo;, and pressing it will
+stop the simulation.  The &ldquo;Step&rdquo; button runs one
+generation of the simulation every time it is pressed.  If
+pressed while a simulation is running, it stops the simulation.
+</p>
+
+<p>
+At the left, a generation counter advances for each generation
+of the simulation.  Clicking the &ldquo;Generation&rdquo;
+label resets the counter to zero.  The generation number is
+a text field: you can click to edit it and set it to any value
+you wish.  To the right of the generation counter are two
+buttons which control population census taking. The &ldquo;Census&rdquo;
+buttton displays the 
+<a href="webca.html#popcen">Population Census</a> dialogue, while the
+red dot is a &ldquo;record&rdquo; button which adds a snapshot
+of the current population to the census.  The population census
+facility will be discussed in more detail below.
+</p>
+
+<p>
+To the right, two checkboxes control the display of histograms
+of cell states.  When checked, the &ldquo;Histogram&rdquo; box
+causes the map display to be replaced by a histogram of
+cell states with bars representing the colors of the cells
+according to the palette.  If &ldquo;Background&rdquo; is
+checked, cells which map to black and states which have no
+cell in them are included in the histogram; otherwise they are
+not plotted.  When &ldquo;Background&rdquo; is checked, cells which
+map to black are plotteed as a dark gray bar in the histogram.
+</p>
+
+<p>
+Below these controls is a slider which controls the speed at
+which the simulator runs. You can set the speed between
+two and two hundred generations per second.  Depending upon
+the speed of your computer, the efficiency of your browser's
+implementation of JavaScript, and the complexity of the
+user evaluator (if any) used by the rule, the actual maximum
+speed may be less than 200 generations a second.  Pressing
+Ctrl+b while the mouse cursor is in the map and the simulator
+is running will display an alert telling you how many generations
+per second you are actually getting.
+</p>
+
+<h2 id="rulesel">Rule Selection</h2>
+
+<p class="c">
+<img src="figures/webca_rulesel.png" width="557" height="49"
+    alt="WebCA: Rule selection" />
+</p>
+
+<p>
+WebCA provides two means to define the rules which cells in the
+automaton obey.  You can define a rule in a
+<a href="https://www.fourmilab.ch/cellab/manual/ruledef-java">Java program</a> which,
+when run, produces a <em>compiled rule file</em> with a
+file type of <b>.jc</b>, or as a JavaScript program which is
+loaded directly into the WebCA page.  This section is for
+loading compiled rules; for JavaScript rules, see the
+<a href="webca.html#ruleprog">Rule Program</a> section below.
+</p>
+
+<p>
+You can load a compiled rule either from a file on your own
+computer or from the library of rules provided by the WebCA
+server.  The first line provides a file selection box that
+allows you to select a <b>.jc</b> file and load it with the
+&ldquo;Load&rdquo; button.  The &ldquo;Algorithmic&rdquo;
+button displays the
+<a href="webca.html#algorule">Algorithmic Rules</a> dialogue, which allows
+you to specify a rule from a number of families of rules. 
+This will be described in the Dialogues section.  The
+&ldquo;Modes&rdquo; button displays the
+<a href="webca.html#rulemodes">Rule Modes</a> dialogue,
+which allows you to inspect or change the modes selected by
+the rule (for example, you may wish to change the world type
+from wrapped to open).
+</p>
+
+<p>
+The next line allows you to load a compiled rule from the
+WebCA server, either by entering its name in the Rule URL
+field and pressing the &ldquo;Load&rdquo; button, or by
+selecting a frequently-used rule from the drop-down list.
+Unfortunately, JavaScript security restrictions prohibit
+loading URLs from a site other than that from which the
+page was loaded, so rule URLs always default to the site
+hosting WebCA.
+</p>
+
+<p>
+A rule file may specify the loading of a pattern,  color
+palette, and/or user evaluator.  If the rule makes such
+requests, the items will be loaded from the WebCA server
+via URL and their names entered in the corresponding
+URL boxes.  You can override these requests (for example,
+loading a different pattern to feed it to a rule) by
+loading the desired item after you load the rule.
+</p>
+
+<h2 id="patsel">Pattern Selection</h2>
+
+<p class="c">
+<img src="figures/webca_pattern.png" width="573" height="69"
+    alt="WebCA: Pattern selection" />
+</p>
+
+<p>
+A pattern specifies the initial state of cells in the map:
+the starting point for the first generation.  A pattern
+is specified in a <b>.jcp</b> file.  Each pattern specifies
+the state of all cells in the map, usually with compression
+to save space and reduce download time.  You can choose from
+a selection of standard patterns provided by WebCA, or draw
+your own using a paint program and then convert to a
+<b>.jcp</b> file with one of the tools available on the
+WebCA site.
+</p>
+
+<p>
+As with compiled rules, you can load patterns from files on
+your computer, or via URL from the WebCA server.  Frequently-used
+patterns can be selected from a drop-down list.
+The &ldquo;Random&rdquo; button creates a random pattern
+in plane #0 with the percentage of one bits given by
+the &ldquo;Density&rdquo; box.
+</p>
+
+<p>
+The final line of the pattern section contains three buttons
+which act on the current pattern.  &ldquo;Swap&rdquo; swaps
+bit planes #0 amd #1.  This is a common way to invert the
+direction of simple reversible rules, so this button is
+provided as a shortcut to avoid having to resort to the
+<a href="webca.html#bitplane">Bit Plane Editor</a> dialogue.
+That dialogue is displayed
+by the &ldquo;Edit&rdquo; button; it is described in
+the Dialogues section below.  The &ldquo;Dump&rdquo; button
+dumps the pattern into the Dump box at the bottom of the
+page (which is hidden until you use it the first time)
+in uncompressed ASCII format where each cell in the map
+is written as a hexadecimal number giving its state,
+You can copy a pattern dump to the clipboard, paste it
+into a text editor, then save it as a <b>.jcp</b> file
+which can be subsequently loaded into WebCA.
+</p>
+
+<p>
+Some patterns only make sense when displayed with a color
+palette expressly designed for them (for example, Fullearth
+and Openplan).  In such cases, we usually give the pattern
+and palette the same name.
+</p>
+
+<h2 id="palsel">Color Palette Selection</h2>
+
+<p class="c">
+<img src="figures/webca_palette.png" width="570" height="70"
+    alt="WebCA: Color palette selection" />
+</p>
+
+<p>
+A color palette specifies the colors used to display cells
+in the map.  A cell's state is a number from 0 to 255,
+so there are 256 entries in a palette.  Often multiple
+states will map to the same color, which has the effect
+of preventing housekeeping bits from imterfering with
+the interesting information in the cells.  A palette
+is usually specified by an ASCII file with one line per
+state, as described in the
+<cite><a href="fileform.html">File Formats</a></cite>
+chapter.  A palette file is given an extension of
+<b>.jcc</b>, and as with rules and patterns, can be
+loaded either from a local file or via a URL from
+the WebCA server.  A drop-down list provides access to
+commonly-used patterns.
+</p>
+
+<p>
+The &ldquo;Dump&rdquo; button writes the current palette into the
+Dump box at the bottom of the WebCA page.  You can select the
+contents of the box, copy it to a text editor, make any changes
+you wish, and save it as a <b>.jcc</b> file, which can be
+loaded into WebCA.
+</p>
+
+<h2 id="ruleprog">Rule Program Loading</h2>
+
+<p class="c">
+<img src="figures/webca_ruleprog.png" width="669" height="131"
+    alt="WebCA: Rule program loading" />
+</p>
+
+<p>
+The easiest way to define rules is to write a
+<a href="ruledef-js.html">rule program
+in JavaScript</a>.  Unlike Java compiled rules, there's no need
+to install a Java development environment on your
+computer&mdash;you just write the JavaScript program with
+a text editor, copy and paste it into the Rule Program
+box, press &ldquo;Generate&rdquo;, and you're ready
+to run.  You can make changes to the program in the
+text box, re-generate, and immediately run.  (If you
+make changes to a rule program and wish to save them,
+be sure to copy the contents of text box and paste it
+back into your text editor.  Due to security
+restrictions, JavaScript cannot directly save to files
+on your computer.)
+</p>
+
+<p>
+You can also load rule programs from local files or
+via URL from the WebCA server.  These rule programs are
+loaded into the Rule Program text box, replacing any
+previous content, and automatically generated.  The
+&ldquo;Clear&rdquo; button clears the box.
+</p>
+
+<h2 id="evalload">User Evaluator Loading</h2>
+
+<p class="c">
+<img src="figures/webca_eval.png" width="669" height="119"
+    alt="WebCA: User evaluator loading" />
+</p>
+
+<p>
+A user evaluator is a JavaScript function which replaces
+the inner loop which WebCA uses to update every cell in
+the map for each generation.  Please see the
+<em><a href="ruledef-eval.html">User
+Evaluators</a></em> chapter for details on what you can
+accomplish with user evaluators and how you go about
+writing one.  User evaluators are loaded by pasting into
+the the text box, loading a local file (which, as a
+JavaScript program, has a file type of <b>.js</b>}, or
+from a URL on the WebCA server.
+</p>
+
+<p>
+After pasting an evaluator into the Evaluator text box,
+or modifying the evaluator in the box, press the
+&ldquo;Compile&rdquo; button to install it.  If the
+rule requests a different evaluator, you can force it to
+use yours instead by checking the &ldquo;Override&ldquo;
+box.  Evaluators loaded from a file or URL are automatically
+compiled.  The &ldquo;Clear&rdquo; button erases any
+content of the Evaluator box.
+</p>
+
+<h2 id="showload">Loading and Running Shows</h2>
+
+<p class="c">
+<img src="figures/webca_show.png" width="668" height="159"
+    alt="WebCA: Loading and running shows" />
+</p>
+
+<p>
+A WebCA show is a sequence of commands which, executed
+automatically, performs a scripted demonstration of the
+program.  Show commands can load rules, patterns,
+palettes; run the simulator; change its modes; present
+messages to the audience; and other functions.  Please
+see the
+&ldquo;<a href="webca.html#defshows">Defining Shows</a>&rdquo; section for details.
+</p>
+
+<p>
+As you've probably guessed by now, shows can be loaded from a
+file on your computer, a URL on the server, or by pasting
+the show into the text box.  A drop-down list of
+common shows is available.  Press the &ldquo;Run&rdquo; button
+to start the show and &ldquo;Stop&rdquo; to halt a running
+show.  For convenience, while a show is running the
+&ldquo;Start/Pause&rdquo; button below the map changes to a
+&ldquo;Stop&rdquo; button which lets you halt the show
+without scrolling down to the Show section of the page.
+The &ldquo;Clear&rdquo; button clears any content in the
+Show box.
+</p>
+
+<h2 id="dump">The Dump Box</h2>
+
+<p class="c">
+<img src="figures/webca_dump.png" width="669" height="87"
+    alt="WebCA: Dump box" />
+</p>
+
+<p>
+To prevent malicious Web pages from modifying files on your
+computer, JavaScript is prohibited from writing files
+to the system running the browser.  As a consequence,
+when WebCA wants to give you the opportunity to save
+something locally, it has to accomplish this through
+a roundabout process: write the output to the Dump
+box at the bottom of the page, whence you can select
+it, copy it to the clipboard, paste it into a text
+editor, and finally save it to a file on your machine.
+</p>
+
+<p>
+The Dump section of the page is hidden until a command
+writes something to it, which will cause it to appear.
+The &ldquo;Hide&rdquo; button will send it back into
+hiding until something else writes to it.  All
+commands which use the Dump box append to the end,
+preserving any existing content.  You can use the
+&ldquo;Clear&rdquo; button to remove existing
+content before adding something new.  The
+&ldquo;Select&rdquo; button selects the contents
+of the Dump box, ready to copy to the clipboard.
+(Once again, you're forced to do this yourself
+because, for security reasons, JavaScript is
+blocked from directly accessing the clipboard.)
+</p>
+
+<h2 id="dialogues">Dialogues</h2>
+
+<h3 id="algorule">Algorithmic Rule Specification</h3>
+
+<p class="c">
+<img src="figures/dialogues/dia_algorule.png" width="525" height="277"
+    alt="WebCA: Algorithmic Rule Specification dialogue" />
+</p>
+
+<p>
+The Algorithmic Rule Specification dialogue is displayed
+by the &ldquo;Algorithmic&rdquo; button in the Rule Selection
+section.  It allows you to specify rules from four families
+by entering a code number, without the need to write a rule
+definition.  You have the following options.
+</p>
+
+<dl class="jb">
+<dt>One-bit Totalistic</dt>
+    <dd>
+    <a href="chap4.html#i4-TH-vote">Totalistic rules</a> depend only
+    upon the number of neighbors a cell has which are in a given
+    state.  A one-bit totalistic rule only tests whether the
+    neighbors are in state 0 or 1.  There are 1024 such rules,
+    numbered from 0 to 1023.  The <a href="rules.html#Vote">Vote</a>
+    rule is an example, with code 976.  If you check the &ldquo;History&rdquo;
+    box, an additional bit will be used to record the previous
+    state in each generation, highlighting changes.
+    </dd>
+
+<dt>NLUKY Semitotalistic Rules</dt>
+    <dd>
+    <a href="chap4.html#i4-TH-semit">Semitotalistic rules</a>
+    depend upon the state of a cell and the number of its
+    neighbors which are in a given state.  This family
+    encompasses many of our sample rules, including
+    <a href="rules.html#Life">Life</a>,
+    <a href="rules.html#Brain">Brain</a>,
+    <a href="rules.html#Faders">Faders</a>, and
+    <a href="rules.html#Rainzha">Life</a>.
+    All of these rules can be described by a set of five
+    parameters: <em>N</em>, <em>L</em>, <em>U</em>, 
+    <em>K</em>, and <em>Y</em>; we refer to them as
+    NLUKY rules.  The meaning of the parameters is
+    <a href="chap4.html#i4-TH-semit">described in the
+    <cite>Theory</cite> chapter</a>.  Enter the parameters
+    (<em>N</em> from 0&ndash;127, the other four from
+    0&ndash;9) to create any NLUKY rule.  For example,
+    (0,3,3,2,3) is Life and (1,2,2,9,9) is Brain.
+    </dd>
+
+<dt>Random 4-bit Rules</dt>
+    <dd>
+    Checking &ldquo;Random&rdquo; and pressing
+    &ldquo;Apply&rdquo; generates a new random semitotalistic 4
+    bit rule with the given sparseness, which specifies the
+    percentage of entries in the rule's 16&times;9 lookup table
+    which will be zero, on the average.
+    </dd>
+
+<dt>Elementary 1D</dt>
+    <dd>
+    The simplest one-dimensional rules are those with only a
+    single bit of state and which depend only upon the state of
+    a cell and its two immediate neighbors.  There are 256 such
+    rules, which Stephen Wolfram calls &ldquo;Elementary
+    Cellular Automata&rdquo;.  Enter the number of the desired
+    rule, from 0 to 255.  Generating an Elementary 1D automaton
+    places WebCA in one-dimensional mode with one bit of state
+    per cell and a closed (ring) topology.  To observe the
+    behavior of the rule in a pure form, you may wish to load
+    the Onebit pattern, which is a single cell set to one in the
+    middle of the line.
+    </dd>
+</dl>
+
+<h3 id="rulemodes">Rule Modes</h3>
+
+<p class="c">
+<img src="figures/dialogues/dia_rulemodes.png" width="665" height="422"
+    alt="WebCA: Rule Modes dialogue" />
+</p>
+
+<p>
+Rule modes specify the number of dimensions (one or two
+dimensional), the topology (open or closed), the
+number of neighbors seen by each cell and how many bits
+of state can be seen, and optional inputs to the rule
+specifying horizontal and vertical textures and
+random input.  These modes are usually set in the
+the <a href="ruledef-js.html#t2">rule definition</a>
+program; see that chapter for details.  The Rule
+Modes dialogue, displayed by the &ldquo;Modes&rdquo;
+button, allows you to examine, and optionally change,
+the modes chosen by the rule.  This is most useful when
+you want to change between open and closed modes for
+the map.  Most other changes to modes for which the
+rule wasn't intended will produce nonsense results, but
+you can't damage anything, so go wild&mdash;you might
+discover something wonderful.
+</p>
+
+<p>
+A rule program can request various kinds of <em>Texture</em> to
+be loaded into the map and/or fed to the rule as it is running.
+The Rule Modes dialogue allows you to view and modify the
+texture requested by the rule.  (Often changing the texture to
+something other than what the rule expects will produce useless
+results, but it can't do any harm and there are circumstances
+where, in conjunction with a rule designed with varying texture
+in mind, it can be valuable.)  There are four kinds of texture
+which can be applied to fields of contiguous bits indicated by
+check marks in the various plane columns.  Note that each field
+must consist of contiguous bits; if you check two or more boxes
+with an unchecked box inbetween, you'll receive an error message
+when you press &ldquo;Apply&rdquo; and your texture request will
+not be accepted.
+</p>
+
+<dl class="jb">
+<dt>Initial random</dt>
+    <dd>
+    Initial random texture is loaded into the checked planes
+    when the rule or a new pattern is loaded, but it is not
+    reloaded thereafter.  Initial random textures are most
+    commonly used to provide random data, for example, the
+    initial position of particles in a gas, without the need to
+    include the particles in a pattern file (which would make it
+    much larger).  The &ldquo;Density&rdquo; box controls the
+    percentage of one bits in the random data and can be set to
+    any value between zero and 50% (equal numbers of zeroes and
+    ones).
+    </dd>
+
+<dt>Random input</dt>
+    <dd>
+    Random input causes the the checked planes to be filled with
+    new random data on each step of the simulator.  This allows
+    a rule to see a continually changing random data source. 
+    Unlike an initial random texture, the new random data is
+    generated on every step. Unlike the initial random seed,
+    random input provided as the simulation runs always has an
+    equal probability of zero and one bits.
+    </dd>
+
+<dt>Horizontal and Vertical texture</dt>
+    <dd>
+    The horizontal and vertical texture fields are used by rules
+    which need to know the position of cells within a block of
+    some size.  An example of such a rule is the gas used in the
+    <a href="rules.html#PerfumeT">Perfume</a> rules.  The fields
+    checked for horizontal and vertical texture are filled with
+    values which start with zero at the upper left of the map
+    and increment by one for each cell in the corresponding
+    direction, wrapping around to zero at the given number of
+    bits.  The horizontal and vertical texture fields are
+    allowed to overlap, permitting the particularly useful case
+    of &ldquo;checkerboard&rdquo; texture where both horizontal
+    and vertical texture are applied to the same plane.
+    </dd>
+</dl>
+
+<h3 id="bitplane">Bit Plane Editor</h3>
+
+<p class="c">
+<img src="figures/dialogues/dia_bitplane.png" width="669" height="508"
+    alt="WebCA: Bit Plane Editor dialogue" />
+</p>
+
+<p>
+This somewhat intimidating dialogue is displayed by pressing the
+&ldquo;Edit&rdquo; button in the Pattern section of the control
+panel.  It allows you to perform various operations on
+individual or selected sets of bit planes.  At the top are
+column titles identifying the eight bit planes and giving the
+value of each in hexadecimal.  The check boxes in the three
+areas below select the bit plane corresponding to the label at
+the top of the column.  The three sets of selection and action
+buttons perform various manipulations on the bit planes and are
+discussed individually.
+</p>
+
+<dl class="jb">
+<dt>Map plane operations</dt>
+    <dd>
+    This field allows you to perform various logical operations
+    on pairs of bit planes.  Before pressing an action button,
+    you must choose a source and destination plane with the
+    radio buttons.  In the illustration above, the user has
+    chosen plane 0 as the source and plane 1 as the
+    destination.  Pressing the &ldquo;And&rdquo; button would
+    then replace every bit in plane 1 with the logical AND of
+    itself and the corresponding bit in plane 0.  The
+    &ldquo;Or&rdquo; and &ldquo;Xor&rdquo; buttons replace the
+    destination plane with the logical OR or exclusive-or of its
+    contents with that of the source plane.  &ldquo;Copy&rdquo;
+    sets the destination plane to the contents of the source
+    plane, and &ldquo;Swap&rdquo; exchanges the contents of the
+    source and destination planes.  &ldquo;Swap&rdquo; is the
+    only button which alters the source plane.
+    </dd>
+
+<dt>Buffer transfers</dt>
+    <dd>
+    In addition to the cell map used by the simulator, WebCA
+    maintains a second cell map, the <em>buffer</em>, which
+    serves as a scratchpad.  You can either transfer an
+    individual plane of the map to or from the buffer, or by
+    checking &ldquo;All planes&rdquo;, operate on all planes,
+    plane-for-plane.  &ldquo;Store&rdquo; copies data from the
+    cell map to the buffer, &ldquo;Recall&rdquo; transfers data
+    from the buffer to the cell map, and &ldquo;Swap&rdquo;
+    exchanges the contents of the buffer and cell map.
+    </dd>
+
+<dt>Initialize map planes</dt>
+    <dd>
+    This box allows you to set the contents of one or more
+    planes to various values.  Unlike the Map plane operations
+    and Buffer transfers sections, you may select any combination
+    of planes to be initialized, with &ldquo;All&rdquo; and
+    &ldquo;None&rdquo; shortcuts provided so you don't have to
+    click every box on or off if that's what you want. 
+    &ldquo;Clear&rdquo; stores zeroes in the selected planes,
+    &ldquo;Set&rdquo; stores ones, &ldquo;Invert&rdquo; replaces
+    zeroes with ones and ones with zeroes, while
+    &ldquo;Random&rdquo; randomizes the selected planes with the
+    percentage of one bits given in the percentage box to the
+    right.  With the default setting of 50%, about half the bits
+    will be ones; if 25% were entered, about one in four bits
+    will be a one.
+    </dd>
+</dl>
+
+<h3 id="popcen">Population Census</h3>
+
+<p class="c">
+<img src="figures/dialogues/dia_popcen.png" width="522" height="180"
+    alt="WebCA: Population Census dialogue" />
+</p>
+
+<p>
+A population census consists of a series of ASCII records, in
+comma-separated value format, each of which consists of the
+generation number at which the census was taken followed by pairs
+giving a cell's state and the number of cells which were in that
+state at the given generation.  States in which no cells in them
+are omitted.  You can snapshot the population census at any time
+by pressing Ctrl+z while the mouse cursor is in the map display
+or by pressing the &ldquo;red dot&rdquo; button below the map.
+The dialogue allows you to configure an automatic dump after
+each number of generations you specify.  Many rules employ
+&ldquo;texture&rdquo; in the map to indicate horizontal
+and vertical position or random stimulus.  If these bits
+are included in the census, the results require post-processing
+to remove them and count the states in which you're
+interested.  If &ldquo;Remove texture bits from census&rdquo;
+is checked, texture requested by a rule will automatically be
+removed and cells with identical state in non-texture bits
+consolidated.  This applies only to texture requested by a
+rule definition; if your rule uses other &ldquo;housekeeping&rdquo;
+bits in which you aren't interested, you'll still have to
+remove them while processing the census results.
+</p>
+
+<p>
+Population census records are appended to the Dump box.  You
+can save them to a file on your computer by copying them from
+the Dump box to a text editor, then saving the file.  The
+population census is particularly handy when verifying that
+a rule which is intended to conserve particles actually does.
+</p>
+
+<p>
+Here are population census records made while running the
+<a href="rules.html#Brain">Brain</a> rule for 400 generations
+with automatic census every 100 generations enabled.
+</p>
+
+<pre>
+0,0,31893,1,32107
+100,0,60314,1,1863,2,1823
+200,0,60808,1,1623,2,1569
+300,0,59857,1,2062,2,2081
+400,0,60625,1,1696,2,1679
+</pre>
+
+<h2 id="defshows">Defining Shows</h2>
+
+<p>
+A Show is a scripted set of commands which WebCA executes, allowing
+you to construct demonstrations which run without user interaction.
+The show commands are listed below.  Blank lines or lines which begin
+with &ldquo;<span class="tt">//</span>&rdquo; are ignored and may be used
+for comments.
+</p>
+
+<blockquote>
+<dl class="jb">
+<dt>banner <em>time</em></dt>
+    <dd>A pop-up banner is displayed for <em>time</em> seconds.
+        The banner includes whatever HTML follows the
+        <b>banner</b> statement, terminated by a line which
+        contains just &ldquo;<span class="tt">--</span>&rdquo;.
+        If <em>time</em> is 0, the banner will be displayed
+        until dismissed by the user.</dd>
+        
+<dt>cell [<em>op</em>]<em>v</em> <em>col</em> <em>row</em></dt>
+    <dd>Set the cell at position (<em>col,row</em>) in the map
+        to value <em>v</em>.  If <em>v</em> is preceded by one
+        of the characters &ldquo;<span class="tt">&amp;</span>&rdquo;,
+        &ldquo;<span class="tt">|</span>&rdquo;,
+        or &ldquo;<span class="tt">^</span>&rdquo;
+        the cell will be replaced by its
+        the result of the corresponding bitwise logical operation
+        between <em>v</em> and its current state.</dd>
+     
+<dt>evaluator [<em>url</em> [override]]</dt>
+    <dd>The user evaluator given by <em>url</em> is loaded and
+        compiled.  If &ldquo;<span class="tt">override</span>&rdquo;
+        is specified, the Override box will be checked.  A
+        blank <b>evaluator</b> command cancels any currently-specified
+        evaluator.</dd>
+     
+<dt>generation <em>n</em></dt>
+    <dd>The generation counter is set to <em>n</em>.</dd>
+     
+<dt>palette <em>url</em></dt>
+    <dd>The color palette from <em>url</em> is loaded.</dd>
+     
+<dt>patch <span class="n">(</span>rule<span class="n">[</span>prog<span class="n">]|</span>eval<span class="n">[</span>uator<span class="n">])</span>
+    &nbsp; /<em>regex</em>/ &nbsp; "<em>replacement</em>"</dt>
+    <dd>Sometimes in a show you may wish to change parameters defined
+        within a rule program or evaluator which are normally set
+        by the user editing the code before starting the
+        simulation.  The <b>patch</b> command modifies the currently
+        loaded <b>ruleprog</b> or <b>evaluator</b> (both of which
+        may be abbreviated to four characters), replacing the text
+        which matches the regular expression <em>regex</em> with the
+        specified <em>replacement</em>.  The rule program or evaluator
+        is automatically re-generated or re-compiled after the
+        patch is applied.  The usual JavaScript rules for quoting slashes
+        within regular expressions and quotes within strings apply.</dd>
+
+<dt>pattern <em>url</em></dt>
+    <dd>The pattern from <em>url</em> is loaded.</dd>
+
+<dt>plane <em>mask</em> clear/set/invert/random [<em>n%</em>]</dt>
+    <dd>The bit planes specified by one bits in the hexadecimal
+        <em>mask</em> are modified according to the following
+        operation: <b>clear</b> (set to 0),
+        <b>set</b> (set to 1),
+        <b>invert</b> (set ones to zeroes, zeroes to ones), and
+        <b>random</b> (set bits to random values; if a
+        number follows <b>random</b>, that percentage
+        (0&ndash;100) of the bits will be ones, with a
+        default of 50% if no number is given).</dd>
+     
+<dt>random <em>density</em></dt>
+    <dd>Bit plane 0 is set to random bits with a density
+        (0&ndash;100) percent of one bits.  Planes 1&ndash;7
+        are cleared to zeroes.  You can accomplish this with
+        <b>plane</b> commands, but it's such a common
+        operation <b>random</b> is provided for convenience.</dd>
+        
+<dt>rule <em>url</em></dt>
+    <dd>Load a compiled (<b>.jc</b> file) rule from <em>url</em>.
+        Note that a rule may request the loading of a pattern,
+        color palette, and/or evaluator.  If you wish to override
+        the rule's selection, follow the <b>rule</b> command with
+        commands to load those you prefer.</dd>
+            
+<dt>ruleprog <em>url</em></dt>
+    <dd>Load a JavaScript (<b>.js</b> file) rule program from
+        <em>url</em> and generates it. Note that a rule program
+        may request the loading of a pattern, color palette,
+        and/or evaluator.  If you wish to override the rule's
+        selection, follow the <b>ruleprog</b> command with
+        commands to load those you prefer.</dd>
+    
+<dt>run [=+&minus;*/]<em>generations</em></dt>
+    <dd>Run the simulator for the specified number of
+        <em>generations</em>.  If <em>generations</em>
+        is preceded by an operator, it behaves as follows:
+        <blockquote style="margin-top: 0px; margin-bottom: 0px;"> 
+        <p style="margin-top: 0px; margin-bottom: 0px;">
+            <b>=</b> &nbsp; Set the default number of
+                <em>generations</em> for subsequent
+                <b>run</b> commands.<br />
+            <b>+</b> &nbsp; Run for the previous default
+                plus <em>generations</em><br />
+            <b>&minus;</b> &nbsp; Run for the previous default
+                minus <em>generations</em><br />
+            <b>*</b> &nbsp; Run for the previous default
+                times <em>generations</em><br />
+            <b>/</b> &nbsp; Run for the previous default
+                divided by <em>generations</em>
+        </p>
+        </blockquote>
+        The <em>generations</em> argument can be a floating point
+        number; the result is rounded to an integer number of steps.
+        If no argument is given, the most recent default will be used.
+    </dd>
+
+<dt>speed <em>gensec</em></dt>
+ 	<dd>Set the speed the simulator runs, in generations
+        per second, to <em>gensec</em>, a value between 2
+        and 200.  The actual maximum speed the simulator
+        runs may be limited by the speed of your computer
+        and the complexity of the evaluator used by a rule.</dd>
+    
+<dt>stop</dt>
+    <dd>Stops the show and returns control to the user.
+        Any lines after the <b>stop</b> are ignored.  Running
+        off the end of the show will also stop it; this command
+        is a convenience for when you're developing a long show
+        and want it to halt after a particular step.</dd>
+                
+<dt>swap <em>plane1</em> <em>plane2</em></dt>
+     <dd>Interchange the contents of bit planes
+        <em>plane1</em> and <em>plane2</em> (0&ndash;7)
+        in the map.  This is commonly used when changing the
+        direction of reversible rules.</dd>
+     
+<dt>top</dt>
+    <dd>Scroll to the top of the WebCA page.  This is handy
+        at the start of a show to guarantee that the map
+        display is visible after the show starts.</dd>
+                
+<dt>wait <em>seconds</em></dt>
+    <dd>Pause the show for the specified number of <em>seconds</em>.</dd>
+
+</dl>
+</blockquote>
+
+<h2 id="urlquery">URL Query Commands</h2>
+
+<p>
+The URL with which WebCA is invoked allows you to append a
+query string to preload items and set parameters.  This can be
+used to create links which open ready-to-run demonstrations
+which require no user interaction other than pressing the
+&ldquo;Start&rdquo; button.  The query is appended to the
+URL after a question mark as a series of commands and
+arguments, separated by ampersands, for example:
+</p>
+
+<p class="c">
+<span class="tt">http://www.fourmilab.ch/cellab/webca/?rule=hodge&amp;palette=bleach</span>
+</p>
+
+<p>
+The following query commands are available.
+</p>
+<blockquote>
+
+<dl class="jb">
+<dt>ruleprog=<em>url</em></dt>
+    <dd>Load the JavaScript rule definition
+        from <em>url</em>. Note that the rule program may
+        automatically load a pattern, palette, and/or
+        evaluator.  If you want to override these default
+        selections, follow the <span class="tt">rule</span>
+        query by queries that load the desired items.</dd>
+
+<dt>rule=<em>url</em></dt>
+    <dd>Load the compiled rule from <em>url</em>.
+        Note that the rule may automatically load a
+        pattern, palette, and/or evaluator.  If you want
+        to override these default selections, follow the
+        <span class="tt">rule</span> query by queries
+        that load the desired items.</dd>
+
+<dt>pattern=<em>url</em></dt>
+    <dd>Load the pattern from the named <em>url</em>.
+        You can abbreviate the command to &ldquo;<b>pat</b>&rdquo;.</dd>
+
+<dt>palette=<em>url</em></dt>
+    <dd>Load the color palette from the named <em>url</em>.
+    You can abbreviate the command to &ldquo;<b>pal</b>&rdquo;.</dd>
+
+<dt>evaluator=<em>url</em></dt>
+    <dd>Load the JavaScript evaluator from the named
+    <em>url</em>. You can abbreviate the command to
+    &ldquo;<b>eval</b>&rdquo;.</dd>
+
+<dt>show=<em>url</em></dt>
+    <dd>Load and run the show from the named <em>url</em>.</dd>
+
+<dt>speed=<em>gensec</em></dt>
+    <dd>Set the simulation speed to <em>gensec</em> generations
+        per second, in the range 2 to 200.  The maximum speed may
+        be limited by the speed of your computer and the complexity
+        of the evaluator used by the rule.</dd>
+</dl>
+</blockquote>
+
+<hr />
+
+<p>
+<a href="chap1.html" class="i"><img src="icons/previous.png" width="32" height="32"
+    class="button" alt="Previous" /></a>
+&nbsp; &nbsp;
+<a href="rules.html" class="i"><img src="icons/next.png" width="32" height="32"
+    class="button" alt="Next" /></a>
+&nbsp; &nbsp;
+<a href="cellab.html" class="i"><img src="icons/contents.png" width="32" height="32"
+    class="button" alt="Contents" /></a>
+</p>
+
+</body>
+</html>
+
+

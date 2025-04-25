@@ -1,0 +1,11 @@
+7       //  Evoloops
+
+state 0 black
+state 1 blue
+state 2 red
+state 3 magenta
+state 4 #00FF00
+state 5 cyan
+state 6 yellow
+state 7 white
+state 8 gray

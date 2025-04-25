@@ -1,0 +1,10 @@
+7   //  Langton's Ant
+
+state 0 #F0F0F0     // Zero cell
+
+state 8 black       // One cell, no ant
+
+state 1 red         // Ant: northbound
+state 3 green       //      eastbound
+state 5 blue        //      southbound
+state 7 magenta     //      westbound

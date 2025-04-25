@@ -1,0 +1,9 @@
+7   //  Critters palette
+
+//  State choice displays low bit when initially
+//  loaded, then flips states on temporal phase in
+//  plane 1 to avoid strobe effect.  Plane 2 tells
+//  us we're running and not in initial pattern load
+//  state.
+state 0,5,6 black
+state 1,4,7 white

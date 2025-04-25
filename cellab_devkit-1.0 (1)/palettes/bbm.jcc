@@ -1,0 +1,7 @@
+7   // BBM (Billiard Ball Machine)
+
+mask 0x05           // Ignore colour tag and (for endworld.js) texture
+
+state 0   black     // Background
+state 1   white     // Active cells
+state 5   gray      // Border (also active cells)

@@ -1,0 +1,8 @@
+7   // Mask3
+
+mask 3
+
+state 0 black
+state 1 #00FF00
+state 2 blue
+state 3 red

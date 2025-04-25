@@ -1,0 +1,1332 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Defining Rules in Java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<meta name="description" content="Cellular Automata Laboratory" />
+<meta name="author" content="by Rudy Rucker and John Walker" />
+<link rel="stylesheet" href="../../documents/styles/standard_screen.css"
+    type="text/css" />
+<link rel="stylesheet" href="styles/cellab.css" type="text/css" />
+<style type="text/css">
+</style>
+</head>
+
+<body class="standard">
+
+<table style="width: 100%;">
+<tr><td style="width: 15%; vertical-align: middle; text-align: left;">
+<a class="i" href="https://www.fourmilab.ch/cellab/"><img src="icons/caweb_icon.png" class="button"
+    width="82" height="74"
+    alt="Cellular Automata Laboratory" /></a>
+</td>
+<td class="c">
+<h1>Cellular Automata Laboratory</h1>
+</td>
+<td style="width: 15%; vertical-align: middle; text-align: right;">
+<a class="i" href="https://www.fourmilab.ch/"><img src="../../images/logo/swlogo.png" class="b0"
+    width="82" height="74"
+    alt="Fourmilab home" /></a>
+</td>
+</tr>
+</table>
+
+<hr />
+
+<h1>Defining Rules in Java</h1>
+
+<p>
+To define a rule in Java, you write a rule function called
+<b>jcrule</b> which, when called with an argument containing the
+state of a cell and the state of its neighbors in variables,
+returns the new state for the cell as an integer from 0 to 255
+(the low bit #0 is the state of Plane 0, bit #1 is the state of
+Plane 1 and so on).  The rulefunction is a method of a rule
+definition class derived from the parent class
+<span class="tt">ruletable</span>.  An object of this class is created
+by a small main program, and a method invoked which creates a
+<b>.jc</b> rule definition file.
+</p>
+
+<p>
+Recapitulating, use your text editor to write a program called
+<b>mylife.java</b>.  Then save the file and compile
+<b>mylife.java</b> and run the resulting <b>mylife.class</b>
+file. When your "<b>mylife</b>" program runs, it creates a
+lookup table for <b>mylife</b> called <b>mylife.jc</b>.  If you
+have an integrated Java development environment, you can enter,
+edit, compile, and run the program using its facilities.
+</p>
+
+<p>
+And what is a <b>.jc</b> file good for?  It is what
+WebCA uses in order to run cellular automata at a good rapid
+speed.  The <b>.jc</b> file codes up the <span class="tt">jcrule</span> result
+for each of the 64K possible combinations of <em>oldstate</em>
+and <em>EightNeighborhood</em> that a cell might have.  A
+<b>.jc</b> file will not, however, normally take up 64K bytes of
+storage because a compression technique is used.
+</p>
+
+<p>
+To understand how to write a <span class="tt">jcrule</span>
+method, first we must consider the neighborhood of a cell, as
+seen by the function through its argument and the variables
+inherited from its parent class
+<span class="tt">ruletable</span>.  The rule is defined in a
+class definition of the form:
+</p>
+
+<pre>
+class <em>RuleName</em> extends ruletable {
+    int jcrule(int oldstate) {
+        int NewSelf;
+
+        //  Calculate value for NewSelf
+
+        return NewSelf;
+    }
+}
+</pre>
+
+<p>
+The <span class="tt">jcrule</span> method sees the neighborhood
+through the following variables in the parent class:
+</p>
+
+<table class="ctr" style="font-family: monospace;">
+    <tr>
+    	<td class="cp">nw</td>
+	<td class="cp">n</td>
+	<td class="cp">ne</td>
+    </tr>
+    <tr>
+    	<td class="cp">w</td>
+	<td class="cp">self</td>
+	<td class="cp">e</td>
+    </tr>
+    <tr>
+    	<td class="cp">sw</td>
+	<td class="cp">s</td>
+	<td class="cp">se</td>
+    </tr>
+</table>
+
+<p>
+Each of these variables will be 1 if the low-order bit of the
+corresponding cell in the neighborhood is on, and 0 if it is
+off. In addition, the rule function may examine the argument
+<span class="tt">oldstate</span>, which contains the full state
+of the center cell (eight bit planes). Thus,
+<span class="tt">oldstate</span> ranges from 0 to 255, with the
+presence of low bit (also supplied in variable
+<span class="tt">self</span>) signifying the state of Plane 0.  The
+function defining the rule must examine these input variables,
+calculate the resulting state for the cell (from 0 to 255), and
+return that value. The following sample code, including the
+required declarations and main program, defines the game of
+Life, proceeding directly from Poundstone's description.
+</p>
+
+<pre>
+class Life extends ruletable {
+    int jcrule(int oldstate) {
+        int EightSum, NewSelf = 0;
+
+        /*  We sum up the number of firing neighbor cells.  If this
+            EightSum is anything other than 2 or 3, the cell gets
+            turned off.  If the EightSum is 2, the cell stays in its
+            present state.  If the Eightsum is 3, the cell gets turned
+            on. */
+
+        EightSum = nw + n + ne + e + se + s + sw + w;
+        if (EightSum == 2) {
+            NewSelf = self;
+        } else if (EightSum == 3) {
+            NewSelf = 1;
+        }
+
+        return NewSelf;
+    }
+}
+
+public class mylife {
+    public static void main(String args[]) {
+        (new Life()).generateRuleFile("mylife");
+    }
+}
+</pre>
+
+<p>
+The main program at the bottom of the file simply creates an
+instance of the class <span class="tt">Life</span> and invokes
+its <span class="tt">generateRuleFile</span> method (implemented
+in the parent class <span class="tt">ruletable</span>), which
+creates a rule definition file with the name given by the string
+argument with "<b>.jc</b>" appended, in this case
+<b>mylife.jc</b>.
+</p>
+
+<p>
+If you have a Java compiler handy, you should try creating and
+running the <b>mylife.java</b> rule right now.  Where do you get
+a file to start work on?  One way is simply to type in the text
+of <b>mylife.java</b>. An easier way is to copy one of our
+<b>.java</b> ruleprograms to a file called <b>mylife.java</b>
+and then make a few changes to &ldquo;<b>mylife.java</b>&rdquo;
+until it looks like the program above.
+</p>
+
+<p>
+As it turns out, the <b>life.java</b> program provided with
+<cite>CelLab</cite> is similar but not quite the same as
+<b>mylife</b>.  Our Life is actually the rule
+&ldquo;LifeMem,&rdquo; which colors the cells differentially
+depending on their state in the last generation.  But our
+<b>life.java</b> is quite similar to what you want for
+<b>mylife.java</b>, so you should copy <b>life.java</b> onto
+<b>mylife.java</b> and use that as the starting point for your
+program.
+</p>
+
+<p>
+So the steps for running mylife are as follows: copy the
+existing <b>life.java</b> file to a new <b>mylife.java</b>
+file.  Then use your text editor to work on <b>mylife.java</b>.
+Once you have <b>mylife.java</b> in shape, compile and run it,
+either within a Java development environment or from the command
+line with:
+</p>
+
+<pre>
+    javac mylife.java
+    java mylife
+</pre>
+
+<p>
+If all goes well, you'll create <b>mylife.jc</b>, which
+you can load into WebCA and run.  All Java rule programs
+define rule classes which extend the class <span class="tt">ruletable</span>
+which is defined in the file <b>ruletable.java</b>.  If you are
+using a version of Java which is not compatible with the
+compiled version of this file included with <cite>CelLab</cite>,
+you may need to manually recompile <b>ruletable.java</b> with
+the command:
+</p>
+
+<pre>
+    javac ruletable.java
+</pre>
+
+<p>
+before you compile your rule program.  If you are using an
+integrated Java development environment, consult its
+documentation on how to include either <b>ruletable.java</b> or
+the compiled <b>ruletable.class</b> in your rule program
+project.
+</p>
+
+<p id="Brain-java">
+Since the rule for the game of Life doesn't use bit-planes #1
+through #7 at all, the <b>mylife.java</b> rule program contains
+no reference to <span class="tt">oldstate</span>.  Rules which
+use the higher bit-planes may also be specified
+straightforwardly by Java rule definition functions. For
+example, here is the definition of
+<a href="rules.html#Brain">Brian's Brain</a>, a rule
+developed by Brian Silverman and described in
+<a href="refs.html#Margolus_Toffoli87">[Margolus&amp;Toffoli87]</a>, p. 47, as:
+</p>
+
+<blockquote>
+    <p>
+    The rule involves cells having three states, 0
+    (&ldquo;ready&rdquo;), 1 (&ldquo;firing&rdquo;), and 2
+    (&ldquo;refractory&rdquo;). A ready cell will fire when
+    exactly two of its eight neighbors are firing; after firing
+    it will go into a refractory state, where it is insensitive
+    to stimuli, and finally it will go back to the ready state.
+    </p>
+</blockquote>
+
+<p>
+This translates directly into a Java program as follows:
+</p>
+
+<pre>
+/*
+    Each cell has three states, though only one bit of the state
+    is used to determing whether neighbors are on or off.  The
+    rule is as follows:
+
+      Old cell state       New state
+
+      0 (Ready)             1 if exactly 2 neighbors in state 1,
+                            0 otherwise.
+      1 (Firing)            2
+      2 (Refractory)        0
+*/
+
+class Brain extends ruletable {
+    int jcrule(int oldstate) {
+        int count = nw + n + ne + w + self + e + sw + s + se;
+
+        if (oldstate == 2)         // If in refractory state...
+           return 0;               // ...become ready.
+        if (oldstate == 1)         // If firing...
+           return 2;               // ...go to refractory state.
+        return count == 2 ? 1 : 0; /* If ready, fire if precisely
+                                      two neighbors are firing. */
+    }
+}
+
+public class brain {
+    public static void main(String args[]) {
+        (new Brain()).generateRuleFile("brain");
+    }
+}
+</pre>
+
+<p id="Sublime-java">
+It is possible to define much more complicated rules by using
+the high bits for various bookkeeping purposes.  Here is an
+example of a rule that simulates thermally driven random
+diffusion. The theory of <a href="chap4.html#i4-TH-lattice">why
+the program works</a> is explained in the <a
+href="chap4.html"><cite>Theory</cite></a> chapter.
+</p>
+
+<pre>
+/*
+
+        This rule implements the Margolus rule for simulating a gas of
+        cells diffusing.  Particle number is conserved.  We set up a
+        lattice of position values that looks like this:
+
+                        0 1 0 1 ..
+                        2 3 2 3 ..
+                        0 1 0 1 ..
+                        2 3 2 3 ..
+                        : : : :
+
+        This lattice is alternately chunked into
+
+               A blocks 0 1   and  B blocks 3 2
+                        2 3                 1 0
+
+        and the blocks are randomly rotated one notch CW or one notch CCW.
+
+        We use the eight bits of state as follows:
+
+        Bit  #0 is used to show info to neighbors
+        Bit  #1 is the gas bit
+        Bit  #2 is fed by the system noise generator
+        Bit  #3 stores the 4-cell consensus on direction 0 is CCW, 1 is CW
+        Bits #4 &amp; #5 hold a position numbers between 0 and 3
+        Bits #6 &amp; #7 control the cycle
+
+*/
+
+class Sublime extends ruletable {
+    static final int HPPlane = 4,     // Horizontal phase plane
+                     HPNbits = 1,     // Horizontal phase plane count
+                     VPPlane = 5,     // Vertical phase plane
+                     VPNbits = 1,     // Vertical phase plane count
+                     RIPlane = 2,     // Random input plane
+                     RINbits = 1,     // Random input bit count
+                     RSPlane = 0,     // Random seed plane
+                     RSNbits = 1,     // Random seed bit count
+                     TPPlane = 6,     // Temporal phase plane
+                     TPNbits = 2;     // Temporal phase plane count
+
+    void jcruleModes() {
+        setPatternRequest("sublime");
+        setPaletteRequest("sublime");
+
+        /*  We set a horizontal pattern of alternate 0s and 1s in bit 4
+            and a vertical pattern of alternate 0s and 1s in bit 5.
+            This produces a pattern that goes 0 1 0 1 ..
+                                              2 3 2 3 ..
+                                              0 1 0 1 ..
+                                              2 3 2 3 ..
+                                              : : : :     */
+
+        setTextureHorizontal(HPPlane, HPNbits);
+        setTextureVertical(VPPlane, VPNbits);
+        setInitialRandomSeed(RSPlane, RSNbits);
+        setRandomInput(RIPlane, RINbits);
+        setTemporalPhase(TPPlane, TPNbits);
+        setWorld(1);
+    }
+
+    int jcrule(int oldstate) {
+        int Cycle, Position, Direction, NewDirection = 0,
+            Noise, Gas, NewGas = 0, r = 0;
+
+        Cycle = TPHASE();
+        Position = HVPHASE();
+        Direction = BITFIELD(3);
+        Noise = BITFIELD(2);
+        Gas = BITFIELD(1);
+
+        switch (Cycle) {
+            case 0:                   // In A block mode set direction to NW's
+                switch (Position) {
+                    case 0:
+                        NewDirection = self;
+                        break;
+
+                    case 1:
+                        NewDirection = w;
+                        break;
+
+                    case 2:
+                        NewDirection = n;
+                        break;
+
+                    case 3:
+                        NewDirection = nw;
+                        break;
+                }
+                r = TPUPD(BF(Position, 4) | BF(NewDirection, 3) |
+                          BF(Gas, 1) | Gas);
+                break;
+
+            case 2:                   // In B block mode set direction to NW's
+                switch (Position) {
+                    case 0:
+                        NewDirection = nw;
+                        break;
+
+                    case 1:
+                        NewDirection = n;
+                        break;
+
+                    case 2:
+                        NewDirection = w;
+                        break;
+
+                    case 3:
+                        NewDirection = self;
+                        break;
+                }
+                r = TPUPD(BF(Position, 4) | BF(NewDirection, 3) |
+                          BF(Gas, 1) | Gas);
+                break;
+
+            case 1:
+                switch (Direction) {
+                    case 0:           // CCW rotation of an A block
+                        switch (Position) {
+                            case 0:
+                                NewGas = e;
+                                break;
+                            case 1:
+                                NewGas = s;
+                                break;
+                            case 2:
+                                NewGas = n;
+                                break;
+                            case 3:
+                                NewGas = w;
+                                break;
+                        }
+                        break;
+
+                    case 1:           // CW rotation of an A block
+                        switch (Position) {
+                            case 0:
+                                NewGas = s;
+                                break;
+                            case 1:
+                                NewGas = w;
+                                break;
+                            case 2:
+                                NewGas = e;
+                                break;
+                            case 3:
+                                NewGas = n;
+                                break;
+                        }
+                        break;
+                }
+                r = TPUPD(BF(Position, 4) | BF(Direction, 3) |
+                          BF(NewGas, 1) | Noise);
+                break;
+
+            case 3:
+                switch (Direction) {
+                    case 0:           // CCW rotation of a B block
+                        switch (Position) {
+                            case 0:
+                                NewGas = w;
+                                break;
+                            case 1:
+                                NewGas = n;
+                                break;
+                            case 2:
+                                NewGas = s;
+                                break;
+                            case 3:
+                                NewGas = e;
+                                break;
+                        }
+                        break;
+
+                    case 1:           // CW rotation of a B block
+                        switch (Position) {
+                            case 0:
+                                NewGas = n;
+                                break;
+                            case 1:
+                                NewGas = e;
+                                break;
+                            case 2:
+                                NewGas = w;
+                                break;
+                            case 3:
+                                NewGas = s;
+                                break;
+                        }
+                        break;
+                }
+                r = TPUPD(BF(Position, 4) | BF(Direction, 3) |
+                          BF(NewGas, 1) | Noise);
+                break;
+        }
+        return r;
+    }
+}
+
+public class sublime {
+    public static void main(String args[]) {
+        (new Sublime()).generateRuleFile("sublime");
+    }
+}
+</pre>
+
+<p>
+For now don't worry about the intricacy of Sublime's definition
+of the <span class="tt">jcrule</span> method.  Instead, let's
+focus on the <span class="tt">jcruleModes</span> method, which
+we haven't encountered before.  This method is called before
+your <span class="tt">jcrule</span> method is called for the
+first time, and can set up various modes which affect how the
+rule is generated and/or perform any initialization needed by
+the <span class="tt">jcrule</span> method.  <b>mylife</b> and
+<b>brain</b> didn't need to change any of the modes from the
+defaults, so their definitions didn't include a
+<span class="tt">jcruleModes</span> method.
+</p>
+
+<p>
+A variety of methods in the parent
+<span class="tt">ruletable</span> class can be called from
+<span class="tt">jcruleModes</span> to specify rule generation modes
+or options for the simulator.  These fall into the following
+categories.
+</p>
+
+<ol class="roman">
+
+    <li><em>StartUp.</em>
+    	<span class="tt">setPaletteRequest</span>,
+    	<span class="tt">setPatternRequest</span>,
+        and <span class="tt">setOwnCodeRequest</span>
+	allow you to have your rule start by loading a
+	<b>.jcc</b> color palette, a <b>.jcp</b> start pattern,
+	and/or a user evaluator (own code).
+    </li>
+
+    <li><em>Background.</em>
+	The <span class="tt">setRandomInput</span>,
+	<span class="tt">setTextureHorizontal</span>,
+    	<span class="tt">setTextureVertical</span>, and
+	<span class="tt">setInitialRandomSeed</span> methods
+	control what we call textures of bits that your rule can
+	automatically load into selected planes.  These texture
+	bits are often left invisible.
+    </li>
+
+    <li><em>Topology.</em>
+	The <span class="tt">setWorld</span> method specifies
+	whether the screenwrap is to be on, whether you want to
+	consider your rule to be two-dimensional or
+	one-dimensional, and how many bits of how many neighbors
+	are visible to the rule program.
+    </li>
+</ol>
+
+<h4 id="t1">StartUp</h4>
+
+<p>
+<span class="tt">setPaletteRequest</span> and
+<span class="tt">setPatternRequest</span>
+are particularly useful for
+creating rules to be shown by self-running demos.
+If <span class="tt">setPaletteRequest</span> and
+<span class="tt">setPatternRequest</span>
+are not called in your
+<span class="tt">jcruleModes</span> method, the pattern and
+the color palette left over from the last rule are used.  If
+you have just loaded the simulator, the <b>default.jcc</b>
+color palette is loaded and the starting pattern will
+consist of all zeroes in planes #1 through #7, with random
+bits of plane #0 turned on.  This start will be modified by
+the rule's texture settings, if any.
+</p>
+
+<p>
+If a rule requests a <b>.jcc</b>, <b>.jcp</b>, or
+<b>.js</b> file which is not available on the WebCA server,
+a warning message appears to let you know the file
+requested by the rule could not be found, leaving the previous
+color palette, pattern, or no user evaluator in effect.
+</p>
+
+<h4 id="t2">Background</h4>
+
+<p>
+With <span class="tt">setRandomInput</span>,
+we can have random
+bits fed into any span of bits that we like.
+Calling
+<span class="tt">setRandomInput(</span><em>startBit</em><span class="tt">,
+</span><em>bitCount</em><span class="tt">)</span>
+causes WebCA to randomize the contents of <em>bitCount</em>
+planes, starting with plane <em>startBit</em>.  New random data are
+stored into the requested planes on each generation.
+For example, if you invoke <span class="tt">setRandomInput(2, 3);</span> in
+your <span class="tt">jcruleModes</span> method, WebCA
+will put random bits in planes #2, #3,
+and #4.  The density of these random bits will always be
+50%, meaning that approximately half of each randomized
+plane's cells will be set to 0 and half to 1.  If you
+require a randomness of, say, 25% ones, you can simulate it
+by filling two planes with random bits and looking for the
+cells that have both bits set to 1.  The
+<span class="tt">setTextureHorizontal</span>
+and <span class="tt">setTextureVertical</span> methods
+feed in horizontal or vertical texture.
+<span class="tt">setTextureHorizontal(</span><em>startBit</em><span class="tt">,
+</span><em>bitCount</em><span class="tt">)</span>
+puts in <em>bitCount</em> planes of horizontal texture starting
+at plane <em>startBit</em>.
+<span class="tt">setTextureVertical(</span><em>startBit</em><span class="tt">,
+</span><em>bitCount</em><span class="tt">)</span> does
+the same, but in the vertical direction.
+If I have one
+bit of texture, that means that the texture bit will cycle
+between 0 and 1.  If I were to use
+<span class="tt">setTextureHorizontal(5, 2)</span>,
+however, I would get two bits of
+texture, meaning that the fifth and six bits would cycle
+through
+<span class="ttb">00</span>,
+<span class="ttb">01</span>,
+<span class="ttb">10</span>,
+<span class="ttb">11</span>,
+<span class="ttb">00</span>,
+<span class="ttb">01</span>,
+<span class="ttb">10</span>,
+<span class="ttb">11</span>,
+and so on across the screen.
+Vertical texture works the same way, and the combination of
+horizontal and vertical can produce a more complicated
+pattern as in <a href="rules.html#Sublime">Sublime</a>.
+</p>
+
+<p>
+The
+<span class="tt">setInitialRandomSeed(</span><em>startBit</em><span class="tt">,
+</span><em>bitCount</em><span class="tt">,
+</span><em>density</em><span class="tt">)</span>
+method allow you to start up a rule with random seed bits
+in some planes. If you only want some random bits for the startup, but
+don't want them to keep coming in later, use
+<span class="tt">setInitialRandomSeed</span>
+instead of <span class="tt">setRandomInput</span>.
+<em>startBit</em> specifies what plane to begin random seeding at, and
+<em>bitCount</em> tells it how many planes to seed. In addition,
+<em>density</em> allows you to specify the percentage of ones you want.  (This
+is <em>not</em> possible for
+<span class="tt">setRandomInput</span>,
+which always seeds
+at 50%.) <em>density</em> can be set to any value between 0 and 255.
+These settings correspond to a percentage of ones which goes from 0%
+to 50%.  Thus a setting of 255 means 50% ones and 50% zeroes, while
+a setting of 128 means 25% ones and 75% zeroes.
+If <em>density</em> is omitted from
+the call on
+<span class="tt">setInitialRandomSeed</span>,
+255 is used, generating a seed with 50% ones and 50% zeroes.
+</p>
+
+<p>
+Thus if I call
+<span class="tt">setInitialRandomSeed(2, 1, 128)</span> in my
+<span class="tt">jcruleModes</span> method,
+then plane #2 will be randomized at the start of
+execution of the rule by a pattern that is 25% ones, but it will
+not be randomized again.
+</p>
+
+<p>
+The primary purpose of
+<span class="tt">setInitialRandomSeed</span>
+is to make it possible to
+request a start pattern with randomness in some special planes without
+having to store the random information as part of the start pattern.
+Look at <a href="rules.html#Soot">Soot</a>
+or <a href="rules.html#Dendrite">Dendrite</a> for examples of this.
+The reason you don't want to have to store a <b>.jcp</b> file
+which has random bits in one of its planes is that then the file
+will be about 64K bytes in size, and will take up more space and
+download time than you really want to give it.  Because the Soot
+pattern gets its &ldquo;random gas&rdquo; from
+<span class="tt">setInitialRandomSeed</span>,
+its <b>.jcp</b> file is only some 2K bytes instead of 64K.
+</p>
+
+<p>
+When a rule is running, you can see what kinds of texture the rule
+requested by looking at the WebCA
+<a href="webca.html#rulemodes">Rule Modes</a> dialogue.
+</p>
+
+<p>
+A special feature of the
+<span class="tt">setTextureHorizontal</span> and
+<span class="tt">setTextureVertical</span>
+textures is that you can't get rid of them
+through editing or changing patterns.  The idea is that if your rule
+calls for these textures, then it needs them, so they are put back in
+every time you leave the
+<a href="webca.html#bitplane">Bit Plane Editor</a>
+or load a new pattern.  The
+<span class="tt">setInitialRandomSeed</span>
+planes are re-randomized whenever you load a new pattern, but not when
+you leave the Bit Plane Editor.
+</p>
+
+<h4 id="t3">Topology</h4>
+
+<p>
+<span class="tt">setWorld(</span><em>worldType</em><span class="tt">)</span>
+specifies three things: a) Whether your screens wrap around
+the edges, b) Whether a rule is two-dimensional or one-dimensional,
+and c) How big a neighborhood you want to look at, and how many
+bits of each neighbor you want to see.
+</p>
+
+<p>
+The most commonly used <span class="tt">setWorld</span> is 1,
+which means a two dimensional
+world with wrap turned on. It was actually unnecessary to call
+<span class="tt">setWorld</span> with 1 in the Sublime rule, because
+<span class="tt">setWorld</span> always defaults to 1. To get a two
+dimensional world with the wrap turned off, call
+<span class="tt">setWorld(0)</span>.
+</p>
+
+<p>
+If you call <span class="tt">setWorld</span> with one of the
+values 3, 4, 5, 6, 8, or 9, your rule will act on a
+one-dimensional (1D) world.
+</p>
+
+<p>
+The 1D rules work by first copying each line of the screen onto the
+line below it, and by then filling in the top line with a new line
+calculated according to <b>jcrule</b>.  This produces a spacetime
+trail of the 1D rule, with earlier times appearing lower on the screen
+like geological strata.
+</p>
+
+<p>
+Our simulator is built to suck in eight bits of neighborhood
+information.  We allow it to get neighborhood information in
+several different ways.  These ways correspond to
+<span class="tt">setWorld</span> arguments as listed below:
+</p>
+
+<table class="ctr">
+    <tr>
+    	<th><span class="tt">setWorld</span></th>
+	<th>Dimensionality</th>
+	<th>Wrap?</th>
+	<th>Neighbors</th>
+	<th>Bits</th>
+    </tr>
+    <tr>
+    	<td class="cp2">0</td>
+	<td class="cp2">2D</td>
+	<td class="cp2"> NoWrap</td>
+	<td class="cp2"> 8</td>
+	<td class="cp2">  1</td>
+    </tr>
+    <tr>
+    	<td class="cp2">1</td>
+	<td class="cp2">2D</td>
+	<td class="cp2"> Wrap</td>
+	<td class="cp2"> 8</td>
+	<td class="cp2">  1</td>
+    </tr>
+    <tr>
+    	<td class="cp2">2</td>
+	<td class="cp2">1D</td>
+	<td class="cp2"> NoWrap</td>
+	<td class="cp2"> 8</td>
+	<td class="cp2">  1</td>
+    </tr>
+    <tr>
+    	<td class="cp2">3</td>
+	<td class="cp2">1D</td>
+	<td class="cp2"> Wrap</td>
+	<td class="cp2"> 8</td>
+	<td class="cp2">  1</td>
+    </tr>
+    <tr>
+    	<td class="cp2">4</td>
+	<td class="cp2">1D</td>
+	<td class="cp2"> NoWrap</td>
+	<td class="cp2"> 4</td>
+	<td class="cp2">  2</td>
+    </tr>
+    <tr>
+    	<td class="cp2">5</td>
+	<td class="cp2">1D</td>
+	<td class="cp2"> Wrap</td>
+	<td class="cp2"> 4</td>
+	<td class="cp2">  2</td>
+    </tr>
+    <tr>
+    	<td class="cp2">8</td>
+	<td class="cp2">1D</td>
+	<td class="cp2"> NoWrap</td>
+	<td class="cp2"> 2</td>
+	<td class="cp2">  4</td>
+    </tr>
+    <tr>
+    	<td class="cp2">9</td>
+	<td class="cp2">1D</td>
+	<td class="cp2"> Wrap</td>
+	<td class="cp2"> 2</td>
+	<td class="cp2">  4</td>
+    </tr>
+    <tr>
+    	<td class="cp2">10</td>
+	<td class="cp2">2D</td>
+	<td class="cp2"> Wrap</td>
+	<td class="cp2"> 8</td>
+	<td class="cp2">  Sum of 8</td>
+    </tr>
+    <tr>
+    	<td class="cp2">11</td>
+	<td class="cp2">2D</td>
+	<td class="cp2"> Wrap</td>
+	<td class="cp2"> 4</td>
+	<td class="cp2">  Sum of 4</td>
+    </tr>
+    <tr>
+    	<td class="cp2">12</td>
+	<td class="cp2">User</td>
+	<td class="cp2"> NoWrap</td>
+	<td class="cp2"> User</td>
+	<td class="cp2">  User</td>
+    </tr>
+    <tr>
+    	<td class="cp2">13</td>
+	<td class="cp2">User</td>
+	<td class="cp2"> Wrap</td>
+	<td class="cp2"> User</td>
+    	<td class="cp2">  User</td>
+    </tr>
+</table>
+
+<p>
+When we are in one of the three 1D modes the values of the
+neighboring cells are passed in variables as follows:
+</p>
+
+<table class="ctr">
+    <tr>
+    	<th colspan="9"><span class="tt">setWorld</span> 2, 3: Eight Neighbors, 1 bit each</th>
+    </tr>
+    <tr>
+    	<td class="cp2">N8L4</td>
+	<td class="cp2">N8L3</td>
+	<td class="cp2">N8L2</td>
+	<td class="cp2">N8L1</td>
+	<td class="cp2">oldstate</td>
+	<td class="cp2">N8R1</td>
+	<td class="cp2">N8R2</td>
+	<td class="cp2">N8R3</td>
+	<td class="cp2">N8R4</td>
+    </tr>
+</table>
+
+<p></p>
+
+<table class="ctr">
+    <tr>
+    	<th colspan="5"><span class="tt">setWorld</span> 4, 5: Four Neighbors, 2 bits each</th>
+    </tr>
+    <tr>
+    	<td class="cp2">N4L2</td>
+	<td class="cp2">N4L1</td>
+	<td class="cp2">oldstate</td>
+	<td class="cp2">N4R1</td>
+	<td class="cp2">N4R2</td>
+    </tr>
+</table>
+
+<p></p>
+
+<table class="ctr">
+    <tr>
+    <th colspan="3"><span class="tt">setWorld</span> 8, 9: Two Neighbors, 4 bits each</th>
+    </tr>
+    <tr>
+    <td class="cp2">N2L1</td>
+	<td class="cp2">oldstate</td>
+	<td class="cp2">N2R1</td>
+    </tr>
+</table>
+
+<p id="Aurora-java">
+To give an example of a one-dimensional rule, I give the code
+for the rule <b>aurora.java</b> below. 
+<a href="rules.html#Aurora">Aurora</a> uses two four-bit
+neighbors, so we use variables <span class="tt">N2L1</span> and
+<span class="tt">N2R1</span> to reference their four-bit values.
+We extract the four-bit value of the cell's own state by ANDing
+<span class="tt">oldstate</span> with 15.  This gets the low
+four bits out of <span class="tt">oldstate</span> because 15 in
+binary is <span class="ttb">00001111</span>, and ANDing any of
+the eight bits <em>B</em> in <span class="tt">oldstate</span>
+with a 0 produces 0, while ANDing a bit <em>B</em> with a 1
+produces <em>B</em>.
+</p>
+
+<pre>
+/*
+
+    A one dimensional rule with two neighbors, and 4 bits of each
+    neighbor visible.  This is run as a sixteen state rule, where
+            NewC = (L + OldC + R) / 3 + 1.
+
+*/
+
+class Aurora extends ruletable {
+    void jcruleModes() {
+        setWorld(9);
+        setPaletteRequest("aurora");
+        setInitialRandomSeed(0, 4);
+    }
+
+    int jcrule(int oldstate) {
+        return ((N2L1 + (oldstate &amp; 15) + N2R1) / 3) + 1;
+    }
+}
+
+public class aurora {
+    public static void main(String args[]) {
+        (new Aurora()).generateRuleFile("aurora");
+    }
+}
+</pre>
+
+<p>
+In the rule descriptions later in this document I give an
+example of a <span class="tt">setWorld</span> 5 rule
+(<a href="rules.html#ShortPi">ShortPi</a>) and an example of a
+<span class="tt">setWorld</span> 2 rule
+(<a href="rules.html#Axons">Axons</a>).
+</p>
+
+<p>
+Choosing <span class="tt">setWorld</span> 10 or 11 causes
+WebCA to evaluate <em>averaging rules</em>.  These rules
+were devised to allow generalizations of the
+<a href="rules.html#Rug">Rug</a> rule.  In
+both of these modes the screen is wrapped.
+<span class="tt">setWorld(10)</span> computes the sum of EveryCell's
+eight nearest neighbors, and
+<span class="tt">setWorld(11)</span> gets the sum of EveryCell's four
+nearest neighbors.
+</p>
+
+<p>
+In the averaging rules, the <span class="tt">oldstate</span>
+argument passed to <span class="tt">jcrule</span> holds the low
+five bits of the EveryCell's old eightbit state, the sum of
+EveryCell's neighbors is in the variable
+<span class="tt">SUM_8</span> (for <span class="tt">setWorld(10)</span>)
+or <span class="tt">SUM_4</span>
+(for <span class="tt">setWorld(11)</span>). (Eight neighbors in
+<span class="tt">setWorld(10)</span>, and 4 neighbors in
+<span class="tt">setWorld(11)</span>.)  This sum can take as many as
+eleven bits to write out, which is why we are only allowed to
+see five bits of EveryCell's old state.  The limitation is that
+our rules use lookup tables whose entries are indexed by sixteen
+bit &ldquo;situation&rdquo; codes.
+</p>
+
+<p id="Heat-java">
+As an example of <span class="tt">setWorld(10)</span>, here is a
+program called
+<a href="rules.html#Heat">Heat</a>.  A Heat cell takes a straight average of
+its neighbor cells, except that if a cell has its low bit on,
+the cell's value is kept fixed. The idea is that this rule is to
+simulate the heat flow in a metal plate certain of whose
+locations are kept fixed at certain temperature values.
+</p>
+
+<pre>
+/*
+
+    This is an eightcell averaging rule with zero increment.
+
+    Odd states are frozen states and even states generate even states.
+    One can reanimate the vacuum by re-randomizing bitplanes 5 or 6.
+
+*/
+
+class Heat extends ruletable {
+    void jcruleModes() {
+        setWorld(10);
+    }
+
+    int jcrule(int oldstate) {
+        int r = 0;
+
+        if ((oldstate &amp; 1) &gt; 0) {
+            if (oldstate &lt; 16) {
+                r = oldstate;
+            } else {
+                r = oldstate + 128;
+            }
+        } else {
+            r = (SUM_8 &gt;&gt; 3) &amp; 0xFE;
+        }
+        return r;
+    }
+}
+
+public class heat {
+    public static void main(String args[]) {
+        (new Heat()).generateRuleFile("heat");
+    }
+}
+</pre>
+
+<p>
+<span class="tt">setWorld(12)</span> and
+<span class="tt">setWorld(13)</span> are for
+&ldquo;user evaluator rules.&rdquo; Type 12 has wrap turned off,
+with zero on the boundary; and Type 13 is the torus wrap mode. 
+To run a rule of <span class="tt">setWorld</span> 12 or 13, one
+must have a predefined evaluator function. These inner loop
+functions are written in JavaScript, have extension <b>.js</b>,
+and are <a href="ruledef-eval.html">discussed more fully</a> in
+the previous section.
+</p>
+
+<p id="Rug-java">
+The Rug rule below is an example of a rule of this type.  I
+could have written a similar Rug rule using
+<span class="tt">setWorld(10)</span>,
+but I wanted to have the wrap off.  The WebCA Rug rule
+calls a function called <b>semi8</b> which returns
+the eleven bit sum of the eight nearest neighbors, so we can
+use this function to define a rug rule.
+</p>
+
+<pre>
+/*
+
+    This program runs an eightcell averaging rule of eight bits per
+    cell.  We program it as a nowrap owncode WorldType 12 calling
+    semi8.jco.
+
+*/
+
+class Rug extends ruletable {
+    void jcruleModes() {
+        setWorld(12);
+        setOwnCodeRequest("semi8");
+    }
+
+    int jcrule(int oldstate) {
+        return ((oldstate &gt;&gt; 3) + 1) &amp; 0xFF;
+    }
+}
+
+public class rug {
+    public static void main(String args[]) {
+        (new Rug()).generateRuleFile("rug");
+    }
+}
+</pre>
+
+<p>
+The speed at which the simulator runs depends only on the
+<span class="tt">setWorld</span> you have chosen.  It does not depend
+at all on the complexity of the Java rule you write or on the
+start pattern you select; it is completely constant.  Thus,
+there is no need to make the function that defines the rule
+efficient&mdash;it is executed only to create the rule
+definition file, then never used again.  The paramount
+consideration in writing a rule program is that it be clearly
+expressed so that you can come back to it later and still be
+able to tell what you were trying to do.
+</p>
+
+<p>
+<b>.java</b> rule programs are provided for all the WebCA demos.  A
+good way to start writing rules of your own is to copy one of
+our rules onto your own file <b>first.java</b>.  Then you can
+edit <b>first.java</b> to your own purposes and to run it and
+generate your <b>first.jc</b> file.  If your rule happens to
+return a value for <span class="tt">jcrule</span> outside the range
+0&ndash;255, or supplies invalid arguments to one of the setup
+functions in its <span class="tt">jcruleModes</span> method, you will get an
+error message when the program tries to generate
+<b>first.jc</b>.  If this happens, fix your program and try
+again.
+</p>
+
+<h3>Rule Program Shorthand</h3>
+
+<p>
+After you've written a number of rule definition programs,
+you'll find yourself using common sequences of code in program
+after program for operations such as counting the number of
+firing cells in a neighborhood, checking position of cells
+within blocks defined by a texture, keeping a cycle count for
+multi-phase rules, and extracting bit fields from a cell. The
+<span class="tt">ruletable</span> parent class provides
+ready-to-use shorthand variables and methods for performing
+these calculations. You don't have to use the shorthand, but if
+you're writing a large number of rule programs, you may find
+they're less work to write and easier to understand when you
+refer back to your rule programs later on.
+</p>
+
+<h4>Precomputed Neighbor Counts</h4>
+
+<p>
+Many two-dimensional, one bit rules depend, in part, on the
+number of neighboring cells which are nonzero.  You can
+calculate these sums by adding the neighbor state in the
+variables <span class="tt">nw</span>, <span class="tt">n</span>,
+<span class="tt">ne</span>, etc., but as a convenience, before
+calling the <span class="tt">jcrule</span> method when
+<span class="tt">setWorld</span> is 0 or 1, the following sums are precomputed:
+</p>
+
+<pre>
+    SUM_4 = n + w + e + s;
+    SUM_5 = n + w + self + e + s;
+    SUM_8 = nw + n + ne + w + e + sw + s + se;
+    SUM_9 = nw + n + ne + w + self + e + sw + s + se;
+</pre>
+
+<p>
+so a rule program can simply reference these commonly used
+sums of neighbors instead of adding them up itself.
+</p>
+
+<h4>Margolus Neighborhood Cells</h4>
+
+<p>
+When using the <a href="ruledef-eval.html#e_margolus"><b>margolus</b>
+or <b>margolusp</b></a> evaluators, two bits of state of each of the
+four cells in the relative positions of the
+<a href="chap4.html#i4-TH-lattice">Margolus neighborhood</a>
+are packed into the upper six bits of the high byte of the lookup
+table index.  When using a world type of 12 or 13, the following
+preset variables may be used to reference these cells.
+</p>
+
+<pre>
+    CENTER      Current cell, plane 0
+    CW          Clockwise cell, plane 0
+    CCW         Counterclockwise cell, plane 0
+    OPP         Opposite cell, plane 0
+    
+    CENTERp     Current cell, plane 1
+    CWp         Clockwise cell, plane 1
+    CCWp        Counterclockwise cell, plane 1
+    OPPp        Opposite cell, plane 1
+</pre>
+
+<h4>Bit Planes and Fields</h4>
+
+<p>
+Rule programs are forever interrogating information in various planes
+or collections of planes encoded as bits in the state of a cell.  A
+collection of methods lets you directly access planes by number.
+</p>
+
+<dl class="justified">
+    <dt><span class="tt">int BIT(<em>plane</em>)</span></dt>
+	<dd>Returns the single bit mask corresponding to plane <em>plane</em>.
+	For example, <span class="tt">BIT(0)</span> = 1 and <span class="tt">BIT(7)</span> = 128.</dd>
+
+    <dt><span class="tt">int BITMASK(<em>plane</em>, <em>nbits</em>)</span></dt>
+	<dd>Returns a bit mask for extracting a field of
+	<em>nbits</em> bits starting at <em>plane</em>.
+	<span class="tt">BITMASK(4, 2)</span> = 48.  <em>nbits</em>
+	may be 1, in which case only one bit is set in the mask,
+	or zero, yielding a zero mask.</dd>
+
+    <dt><span class="tt">boolean BITSET(<em>plane</em>)</span></dt>
+	<dd>Tests whether the bit corresponding to <em>plane</em> is set in
+	<span class="tt">oldstate</span>.  Note that the result of this method is
+	<span class="tt">boolean</span>; if you want an integer result use the
+	<span class="tt">BITFIELD</span> method described below.</dd>
+
+    <dt><span class="tt">int BITFIELD(<em>plane</em>, <em>nbits</em>)</span>
+    	    or <span class="tt">BITFIELD(<em>plane</em>)</span></dt>
+	<dd>Returns the integer value of the field in
+	<span class="tt">oldstate</span> which starts at
+	<em>plane</em> and extends for <em>nbits</em>.  If the
+	<em>nbits</em> argument is omitted, a one bit field is
+	returned. Suppose oldstate is 237, or binary
+	<span class="tt">0<b>110</b>1101</span>, and we wish to
+	extract the three bit field starting at plane 4 (shown
+	in bold in the binary value).  The call
+	<span class="tt">BITFIELD(4, 3)</span> returns the desired
+	bits, whose decimal value is 6.</dd>
+
+    <dt><span class="tt">int BF(<em>value</em>, <em>plane</em>)</span></dt>
+	<dd>Returns the given <em>value</em> (which can be either an
+	<span class="tt">int</span> or <span class="tt">boolean</span>
+	taken to be 1 if true and 0 if false), shifted to
+	appear in a bit field starting at <em>plane</em>.
+	<span class="tt">BF</span> is handy when returning a new state
+	from your rule function composed of several items stored
+	in separate bit fields.</dd>
+</dl>
+
+<h4>Texture and Phase</h4>
+
+<p>
+Many rules use a &ldquo;texture&rdquo; stored in one or more bit
+planes to allow the rule program to locate a cell within a block
+of a given size.  The <span class="tt">setTextureHorizontal</span>
+and <span class="tt">setTextureVertical</span> methods allow a
+rule to request a texture pattern to be preloaded into specified
+planes.  If these functions have been called in
+<span class="tt">jcruleModes</span> to request texture, the
+<span class="tt">jcrule</span> method may obtain the value of the
+texture with the following method calls.
+</p>
+
+<dl class="justified">
+    <dt><span class="tt">HPHASE()</span></dt>
+        <dd>Contents of the horizontal texture plane(s) for this cell.</dd>
+
+    <dt><span class="tt">VPHASE()</span></dt>
+        <dd>Contents of the vertical texture plane(s) for this cell.</dd>
+
+    <dt><span class="tt">HVPHASE()</span></dt>
+	<dd>Result of concatenating the contents vertical phase planes(s)
+	with the horizontal phase plane(s), with the vertical phase in the most
+	significant bits.  The horizontal and vertical texture fields need
+	not be contiguous within <span class="tt">oldstate</span>.</dd>
+</dl>
+
+<p>
+Many rules dedicate one or more bits in each cell to maintain a
+cycle counter that increments, in each generation, modulo the
+length of the bit field.  This allows multi-phase rules to
+perform different calculations in successive steps and/or access
+alternate neighborhood regions as in the gas rules.  A
+&ldquo;temporal phase&rdquo; mechanism is provided in <span
+class="tt">ruletable</span> to automate the bookkeeping
+associated with this.  A rule program declares which bit planes
+are to be used for a cycle counter by calling
+<span class="tt">setTemporalPhase(</span><em>startBit</em><span class="tt">,
+</span><em>bitCount</em><span class="tt">)</span>
+in its <span class="tt">jcruleModes</span> method.
+Unlike <span class="tt">setTextureHorizontal</span>
+and the other texture requests, this call does not affect the
+simulator nor the contents of the cell map&mdash;it merely declares which
+planes the rule is using for its cycle counter.  Within the
+<span class="tt">jcrule</span> method, the cycle counter for this generation
+is obtained by calling <span class="tt">TPHASE()</span>.  When the new
+value for the cell is returned by <span class="tt">jcrule</span> the cycle
+counter can be automatically incremented and placed in the selected
+planes by returning
+<span class="tt">TPUPD(</span><em>newValue</em><span class="tt">)</span>,
+where <em>newValue</em> is the new value for the cell, leaving
+<span class="tt">TPUPD</span> to fill in the cycle counter.
+</p>
+
+<h3>Parametric Rule Definitions</h3>
+
+<p>
+Certain categories of rules can be defined in a very compact
+form by a few numeric parameters.  The following generators are
+provided by <span class="tt">ruletable</span> which allow
+one-line <span class="tt">jcrule</span> functions which simply
+invoke them with the parameters for the rule desired.
+</p>
+
+
+<dl class="justified">
+    <dt><span class="tt">int NLUKY(<em>N</em>, <em>L</em>,
+    	    <em>U</em>, <em>K</em>, <em>Y</em>)</span></dt>
+	<dd>Returns the new state for an <a href="chap4.html#NLUKY">NLUKY rule</a>
+	with the current state given in <span class="tt">oldstate</span> and the specified
+	parameters for <em>N</em>, <em>L</em>, <em>U</em>, <em>K</em>, and <em>Y</em>.
+	A <span class="tt">jcrule</span> method defining the <a href="rules.html#Brain">Brain rule</a>
+	can be written as:
+<pre>
+    int jcrule(int oldstate) {
+        return NLUKY(1, 2, 2, 9, 9);  // Brain
+    }
+</pre></dd>
+
+    <dt><span class="tt">int TOTALISTIC(<em>code</em>,
+    	    <em>history</em>)</span></dt>
+	<dd class="subsuper">Returns the new value for a
+	<a href="chap4.html#4-TH-vote">totalistic rule</a> with the
+	given <em>code</em>, a number between 0 and 1023 whose
+	2<sup><em>n</em></sup> bit gives the new state when the
+	current state and eight adjacent neighbors sum to
+	<em>n</em>.  If the <span class="tt">boolean</span>
+	argument <em>history</em> is <span
+	class="tt">true</span>, a one bit history of the last
+	state is kept in plane 1.  If <em>history</em> is not
+	specified, <span class="tt">false</span> is assumed. The
+	following <span class="tt">jcrule</span> method is a
+	complete definition of the
+	<a href="rules.html#Vote">Vote</a> rule with a one bit
+	history.
+<pre>
+    int jcrule(int oldstate) {
+        return TOTALISTIC(976, true); // Vote rule with history
+    }
+</pre></dd>
+</dl>
+
+<hr />
+
+<p>
+<a href="ruledef-eval.html" class="i"><img src="icons/previous.png" width="32" height="32"
+    class="button" alt="Previous" /></a>
+&nbsp; &nbsp;
+<a href="chap4.html" class="i"><img src="icons/next.png" width="32" height="32"
+    class="button" alt="Next" /></a>
+&nbsp; &nbsp;
+<a href="cellab.html" class="i"><img src="icons/contents.png" width="32" height="32"
+    class="button" alt="Contents" /></a>
+</p>
+
+</body>
+</html>

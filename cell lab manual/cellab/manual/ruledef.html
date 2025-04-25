@@ -1,0 +1,300 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Defining Rules</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<meta name="description" content="Cellular Automata Laboratory" />
+<meta name="author" content="by Rudy Rucker and John Walker" />
+<link rel="stylesheet" href="../../documents/styles/standard_screen.css"
+    type="text/css" />
+<link rel="stylesheet" href="styles/cellab.css" type="text/css" />
+<style type="text/css">
+</style>
+</head>
+
+<body class="standard">
+
+<table style="width: 100%;">
+<tr><td style="width: 15%; vertical-align: middle; text-align: left;">
+<a class="i" href="https://www.fourmilab.ch/cellab/"><img src="icons/caweb_icon.png" class="button"
+    width="82" height="74"
+    alt="Cellular Automata Laboratory" /></a>
+</td>
+<td class="c">
+<h1>Cellular Automata Laboratory</h1>
+</td>
+<td style="width: 15%; vertical-align: middle; text-align: right;">
+<a class="i" href="https://www.fourmilab.ch/"><img src="../../images/logo/swlogo.png" class="b0"
+    width="82" height="74"
+    alt="Fourmilab home" /></a>
+</td>
+</tr>
+</table>
+
+<hr />
+
+<h1 id="i3-CA-ruledef">Defining Rules</h1>
+
+<p>
+Each cell in the automaton has eight bits of &ldquo;state&rdquo;
+information. The eight state bits are combined to get a number
+between 0 and 255. It is important to thoroughly understand the
+&ldquo;binary&rdquo; or &ldquo;base two&rdquo; system by which
+this is done.  The eight bits in a binary number like
+<span class="ttb">11010010</span> are named and weighted from
+right to left as follows:
+</p>
+
+<table class="ctr">
+    <tr>
+        <th class="l">Bit number</th>
+        <td class="c"> 7</td>
+        <td class="c"> 6</td>
+        <td class="c"> 5</td>
+        <td class="c"> 4</td>
+        <td class="c"> 3</td>
+        <td class="c"> 2</td>
+        <td class="c"> 1</td>
+        <td class="c"> 0</td>
+    </tr>
+    <tr>
+        <th class="l">Value</th>
+        <td class="c"> 1</td>
+        <td class="c"> 1</td>
+        <td class="c"> 0</td>
+        <td class="c"> 1</td>
+        <td class="c"> 0</td>
+        <td class="c"> 0</td>
+        <td class="c"> 1</td>
+        <td class="c"> 0</td>
+    </tr>
+    <tr>
+        <th class="l" rowspan="2">Weight<br />=</th>
+        <td class="c" rowspan="2"> 2<sup>7</sup><br />128</td>
+        <td class="c" rowspan="2"> 2<sup>6</sup><br />64</td>
+        <td class="c" rowspan="2"> 2<sup>5</sup><br />32</td>
+        <td class="c" rowspan="2"> 2<sup>4</sup><br />16</td>
+        <td class="c" rowspan="2"> 2<sup>3</sup><br />8</td>
+        <td class="c" rowspan="2"> 2<sup>2</sup><br />4</td>
+        <td class="c" rowspan="2"> 2<sup>1</sup><br />2</td>
+        <td class="c" rowspan="2"> 2<sup>0</sup><br />1</td>
+    </tr>
+</table>
+
+<p>
+So <span class="ttb">11010010</span> can be viewed as the number
+128+64+16+2=210. Another way of characterizing this number would
+be to say that it has Bits #1, #4, #6, and #7 turned ON, but it
+has Bits #0, #2, #3, and #5 turned OFF. We often think of the
+cellular automaton as having eight planes laid over each other,
+and a cell's state bits as specifying the cell's one-bit states
+in each of the eight planes.  The zero, bottom, or low plane is
+the plane that holds Bit #0.  Note that Bit #0 counts as one in
+forming the number value of an eight bit state pattern, that Bit
+#1 counts as two, Bit #3 counts as four, and so on.  This is
+sometimes a cause of confusion.
+</p>
+
+<p>
+So each cell has a state between binary
+<span class="ttb">00000000</span> and <span class="ttb">11111111</span>
+(decimal 0 and 255).  For a fully general cellular automaton, we
+might expect that at each update each cell can see all eight
+bits of each of its eight nearest neighbors.  (Rug, for
+instance, is a rule of this nature.) But if we were to implement
+such generality for every rule, WebCA would run too slowly.
+Instead, most of the rule definitions require only that
+each cell be able to see the low bit #0 of its nearest eight
+neighbors.  At each generation, each cell has, in other
+words, sixteen bits of information to base its new state on: it
+has the eight bits of its own present state, and it has 8 bits
+of information about its neighbors, one bit (the low #0 bit)
+from each.
+</p>
+
+<p>
+In talking about a cell's neighbors,
+we think of a general cell,
+designated by &bull;, as being surrounded by eight adjacent cells, named
+by the points of the compass.
+</p>
+
+<table class="ctr">
+    <tr>
+        <td class="cp"><span class="tt">NW</span></td>
+        <td class="cp"><span class="tt">N</span></td>
+        <td class="cp"><span class="tt">NE</span></td>
+    </tr>
+    <tr>
+        <td class="cp"><span class="tt">W</span></td>
+        <td class="cp">&bull;</td>
+        <td class="cp"><span class="tt">E</span></td>
+    </tr>
+    <tr>
+        <td class="cp"><span class="tt">SW</span></td>
+        <td class="cp"><span class="tt">S</span></td>
+        <td class="cp"><span class="tt">SE</span></td>
+    </tr>
+</table>
+
+<p>
+The eight bits of a cell's own state are called
+<em>oldstate</em>, and the eight individual bits of the cell's
+neighbors are called <em>NW</em>, <em>N</em>, <em>NE</em>,
+<em>E</em>, <em>SE</em>, <em>S</em>, <em>SW</em>, and <em>W</em>
+respectively. The cell's new state is called <em>newstate</em>.
+Defining a cellular automaton in WebCA involves specifying some
+program, function, or lookup table <em>f</em> for computing the
+output value for all 64K possible sixteen-bit inputs to the
+equation:
+</p>
+
+<p class="c">
+<em>newstate</em> = <em>f</em>(<em>oldstate, NW, N, NE, E, SE, S, SW, W</em>)
+</p>
+
+<p>
+A cell's extra bits of individual state act like an individual memory.
+Keep in mind that a cell can see its own memory bits, but it can't see
+the memory bits of the neighbors. All it can see of its neighbors is
+their lowest bits.
+</p>
+
+<p>
+The collection of all the bits representing the primary state of
+cells, those bits visible to the neighbors, is referred to as
+Plane 0, or the main bit plane. The collection of bits which
+hold the local cell state information are referred to as Planes
+1, 2, 3, 4, 5, 6, and 7. These auxiliary bit planes can be
+configured to provide other information to rules, including
+random bits for rules which include randomness, spatial textures
+for position-dependent rules, and temporal phase for
+time-dependent rules. These uses for Planes 1&ndash;7 compensate for
+many of the limitations that would normally be imposed by
+restricting communication between cells to a single bit of
+state.
+</p>
+
+<p>
+Although most of our rules conform to the description just
+given, it is actually possible to create and run other sorts of
+rules with WebCA.  The three other general classes of
+rules which we allow are as follows:
+</p>
+
+<ol class="spaced">
+    <li>It is possible to define <em>one-dimensional rules</em>,
+    where only the cells on the top line of the screen are
+    updated. These one-dimensional modes are invoked by setting
+    a variable called <span class="tt">worldtype</span>
+    to one of the values 2, 3, 4, 5, 8, or 9.</li>
+
+    <li>It is possible to define <em>averaging rules</em> where
+    the new state depends on the low five bits of
+    <em>oldstate</em> and on the full sum of the states of
+    EveryCell's Neighbor. In <span class="tt">worldtype</span>
+    10, one gets the 11 bit sum of the eight 8-bit neighbors;
+    and in <span class="tt">worldtype</span> 11, one looks at
+    the 10 bit sum of four 8-bit neighbors.
+    <a href="rules.html#Heat">HeatWave</a>
+    is an example of an averaging rule which can be
+    realized in WebCA by using <span class="tt">worldtype</span>
+    10.</li>
+
+    <li>You can create <em>user evaluator rules</em> by writing
+    any desired function which returns a sixteen bit number for
+    each cell.  User evaluator rules are created by writing a
+    JavaScript evaluator function which computes this number.
+    One uses this file by loading it with a rule which has its
+    <span class="tt">worldtype</span> set to 12 or 13.  The
+    <a href="rules.html#Langton">Langton</a> rule is an example
+    of such a rule. The user evaluator for Langton looks at
+    three bits each of EveryCell and its North, South, East, and
+    West neighbors.</li>
+</ol>
+
+<p>
+A rule of any kind is defined by a function, written in either
+JavaScript or Java, which, when called with arguments
+representing the state of the cell and its neighbors, calculates
+and returns the new state of the cell.  Rule functions are not,
+however, used directly while simulating the cellular
+automaton&mdash;calling a function for each cell on every step
+would run hundreds to thousands of times more slowly than the
+simulator operates.  The functional definition of the rule is,
+instead, used to define a rule table which maps the state of the
+cell and its neighbors into the cell's new state.  This rule
+table is either generated directly from a JavaScript definition
+or, for a rule defined in Java, written into a <b>.jc</b> file
+which can be loaded into WebCA to run the automaton it defines.
+</p>
+
+<p>
+You can define rules by writing functions in JavaScript or Java.
+Let's use the most famous cellular automaton of them all, John
+Horton Conway's original game of Life. William Poundstone, in
+<cite>The Recursive
+Universe</cite> <a href="refs.html#Poundstone85">[Poundstone85]</a>,
+gives the rules as follows:
+</p>
+
+<blockquote>
+    <p>
+    Each square cell has eight neighboring cells. It adjoins
+    four cells on its edges and touches four more at the
+    corners. During each moment of time, the player or computer
+    counts the number of neighboring cells that are on for each
+    and every cell.
+    </p>
+
+    <p>
+    If, for a given cell, the number of on neighbors is exactly
+    two, the cell maintains its status quo into the next
+    generation. If the cell is on, it stays on; if it is off, it
+    stays off.
+    </p>
+
+    <p>
+    If the number of neighbors is exactly three, the cell will
+    be on in the next generation. This is so regardless of the
+    cell's present state.
+    </p>
+
+    <p>
+    If the number of on neighbors is zero, one, four, five, six,
+    seven, or eight, the cell will be off in the next
+    generation. There are no other rules.
+    </p>
+</blockquote>
+
+<p>
+Let's see how to turn that into code. The following sections
+explain how to define rules in JavaScript and Java, and how
+to write user evaluators in JavaScript.  Because
+most users are likely to use only one language, information is
+duplicated in these three sections so that each may serve as a
+self-contained guide to rule definition in its respective
+language.
+</p>
+
+<h3 class="nav"><a href="ruledef-js.html">Defining Rules in JavaScript</a></h3>
+<h3 class="nav"><a href="https://www.fourmilab.ch/cellab/manual/ruledef-own.html">Defining User Evaluators</a></h3>
+<h3 class="nav"><a href="ruledef-java.html">Defining Rules in Java</a></h3>
+
+<p></p>
+
+<hr />
+
+<p>
+<a href="rules.html" class="i"><img src="icons/previous.png" width="32" height="32"
+    class="button" alt="Previous" /></a>
+&nbsp; &nbsp;
+<a href="ruledef-js.html" class="i"><img src="icons/next.png" width="32" height="32"
+    class="button" alt="Next" /></a>
+&nbsp; &nbsp;
+<a href="cellab.html" class="i"><img src="icons/contents.png" width="32" height="32"
+    class="button" alt="Contents" /></a>
+</p>
+</body>
+</html>

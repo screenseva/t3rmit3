@@ -1,0 +1,5 @@
+7   //  Mask1: 1 bit only, white if on, black if off
+
+mask 1
+state 0 black
+state 1 white

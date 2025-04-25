@@ -1,0 +1,1076 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Defining Rules in JavaScript</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<meta name="description" content="Cellular Automata Laboratory" />
+<meta name="author" content="by Rudy Rucker and John Walker" />
+<link rel="stylesheet" href="../../documents/styles/standard_screen.css"
+    type="text/css" />
+<link rel="stylesheet" href="styles/cellab.css" type="text/css" />
+<style type="text/css">
+</style>
+</head>
+
+<body class="standard">
+
+<table style="width: 100%;">
+<tr><td style="width: 15%; vertical-align: middle; text-align: left;">
+<a class="i" href="https://www.fourmilab.ch/cellab/"><img src="icons/caweb_icon.png" class="button"
+    width="82" height="74"
+    alt="Cellular Automata Laboratory" /></a>
+</td>
+<td class="c">
+<h1>Cellular Automata Laboratory</h1>
+</td>
+<td style="width: 15%; vertical-align: middle; text-align: right;">
+<a class="i" href="https://www.fourmilab.ch/"><img src="../../images/logo/swlogo.png" class="b0"
+    width="82" height="74"
+    alt="Fourmilab home" /></a>
+</td>
+</tr>
+</table>
+
+<hr />
+
+<h1>Defining Rules in JavaScript</h1>
+
+<p>
+To define a rule in JavaScript, you write a rule function which,
+when called with an argument containing the state of a cell and
+the state of its neighbors in variables, returns the new state
+for the cell as an integer from 0 to 255 (the low bit #0 is the
+state of Plane 0, bit #1 is the state of Plane 1 and so on). 
+The rule function program is loaded into a text box in the WebCA
+page, and run to generate the lookup table for the rule.
+</p>
+
+<p>
+Recapitulating, use your text editor to write a program called
+<b>mylife.js</b>.  Then paste the program into the Rule Program
+box in WebCA, press &ldquo;Generate&rdquo; to run it and
+generate the rule table, and now you're ready to run the rule by
+pressing the &ldquo;Start&rdquo; button below the map display.
+</p>
+
+<p>
+To understand how to write a rule
+program, first we must consider the neighborhood of a cell, as
+seen by the function through its arguments.  The rule is defined as
+a function of the form:
+</p>
+
+<pre>
+function <em>ruleName</em>(oldstate,
+    	    	    	    nw, n  , ne,
+                     	    w, self, e,
+                      	    sw, s  , se
+                          ) {
+    var newSelf;
+
+    //  Calculate value for newSelf
+
+    return newSelf;
+}
+</pre>
+
+<p>
+The rule function sees the neighborhood
+through the following arguments:
+</p>
+
+<table class="ctr" style="font-family: monospace;">
+    <tr>
+        <td class="cp">nw</td>
+        <td class="cp">n</td>
+        <td class="cp">ne</td>
+    </tr>
+    <tr>
+        <td class="cp">w</td>
+        <td class="cp">self</td>
+        <td class="cp">e</td>
+    </tr>
+    <tr>
+        <td class="cp">sw</td>
+        <td class="cp">s</td>
+        <td class="cp">se</td>
+    </tr>
+</table>
+
+<p>
+Each of these variables will be 1 if the low-order bit of the
+corresponding cell in the neighborhood is on, and 0 if it is
+off. In addition, the rule function may examine the argument
+<span class="tt">oldstate</span>, which contains the full state
+of the center cell (eight bit planes). Thus,
+<span class="tt">oldstate</span> ranges from 0 to 255, with the
+presence of low bit (also supplied in variable
+<span class="tt">self</span>) signifying the state of Plane 0.  The
+function defining the rule must examine these input variables,
+calculate the resulting state for the cell (from 0 to 255), and
+return that value. The following sample code, including the
+required declarations and main program, defines the game of
+Life, proceeding directly from Poundstone's description.
+</p>
+
+<pre>
+function mylife(oldstate,
+    	    	    nw, n  , ne,
+            	    w, self, e,
+              	    sw, s  , se
+              ) {
+    var eightSum, newSelf = 0;
+
+    /*  We sum up the number of firing neighbor cells.  If this
+        eightSum is anything other than 2 or 3, the cell gets
+        turned off.  If the eightSum is 2, the cell stays in its
+        present state.  If the eightSum is 3, the cell gets turned
+        on.  */
+    eightSum = nw + n + ne + e + se + s + sw + w;
+    
+    switch (self) {
+        case 0:
+            if (eightSum == 3) {
+                newSelf = 1;
+            } else {
+                newSelf = 0;
+            }
+            break;
+
+        case 1:
+            if (eightSum == 2 || eightSum == 3) {
+                newSelf = 1;
+            } else {
+                newSelf = 0;
+            }
+            break;
+    }
+
+    return newSelf;
+}
+</pre>
+
+<p>
+You can try pasting the program above into the Rule Program box
+of WebCA, press &ldquo;Generate&rdquo;, and then press
+&ldquo;Start&rdquo; to watch the <b>mylife</b> rule run.
+</p>
+
+<p>
+As it turns out, the <b>life.js</b> rule program provided with
+<cite>CelLab</cite> is similar but not quite the same as
+<b>mylife</b>.  Our Life is actually the rule
+&ldquo;LifeMem,&rdquo; which colors the cells differentially
+depending on their state in the last generation.  But our
+<b>life.js</b> is quite similar to what you want for
+<b>mylife.js</b>, so you should copy <b>life.js</b> onto
+<b>mylife.js</b> and use that as the starting point for your
+program.
+</p>
+
+<p>
+So the steps for running mylife are as follows: copy the
+existing <b>life.js</b> file to a new <b>mylife.js</b>
+file.  Then use your text editor to work on <b>mylife.js</b>.
+Once you have <b>mylife.js</b> in shape, paste it into
+the Rule Program box of WebCA, press Generate, then press
+Start.
+</p>
+
+
+<p id="Brain-js">
+Since the rule for the game of Life doesn't use bit-planes #1
+through #7 at all, the <b>mylife.js</b> rule program contains
+no reference to <span class="tt">oldstate</span>.  Rules which
+use the higher bit-planes may also be specified
+straightforwardly by JavaScript rule definition functions. For
+example, here is the definition of
+<a href="rules.html#Brain">Brian's Brain</a>, a rule
+developed by Brian Silverman and described in
+<a href="refs.html#Margolus_Toffoli87">[Margolus&amp;Toffoli87]</a>, p. 47, as:
+</p>
+
+<blockquote>
+    <p>
+    The rule involves cells having three states, 0
+    (&ldquo;ready&rdquo;), 1 (&ldquo;firing&rdquo;). and 2
+    (&ldquo;refractory&rdquo;). A ready cell will fire when
+    exactly two of its eight neighbors are firing; after firing
+    it will go into a refractory state, where it is insensitive
+    to stimuli, and finally it will go back to the ready state.
+    </p>
+</blockquote>
+
+<p>
+This translates directly into a JavaScript program as follows:
+</p>
+
+<pre>
+/*
+    Each cell has three states, though only one bit of the state
+    is used to determing whether neighbors are on or off.  The
+    rule is as follows:
+
+      Old cell state       New state
+
+      0 (Ready)             1 if exactly 2 neighbors in state 1,
+                            0 otherwise.
+      1 (Firing)            2
+      2 (Refractory)        0
+*/
+
+function brain(oldstate,     nw, n  , ne,
+                             w, self, e,
+                             sw, s  , se) {
+    var count = nw + n + ne + w + self + e + sw + s + se;
+
+    if (oldstate == 2) {       // If in refractory state...
+       return 0;               // ...become ready.
+    }
+    if (oldstate == 1) {       // If firing...
+       return 2;               // ...go to refractory state.
+    }
+    return (count == 2) ? 1 : 0; /* If ready, fire if precisely
+                                    two neighbors are firing. */
+}
+</pre>
+
+<p id="Sublime-js">
+It is possible to define much more complicated rules by using
+the high bits for various bookkeeping purposes.  Here is an
+example of a rule that simulates thermally driven random
+diffusion. The theory of <a href="chap4.html#i4-TH-lattice">why
+the program works</a> is explained in the <a
+href="chap4.html"><cite>Theory</cite></a> chapter.
+</p>
+
+<pre>
+/*
+
+    This rule implements the Margolus rule for simulating a gas of
+    cells diffusing.  Particle number is conserved.  We set up a
+    lattice of position values that looks like this:
+
+                    0 1 0 1 ..
+                    2 3 2 3 ..
+                    0 1 0 1 ..
+                    2 3 2 3 ..
+                    : : : :
+
+    This lattice is alternately chunked into
+
+           A blocks 0 1   and  B blocks 3 2
+                    2 3                 1 0
+
+    and the blocks are randomly rotated one notch CW or one notch CCW.
+
+    We use the eight bits of state as follows:
+
+    Bit  #0 is used to show info to neighbors
+    Bit  #1 is the gas bit
+    Bit  #2 is fed by the system Noiseizer
+    Bit  #3 stores the 4-cell consensus on direction 0 is CCW, 1 is CW
+    Bits #4 &amp; #5 hold a position numbers between 0 and 3
+    Bits #6 &amp; #7 control the cycle
+
+*/
+
+    rule.worldtype = 1;          // 2D torus world
+    rule.patreq = "sublime";
+    rule.palreq = "sublime";
+
+    rule.randb = 2;             // Random input
+    rule.randn = 1;
+
+    rule.rseedb = 0;            // Initial random seed
+    rule.rseedn = 1;
+
+    /*  We set a horizontal pattern of alternate 0s and 1s in bit 4
+        and a vertical pattern of alternate 0s and 1s in bit 5.
+        This produces a pattern that goes 0 1 0 1 ..
+                                          2 3 2 3 ..
+                                          0 1 0 1 ..
+                                          2 3 2 3 ..
+                                          : : : :     */
+
+    rule.texthb = 4;            // Horizontal texture
+    rule.texthn = 1;
+
+    rule.textvb = 5;            // Vertical texture
+    rule.textvn = 1;
+
+    rule.tempb = 6;             // Temporal phase
+    rule.tempn = 2;
+
+    function sublime(oldstate,     nw, n  , ne,
+                                   w, self, e,
+                                   sw, s  , se) {
+        var Cycle, Position, Direction, NewDirection = 0,
+            Noise, Gas, NewGas = 0, r = 0;
+
+        Cycle = TPHASE();
+        Position = HVPHASE();
+        Direction = BITFIELD(3);
+        Noise = BITFIELD(2);
+        Gas = BITFIELD(1);
+
+        switch (Cycle) {
+            case 0:                   // In A block mode set direction to NW's
+                switch (Position) {
+                    case 0:
+                        NewDirection = self;
+                        break;
+
+                    case 1:
+                        NewDirection = w;
+                        break;
+
+                    case 2:
+                        NewDirection = n;
+                        break;
+
+                    case 3:
+                        NewDirection = nw;
+                        break;
+                }
+                r = TPUPD(BF(Position, 4) | BF(NewDirection, 3) |
+                          BF(Gas, 1) | Gas);
+                break;
+
+            case 2:                   // In B block mode set direction to NW's
+                switch (Position) {
+                    case 0:
+                        NewDirection = nw;
+                        break;
+
+                    case 1:
+                        NewDirection = n;
+                        break;
+
+                    case 2:
+                        NewDirection = w;
+                        break;
+
+                    case 3:
+                        NewDirection = self;
+                        break;
+                }
+                r = TPUPD(BF(Position, 4) | BF(NewDirection, 3) |
+                          BF(Gas, 1) | Gas);
+                break;
+
+            case 1:
+                switch (Direction) {
+                    case 0:           // CCW rotation of an A block
+                        switch (Position) {
+                            case 0:
+                                NewGas = e;
+                                break;
+                            case 1:
+                                NewGas = s;
+                                break;
+                            case 2:
+                                NewGas = n;
+                                break;
+                            case 3:
+                                NewGas = w;
+                                break;
+                        }
+                        break;
+
+                    case 1:           // CW rotation of an A block
+                        switch (Position) {
+                            case 0:
+                                NewGas = s;
+                                break;
+                            case 1:
+                                NewGas = w;
+                                break;
+                            case 2:
+                                NewGas = e;
+                                break;
+                            case 3:
+                                NewGas = n;
+                                break;
+                        }
+                        break;
+                }
+                r = TPUPD(BF(Position, 4) | BF(Direction, 3) |
+                          BF(NewGas, 1) | Noise);
+                break;
+
+            case 3:
+                switch (Direction) {
+                    case 0:           // CCW rotation of a B block
+                        switch (Position) {
+                            case 0:
+                                NewGas = w;
+                                break;
+                            case 1:
+                                NewGas = n;
+                                break;
+                            case 2:
+                                NewGas = s;
+                                break;
+                            case 3:
+                                NewGas = e;
+                                break;
+                        }
+                        break;
+
+                    case 1:           // CW rotation of a B block
+                        switch (Position) {
+                            case 0:
+                                NewGas = n;
+                                break;
+                            case 1:
+                                NewGas = e;
+                                break;
+                            case 2:
+                                NewGas = w;
+                                break;
+                            case 3:
+                                NewGas = s;
+                                break;
+                        }
+                        break;
+                }
+                r = TPUPD(BF(Position, 4) | BF(Direction, 3) |
+                          BF(NewGas, 1) | Noise);
+                break;
+        }
+        return r;
+
+        //  Return bit set for plane
+        function BIT(p) {
+            return 1 &lt;&lt; p;
+        }
+
+        //  Test if bit p is set in oldstate
+        function BITSET(p) {
+            return (oldstate &amp; BIT(p)) != 0;
+        }
+
+        //  Extract bit from oldstate
+        function BITFIELD(p) {
+            return B(BITSET(p));
+        }
+
+        /*  Mask for N contiguous bits with low order bit in plane P.  Note
+            how this definition craftily generates masks of zero when a
+            zero bit field is specified.  */
+        function BITMASK(p, n) {
+            return BIT(p + n) - BIT(p);
+        }
+
+        //  Test value nonzero
+        function B(i) {
+            return i ? 1 : 0;
+        }
+
+        //  Place a value in a specified bit field
+        function BF(v, p) {
+            return v &lt;&lt; p;
+        }
+
+        //  Return horizontal phase of oldstate
+        function HPHASE() {
+            return (oldstate &gt;&gt; rule.texthb) &amp; BITMASK(0, rule.texthn);
+        }
+
+        //  Return vertical phase of oldstate
+        function VPHASE() {
+            return (oldstate &gt;&gt; rule.textvb) &amp; BITMASK(0, rule.textvn);
+        }
+
+        //  Return horizontal and vertical phase together, vertical most sig.
+        function HVPHASE() {
+            return (VPHASE() &lt;&lt; rule.texthn) | HPHASE();
+        }
+
+        //  Return temporal phase of oldstate
+        function TPHASE() {
+            return (oldstate &gt;&gt; rule.tempb) &amp; BITMASK(0, rule.tempn);
+        }
+
+        //  Update temporal phase in state x
+        function TPUPD(x) {
+            return (x &amp; (~(BITMASK(rule.tempb, rule.tempn)))) |
+                    (((TPHASE() + 1) &amp; BITMASK(0, rule.tempn)) &lt;&lt; rule.tempb);
+        }
+    }
+</pre>
+
+<p>
+For now don't worry about the intricacy of the definition
+of the <span class="tt">sublime</span> function.  Instead, let's
+focus on the assignment statements before the function
+declaration, which we haven't encountered before.  These
+statements make up what we call the &ldquo;prologue&rdquo; of
+the rule program, and are executed before the rule is generated.
+They can set up various modes which affect how the rule is
+generated and/or perform any initialization needed by the rule
+function.  <b>mylife</b> and <b>brain</b> didn't need to change
+any of the modes from the defaults, so their definitions didn't
+include a prologue.
+</p>
+
+<p>
+A variety of variables in the <span class="tt">rule</span>
+object can be set from in the prologue to specify rule
+generation modes or options for the simulator.  These fall into
+the following categories.
+</p>
+
+<ol class="roman">
+
+    <li><em>StartUp.</em>
+        <span class="tt">rule.palreq</span>,
+        <span class="tt">rule.patreq</span>,
+        and <span class="tt">rule.ocodereq</span>
+        allow you to have your rule start by loading a
+        <b>.jcc</b> color palette, a <b>.jcp</b> start pattern,
+	    and/or a user evaluator (own code) written in
+    	JavaScript.
+    </li>
+
+    <li><em>Background.</em>
+        The <span class="tt">rule.randb</span>,
+	    <span class="tt">rule.randn</span>,
+	    <span class="tt">rule.texthb</span>,
+	    <span class="tt">rule.texthn</span>,
+	    <span class="tt">rule.textvb</span>,
+	    <span class="tt">rule.textvn</span>,
+	    <span class="tt">rule.rseedb</span>,
+	    <span class="tt">rule.rseedn</span>, and
+	    <span class="tt">rule.rseedp</span>
+	    variables control what we call textures of bits that
+	    your rule can automatically load into selected planes. 
+	    These texture bits are often left invisible.
+    </li>
+
+    <li><em>Topology.</em>
+	    The <span class="tt">rule.worldtype</span> variable
+	    specifies whether the screenwrap is to be on, whether
+	    you want to consider your rule to be two-dimensional or
+	    one-dimensional, and how many bits of how many neighbors
+	    are visible to the rule program.
+    </li>
+</ol>
+
+<h4 id="t1">StartUp</h4>
+
+<p>
+<span class="tt">rule.palreq</span> and <span
+class="tt">rule.patreq</span> are particularly useful for
+creating rules to be shown by self-running demos. If <span
+class="tt">rule.palreq</span> and <span
+class="tt">rule.patreq</span> are not called in your rule
+prologue, the pattern and the color palette left over from the
+last rule are used.  If you have just loaded the simulator, the
+<b>default.jcc</b> color palette is loaded and the starting
+pattern will consist of all zeroes in planes #1 through #7, with
+random bits of plane #0 turned on.  This start will be modified
+by the rule's texture settings, if any.
+</p>
+
+<p>
+If a rule requests a <b>.jcc</b>, <b>.jcp</b>, or <b>.js</b>
+evaluator file which is not in available on the server, a
+warning message appears to let you know the file requested by
+the rule could not be found, leaving the previous color palette,
+pattern, or no user evaluator in effect.
+</p>
+
+<h4 id="t2">Background</h4>
+
+<p>
+With <span class="tt">rule.randb</span>, and
+<span class="tt">rule.randn</span> we can have random bits fed into
+any span of bits that we like. Setting
+<span class="tt">rule.randn</span> causes the simulator to randomize
+the contents of <span class="tt">rule.randn</span> planes,
+starting with plane <span class="tt">rule.randb</span>.  New
+random data are stored into the requested planes on each
+generation. For example, if you specify
+<span class="tt">rule.randb=2; rule.randn=3;</span>, the simulator
+will put random bits in planes #2, #3, and #4.  The density of
+these random bits will always be 50%, meaning that approximately
+half of each randomized plane's cells will be set to 0 and half
+to 1.  If you require a randomness of, say, 25% ones, you can
+simulate it by filling two planes with random bits and looking
+for the cells that have both bits set to 1.  The
+<span class="tt">rule.texthb</span>,
+<span class="tt">rule.texthn</span>,
+<span class="tt">rule.textvb</span>, and
+<span class="tt">rule.textvn</span>, variables feed in horizontal and/or
+vertical texture. <span class="tt">rule.texthb</span> specifies
+the starting plane of the horizontal texture and <span
+class="tt">rule.texthn</span> the number of bits of horizontal
+texture (0 for none). Similarly,
+<span class="tt">rule.textvb</span> specifies the starting plane of
+the vertical texture and <span class="tt">rule.textvn</span> the
+number of bits of vertical texture (0 for none). If I have one
+bit of texture, that means that the texture bit will cycle
+between 0 and 1.  If I were to use
+<span class="tt">rule.texthb=5;</span> and
+<span class="tt">rule.texthn=2;</span> however, I would get two bits
+of texture, meaning that the fifth and six bits would cycle
+through <span class="ttb">00</span>,
+<span class="ttb">01</span>, <span class="ttb">10</span>,
+<span class="ttb">11</span>, <span class="ttb">00</span>,
+<span class="ttb">01</span>, <span class="ttb">10</span>,
+<span class="ttb">11</span>, and so on across the screen. Vertical
+texture works the same way, and the combination of horizontal
+and vertical can produce a more complicated pattern as in
+Sublime.
+</p>
+
+<p>
+The
+<span class="tt">rule.rseedb</span>,
+<span class="tt">rule.rseedn</span>, and
+<span class="tt">rule.rseedp</span>
+variables allow you to start up a rule with random seed bits
+in some planes. If you only want some random bits for the startup, but
+don't want them to keep coming in later, use
+these variables
+instead of <span class="tt">rule.randb</span> and
+<span class="tt">rule.randn</span>.
+<span class="tt">rule.rseedb</span> specifies what plane to
+begin random seeding at, and
+<span class="tt">rule.rseedn</span> tells it how many planes to
+seed (0 for none). In addition,
+<span class="tt">rule.rseedp</span> allows you to specify the percentage of ones you want.  (This
+is <em>not</em> possible for
+random input set by <span class="tt">rule.randb</span> and
+<span class="tt">rule.randn</span>,
+which always seeds
+at 50%.) <span class="tt">rule.rseedp</span> can be set to any value between 0 and 255.
+These settings correspond to a percentage of ones which goes from 0%
+to 50%.  Thus a setting of 255 means 50% ones and 50% zeroes, while
+a setting of 128 means 25% ones and 75% zeroes.
+If <span class="tt">rule.rseedp</span> is not set, 255 is used,
+generating a seed with 50% ones and 50% zeroes.
+</p>
+
+<p>
+Thus if I set
+<span class="tt">rule.rseedb=2</span>,
+<span class="tt">rule.rseedn=1</span>, and
+<span class="tt">rule.rseedp=128</span> in my
+prologue, then plane #2 will be randomized at the start of
+execution of the rule by a pattern that is 25% ones, but it will
+not be randomized again.
+</p>
+
+<p>
+The primary purpose of
+<span class="tt">rule.rseedb</span>,
+<span class="tt">rule.rseedn</span>, and
+<span class="tt">rule.rseedp</span>
+is to make it possible to request a start pattern with
+randomness in some special planes without having to store the
+random information as part of the start pattern. Look at
+<a href="rules.html#Soot">Soot</a> or
+<a href="rules.html#Dendrite">Dendrite</a> for examples of this.
+The reason you don't want to have to store a <b>.jcp</b> file
+which has random bits in one of its planes is that then the file
+will be about 64K bytes in size, and will take up more space and
+download time than you really want to give it.  Because the Soot
+pattern gets its &ldquo;random gas&rdquo; from
+<span class="tt">rule.rseed</span><em>x</em>,
+its <b>.jcp</b> file is only some 2K bytes instead of 64K.
+</p>
+
+<p>
+When a rule is running, you can see what kinds of texture the rule
+requested by looking at the WebCA
+<a href="webca.html#rulemodes">Rule Modes</a> dialogue.
+</p>
+
+<p>
+A special feature of horizontal and vertical textures is that
+you can't get rid of them through editing or changing patterns. 
+The idea is that if your rule calls for these textures, then it
+needs them, so they are put back in every time you leave the map
+editor or load a new pattern.  The initial random seed planes
+are re-randomized whenever you load a new pattern, but not when
+you leave the map editor.
+</p>
+
+<h4 id="t3">Topology</h4>
+
+<p>
+<span class="tt">rule.worldtype</span> variable specifies three
+things: a) Whether your screens wrap around the edges, b)
+Whether a rule is two-dimensional or one-dimensional, and c) How
+big a neighborhood you want to look at, and how many bits of
+each neighbor you want to see.
+</p>
+
+<p>
+The most commonly used <span class="tt">rule.worldtype</span> is 1,
+which means a two dimensional
+world with wrap turned on. It was actually unnecessary to set
+<span class="tt">rule.worldtype</span> to 1 in the Sublime rule, because
+<span class="tt">rule.worldtype</span> always defaults to 1. To get a two
+dimensional world with the wrap turned off, use
+<span class="tt">rule.worldtype=0;</span>.
+</p>
+
+<p>
+If you set <span class="tt">rule.worldtype</span> to one of the
+values 3, 4, 5, 6, 8, or 9, your rule will act on a
+one-dimensional (1D) world.
+</p>
+
+<p>
+The 1D rules work by first copying each line of the screen onto the
+line below it, and by then filling in the top line with a new line
+calculated according to the rule function.  This produces a spacetime
+trail of the 1D rule, with earlier times appearing lower on the screen
+like geological strata.
+</p>
+
+<p>
+Our simulator is built to suck in eight bits of neighborhood
+information.  We allow it to get neighborhood information in
+several different ways.  These ways correspond to
+<span class="tt">rule.worldtype</span> setting as listed below:
+</p>
+
+<table class="ctr">
+    <tr>
+        <th><span class="tt">worldtype</span></th>
+        <th>Dimensionality</th>
+        <th>Wrap?</th>
+        <th>Neighbors</th>
+        <th>Bits</th>
+    </tr>
+    <tr>
+        <td class="cp2">0</td>
+        <td class="cp2">2D</td>
+        <td class="cp2"> NoWrap</td>
+        <td class="cp2"> 8</td>
+        <td class="cp2">  1</td>
+    </tr>
+    <tr>
+        <td class="cp2">1</td>
+        <td class="cp2">2D</td>
+        <td class="cp2"> Wrap</td>
+        <td class="cp2"> 8</td>
+        <td class="cp2">  1</td>
+    </tr>
+    <tr>
+        <td class="cp2">2</td>
+        <td class="cp2">1D</td>
+        <td class="cp2"> NoWrap</td>
+        <td class="cp2"> 8</td>
+        <td class="cp2">  1</td>
+    </tr>
+    <tr>
+        <td class="cp2">3</td>
+        <td class="cp2">1D</td>
+        <td class="cp2"> Wrap</td>
+        <td class="cp2"> 8</td>
+        <td class="cp2">  1</td>
+    </tr>
+    <tr>
+        <td class="cp2">4</td>
+        <td class="cp2">1D</td>
+        <td class="cp2"> NoWrap</td>
+        <td class="cp2"> 4</td>
+        <td class="cp2">  2</td>
+    </tr>
+    <tr>
+        <td class="cp2">5</td>
+        <td class="cp2">1D</td>
+        <td class="cp2"> Wrap</td>
+        <td class="cp2"> 4</td>
+        <td class="cp2">  2</td>
+    </tr>
+    <tr>
+        <td class="cp2">8</td>
+        <td class="cp2">1D</td>
+        <td class="cp2"> NoWrap</td>
+        <td class="cp2"> 2</td>
+        <td class="cp2">  4</td>
+    </tr>
+    <tr>
+        <td class="cp2">9</td>
+        <td class="cp2">1D</td>
+        <td class="cp2"> Wrap</td>
+        <td class="cp2"> 2</td>
+        <td class="cp2">  4</td>
+    </tr>
+    <tr>
+        <td class="cp2">10</td>
+        <td class="cp2">2D</td>
+        <td class="cp2"> Wrap</td>
+        <td class="cp2"> 8</td>
+        <td class="cp2">  Sum of 8</td>
+    </tr>
+    <tr>
+        <td class="cp2">11</td>
+        <td class="cp2">2D</td>
+        <td class="cp2"> Wrap</td>
+        <td class="cp2"> 4</td>
+        <td class="cp2">  Sum of 4</td>
+    </tr>
+    <tr>
+        <td class="cp2">12</td>
+        <td class="cp2">User</td>
+        <td class="cp2"> NoWrap</td>
+        <td class="cp2"> User</td>
+        <td class="cp2">  User</td>
+    </tr>
+    <tr>
+        <td class="cp2">13</td>
+        <td class="cp2">User</td>
+        <td class="cp2"> Wrap</td>
+        <td class="cp2"> User</td>
+        <td class="cp2">  User</td>
+    </tr>
+</table>
+
+<p>
+When we are in one of the three 1D modes the values of the
+neighboring cells are passed in variables as follows:
+</p>
+
+<table class="ctr">
+    <tr>
+        <th colspan="9"><span class="tt">worldtype</span> 2, 3: Eight Neighbors, 1 bit each</th>
+    </tr>
+    <tr>
+        <td class="cp2">N8L4</td>
+        <td class="cp2">N8L3</td>
+        <td class="cp2">N8L2</td>
+        <td class="cp2">N8L1</td>
+        <td class="cp2">oldstate</td>
+        <td class="cp2">N8R1</td>
+        <td class="cp2">N8R2</td>
+        <td class="cp2">N8R3</td>
+        <td class="cp2">N8R4</td>
+    </tr>
+</table>
+
+<p></p>
+
+<table class="ctr">
+    <tr>
+        <th colspan="5"><span class="tt">worldtype</span> 4, 5: Four Neighbors, 2 bits each</th>
+    </tr>
+    <tr>
+        <td class="cp2">N4L2</td>
+        <td class="cp2">N4L1</td>
+        <td class="cp2">oldstate</td>
+        <td class="cp2">N4R1</td>
+        <td class="cp2">N4R2</td>
+    </tr>
+</table>
+
+<p></p>
+
+<table class="ctr">
+    <tr>
+        <th colspan="3"><span class="tt">worldtype</span> 8, 9: Two Neighbors, 4 bits each</th>
+    </tr>
+    <tr>
+        <td class="cp2">N2L1</td>
+        <td class="cp2">oldstate</td>
+        <td class="cp2">N2R1</td>
+    </tr>
+</table>
+
+<p id="Aurora-java">
+To give an example of a one-dimensional rule, I give the code
+for the rule <b>aurora.js</b> below.
+<a href="rules.html#Aurora">Aurora</a> uses two four-bit
+neighbors, so we use arguments <span class="tt">l</span> and
+<span class="tt">r</span> to reference their four-bit values.
+We extract the four-bit value of the cell's own state by ANDing
+<span class="tt">oldstate</span> with 15.  This gets the low
+four bits out of <span class="tt">oldstate</span> because 15 in
+binary is <span class="ttb">00001111</span>, and ANDing any of
+the eight bits <em>B</em> in <span class="tt">oldstate</span>
+with a 0 produces 0, while ANDing a bit <em>B</em> with a 1
+produces <em>B</em>.
+</p>
+
+<pre>
+/*
+
+    A one dimensional rule with two neighbors, and 4 bits of each
+    neighbor visible.  This is run as a sixteen state rule, where
+            NewC = (L + OldC + R ) / 3 + 1.
+
+*/
+
+rule.worldtype = 9; 	    // 1D ring world, 2 neighbors
+rule.palreq = "aurora";
+rule.rseedb = 0;            // Initial random seed, planes 0-3
+rule.rseedn = 4;
+
+function aurora(oldstate,     l, self, r) {
+    return ((l + (oldstate &amp; 15) + r) / 3) + 1;
+}
+</pre>
+
+<p>
+In the rule descriptions later in this document I give an
+example of a <span class="tt">worldtype</span> 5 rule
+(<a href="rules.html#ShortPi">ShortPi</a>) and an example of a
+<span class="tt">worldtype</span> 2 rule
+(<a href="rules.html#Axons">Axons</a>).
+</p>
+
+<p>
+Setting <span class="tt">rule.worldtype</span> 10 or 11 causes the
+simulator to evaluate <em>averaging rules</em>.  These rules
+were devised to allow generalizations of the
+<a href="rules.html#Rug">Rug</a> rule.  In
+both of these modes the screen is wrapped.
+<span class="tt">rule.worldtype=10;</span> computes the sum of EveryCell's
+eight nearest neighbors, and
+<span class="tt">rule.worldtype=11;</span> gets the sum of EveryCell's four
+nearest neighbors.
+</p>
+
+<p>
+In the averaging rules, the <span class="tt">oldstate</span>
+argument passed to the rule function holds the low
+five bits of the EveryCell's old eightbit state, the sum of
+EveryCell's neighbors is in the argument
+<span class="tt">SUM_8</span> (for <span class="tt">rule.worldtype=10;</span>)
+or <span class="tt">SUM_4</span>
+(for <span class="tt">rule.worldtype=11;</span>). (Eight neighbors in
+<span class="tt">rule.worldtype=10;</span>, and 4 neighbors in
+<span class="tt">rule.worldtype=11;</span>.)  This sum can take
+as many as eleven bits to write out, which is why we are only
+allowed to see five bits of EveryCell's old state.  The
+limitation is that our rules use lookup tables whose entries are
+indexed by sixteen bit &ldquo;situation&rdquo; codes.
+</p>
+
+<p id="Heat-js">
+As an example of <span class="tt">rule.worldtype=10;</span>,
+here is a program called
+<a href="rules.html#Heat">Heat</a>.  A Heat cell takes a straight
+average of its neighbor cells, except that if a cell has its low
+bit on, the cell's value is kept fixed. The idea is that this
+rule is to simulate the heat flow in a metal plate certain of
+whose locations are kept fixed at certain temperature values.
+</p>
+
+<pre>
+/*
+
+    This is an eight cell averaging rule with zero increment.
+
+    Odd states are frozen states and even states generate
+    even states. One can reanimate the vacuum by
+    re-randomizing bitplanes 5 or 6.
+
+*/
+
+rule.worldtype = 10;         // 2D open semitotalistic rule
+
+function heat(oldstate, SUM_8) {
+    var r = 0;
+
+    if ((oldstate &amp; 1) &gt; 0) {
+        if (oldstate &lt; 16) {
+            r = oldstate;
+        } else {
+            r = oldstate + 128;
+        }
+    } else {
+        r = (SUM_8 &gt;&gt; 3) &amp; 0xFE;
+    }
+    return r;
+}
+</pre>
+
+<p>
+<span class="tt">rule.worldtype=12;</span> and
+<span class="tt">rule.worldtype=13;</span> are for
+&ldquo;user evaluator rules.&rdquo;
+Type 12 has wrap turned off, with zero on the boundary; and Type
+13 is the torus wrap mode.  To run a rule of
+<span class="tt">rule.worldtype</span> 12 or 13, one must have a
+predefined user evaluator function. These functions are written
+in JavaScript and have extension <b>.js</b>. They are
+<a href="ruledef-eval.html">discussed more fully</a> later in this
+manual.
+</p>
+
+<p id="Rug-java">
+The Rug rule below is an example of a rule of this type.  I
+could have written a similar Rug rule using
+<span class="tt">rule.worldtype=10;</span>,
+but I wanted to have the wrap off.  The WebCA Rug rule calls an
+evaluator function called <b>semi8</b> which returns the eleven
+bit sum of the eight nearest neighbors, so we can use this
+function to define a rug rule.
+</p>
+
+<pre>
+/*
+
+    This program runs an eight cell averaging rule of eight bits
+    per cell.  We program it as a nowrap worldtype 12 calling
+    the semi8 evaluator.
+
+*/
+
+rule.worldtype = 12;         // User evaluator, 2D open world
+rule.ocodereq = "semi8";
+
+function rug(lutindex) {
+    return ((lutindex &gt;&gt; 3) + 1) &amp; 0xFF;
+}
+</pre>
+
+<p>
+The speed at which the simulator runs depends only on the
+<span class="tt">rule.worldtype</span> you have set.  It does not
+depend at all on the complexity of the JavaScript rule you write
+or on the start pattern you select; it is completely constant. 
+Thus, there is no need to make the function that defines the
+rule efficient&mdash;it is executed only to create the rule
+definition file, then never used again.  The paramount
+consideration in writing a rule program is that it be clearly
+expressed so that you can come back to it later and still be
+able to tell what you were trying to do.
+</p>
+
+<p>
+<b>.js</b> rule programs are provided for all the WebCA demos. 
+A good way to start writing rules of your own is to copy one of
+our rules onto your own file <b>first.js</b>.  Then you can edit
+<b>first.js</b> to your own purposes, paste it into the rule
+program box, and Generate  and run it.  If your rule happens to
+return a value for outside the range 0&ndash;255, or supplies
+invalid arguments to one of the prologue variables, you will get
+an alert when the attempt to generate the rule.  If this
+happens, fix your program and try again.
+</p>
+
+<hr />
+
+<p>
+<a href="ruledef.html" class="i"><img src="icons/previous.png" width="32" height="32"
+    class="button" alt="Previous" /></a>
+&nbsp; &nbsp;
+<a href="ruledef-eval.html" class="i"><img src="icons/next.png" width="32" height="32"
+    class="button" alt="Next" /></a>
+&nbsp; &nbsp;
+<a href="cellab.html" class="i"><img src="icons/contents.png" width="32" height="32"
+    class="button" alt="Contents" /></a>
+</p>
+
+</body>
+</html>

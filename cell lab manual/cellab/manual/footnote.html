@@ -1,0 +1,601 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Footnotes</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<meta name="description" content="Cellular Automata Laboratory" />
+<meta name="author" content="by Rudy Rucker and John Walker" />
+<link rel="stylesheet" href="../../documents/styles/standard_screen.css"
+    type="text/css" />
+<link rel="stylesheet" href="styles/cellab.css" type="text/css" />
+<style type="text/css">
+    p.back {
+        padding-bottom: 120ex;
+    }
+</style>
+<script type="text/javascript" src="../../documents/scripts/externalLinks.js">
+</script>
+</head>
+
+<body class="standard" onload="externalLinks();">
+<p id="F1_1">
+In <a href="refs.html#Feynman82">[Feynman82]</a>, Richard
+Feynman seems to say that CAs cannot be a perfect model for the
+world because nature does in fact have action at a distance in
+the form of the kind of quantum mechanical synchronicities
+discussed by the Einstein-Podolsky-Rosen paradox.  But it is
+possible to write programs similar to CAs in which the cells do
+occasionally look at distant neighbors.
+</p>
+
+<p class="back">
+<input type="button" value="Back to text" onclick="history.back()" />
+</p>
+
+<p id="F1_2">
+U.S.
+<a href="https://www.google.com/patents/US4691291"
+    rel="Target:CelLabAux">Patent Number 4,691,291</a>,
+&ldquo;Random Sequence Generators&rdquo;, granted September 1,
+1987.  Wolfram has also patented a hexagonal-cell cellular
+automaton for simulating systems described by partial
+differential equations; see U.S.
+<a href="https://www.google.com/patents/US4809202"
+    rel="Target:CelLabAux">Patent Number 4,809,202</a>,
+granted February 28, 1989.
+</p>
+
+<p class="back">
+<input type="button" value="Back to text" onclick="history.back()" />
+</p>
+
+<p id="F1_3">
+The interdisciplinary conference CA 84 held at MIT in early
+summer of 1984, attracted some 150 participants.
+</p>
+
+<p class="back">
+<input type="button" value="Back to text" onclick="history.back()" />
+</p>
+
+<p id="F3_1" class="subsuper">
+The real reason is that if EveryCell could see eight bits of
+each neighbor, then a &ldquo;situation&rdquo; would consist of
+8&times;9 = 72 bits, and our exhaustive lookup table would have
+a crippling 2<sup>72</sup> entries.  2<sup>72</sup> &asymp;
+2<sup>70</sup> = 2<sup>10<sup> 7</sup></sup> = 1 K<sup>7</sup>
+&asymp; (One Thousand)<sup>7</sup> =
+1,000,000,000,000,000,000,000 = One Sextillion.  No way.  Seeing
+two bits of each neighbor is almost feasible; you'd need a
+2<sup>24</sup> entry table, and 2<sup>24</sup> = (2<sup>4</sup>)
+&times; (2<sup>20</sup>), or 16 Meg lookup table.  Meg is K's
+big sister and means about a million.  Actually a lot of our
+rules (like Ranch) do look at two bits of each neighbor; we do
+it by running a rule that has two alternating cycles, looking at
+bit #0 in cycle 0 and at bit #1 in cycle 1.  Sometimes people
+say that no programs need all the new RAM and processor speed
+being developed.  That's not true.  Cellular automata freaks can
+eternally sop up whatever the chipsters have ready.
+</p>
+
+<p class="back">
+<input type="button" value="Back to text" onclick="history.back()" />
+</p>
+
+<p id="F3_6">
+See <a href="refs.html#Dewdney88">[Dewdney88]</a>, pp. 135-148
+for a good introductory discussion of one-dimensional CAs. 
+Among other treasures,
+<a href="refs.html#Wolfram86">[Wolfram86]</a> has several very
+comprehensive discussions of 1D CAs.
+</p>
+
+<p class="back">
+<input type="button" value="Back to text" onclick="history.back()" />
+</p>
+
+<p id="F3_7">
+In some programming languages, <span class="tt">(A &minus; B)
+MOD 2</span> can return the negative value &minus;1, which will
+upset the rule maker, causing it to emit error messages.  An easy
+way to avoid this is to write <span class="tt">(2 + A &minus; B)
+MOD 2</span> to ensure a positive value.  An alternative method,
+if you know that <span class="tt">A</span> and <span
+class="tt">B</span> are both zero or one, is to write <span
+class="tt">A XOR B</span>.
+</p>
+
+<p class="back">
+<input type="button" value="Back to text" onclick="history.back()" />
+</p>
+
+<p id="F3_8">
+The Sierpi&#324;ski gasket is a shape you get by repeatedly
+dividing a triangle into four subtriangles by connecting the
+triangle's median points, then removing the middle triangle, and
+applying the same process to the three remaining triangles.  The
+name was coined by Benoit Mandelbrot
+<a href="refs.html#Mandelbrot82">[Mandelbrot82]</a>, in homage to
+the set-theorist Wac&#322;aw Sierpi&#324;ski, but the pattern
+can also be found in Pascal's triangle, as the result of a
+chaotic iteration
+<a href="refs.html#[Peitgen_Saupe88]">[Peitgen&amp;Saupe88]</a>,
+p.&nbsp;224, and as the output of the 1-D version of Fredkin's
+parity rule.
+</p>
+
+<p class="back">
+<input type="button" value="Back to text" onclick="history.back()" />
+</p>
+
+<p id="F3_9" class="subsuper">
+If we keep <em>B</em> down to 1, then EveryCell has 9 bits of
+situation: one bit of self and eight bits of neighbor.  So the
+lookup table has 2<sup>9</sup> or 512 lines.  If each
+<em>NewState</em> is again a single bit, this makes for
+2<sup>512</sup> ways to fill in the table.  2<sup>512</sup> is a
+good deal larger than googol, or 10<sup>100</sup>.  If
+<em>B</em> is 4, then EveryCell has 12 bits of situation: four
+bits of self and eight bits of neighbor.  If the new state is to
+be another four bit state, we have 2<sup>4</sup> choices for
+each line of a 2<sup>12</sup> line lookup table, which makes for
+(2<sup>4</sup>)<sup>2<sup> 12</sup></sup> = 2<sup>4 &times;
+(2<sup> 12</sup>)</sup> = 2<sup>((2<sup> 2</sup>) &times;
+(2<sup> 12</sup>))</sup> = 2<sup>2 <sup>14</sup></sup> =
+2<sup>16 K</sup> = 2<sup>4 &times; (4 K)</sup> &gt; 10<sup>4
+K</sup> &gt; the decimal number written as a one with four
+thousand zeroes after it.
+</p>
+
+<p class="back">
+<input type="button" value="Back to text" onclick="history.back()" />
+</p>
+
+<p id="F4_1">
+<a href="refs.html#Margolus_Toffoli87">[Margolus&amp;Toffoli87]</a>,
+pp.&nbsp;41&ndash;42 and pp.&nbsp;70&ndash;71.
+</p>
+
+<p class="back">
+<input type="button" value="Back to text" onclick="history.back()" />
+</p>
+
+<p id="F4_2">
+<a href="refs.html#Margolus_Toffoli87">[Margolus&amp;Toffoli87]</a>,
+pp.&nbsp;72&ndash;75.  WebCA uses a pseudorandom number
+generator.
+</p>
+
+<p class="back">
+<input type="button" value="Back to text" onclick="history.back()" />
+</p>
+
+<p id="F4_3">
+Stephen Wolfram refers to such rules as &ldquo;legal&rdquo;
+rules, see <a href="refs.html#Wolfram86">[Wolfram86]</a>,
+p.&nbsp;9.
+</p>
+
+<p class="back">
+<input type="button" value="Back to text" onclick="history.back()" />
+</p>
+
+<p id="F4_4">
+<a href="refs.html#Poundstone85">[Poundstone85]</a>,
+pp.&nbsp;33&ndash;37.  John Horton Conway, the inventor of Life,
+discovered the glider while watching the evolution of the R
+pentomino.  The R pentomino was first tracked all the way to its
+final state in 1970.
+</p>
+
+<p class="back">
+<input type="button" value="Back to text" onclick="history.back()" />
+</p>
+
+<p id="F4_5">
+<a href="refs.html#Silverman87">[Silverman87]</a>,
+p.&nbsp;51&ndash;54.
+See also
+<a href="refs.html#Margolus_Toffoli87">[Margolus&amp;Toffoli87]</a>,
+pp.&nbsp;47&ndash;49.
+</p>
+
+<p class="back">
+<input type="button" value="Back to text" onclick="history.back()" />
+</p>
+
+<p id="F4_6">
+The way I got this estimate was by following these steps:
+</p>
+
+<ol class="spaced">
+    <li>Load the rule Brain, press &ldquo;Random&rdquo; to
+        randomize, and run Brain for awhile.  Press
+        &ldquo;Pause&rdquo; to stop.</li>
+    <li>Erase the refractory cells (which live in plane 1)
+        with the <a href="webca.html#bitplane">Bit Plane
+        Editor</a>.</li>
+    <li>Load the evaluator Meltdown by requesting
+        <b>Meltdown</b> which is a variant of the
+        <b>Safe-Pass</b> rule of 
+        (<a href="refs.html#Margolus_Toffoli87">[Margolus&amp;Toffoli87]</a>,
+        pp.&nbsp;77&ndash;80), and the rule program
+        <b>Owncode</b>, which will apply the evaluator.</li>
+    <li>Let Meltdown run till it has moved all the plane 0 cells
+        down to form a pattern like a city skyline at the screen
+        bottom. At this point you can form a pretty good
+        estimate of how many of the screen's cells were firing
+        brain cells because if you could break off the skyline's
+        peaks and put them into the gaps, you'd get about six
+        solid lines of plane 0 cells. Given that the screen has
+        200 lines, this means 6/200 or 3% of them were firing
+        cells.  As each firing cell immediately becomes
+        refractory, there should have been an approximately
+        equal number of refractory cells.</li>
+</ol>
+
+<p>
+You can also use the <a href="webca.html#popcen">population
+census</a> to make such estimates.
+</p>
+
+<p class="back">
+<input type="button" value="Back to text" onclick="history.back()" />
+</p>
+
+<p id="F4_7">
+If <em>n</em>=0, then the rule has no refractory states, meaning
+that state 1 goes directly back to state 0.  This means, in
+turn, that conditions (ii) and (iv) can be omitted and that
+condition (ii) would read &ldquo;A cell in state 1 goes to state
+0.&rdquo; The Brain 0LU rules are ugly, with a nasty flicker.
+</p>
+
+<p class="back">
+<input type="button" value="Back to text" onclick="history.back()" />
+</p>
+
+<p id="F4_8">
+<a href="refs.html#Rucker82">[Rucker82]</a>,
+pp.&nbsp;38&ndash;39. <cite>Software</cite> has three main
+characters: young Sta-Hi, old Cobb Anderson, and Ralph Numbers,
+the first truly living robot. In the scene where Rainbow
+appears, Sta-Hi has fallen into the hands of a demented redneck
+cyberpunk gang called the Little Kidders.  The little Kidders are
+Kristleen, Filthy Phil, Haf'n'Haf, Rainbow, and her boyfriend
+Berdoo. They have Sta-Hi tightly bound, with his head sticking
+up through a hole in the middle of a table.
+</p>
+
+<blockquote>
+<p>
+&ldquo;It's a stuzzy high, Rainbow,&rdquo; Phil told her. With
+the fat and the short hair he looked stupid, but his way of
+speaking was precise and confident. He seemed to be the leader.
+&ldquo;This should be a good brain, too. Full of chemicals, I
+imagine.&rdquo;
+</p>
+
+<p>
+Haf'N'Haf seemed to be having some trouble starting the little
+cutting machine up. It was a variable heat-blade. They were
+going to cut off the top of Sta-Hi's skull and eat his brain
+with those cheap steel spoons. He would be able to watch
+them&hellip;at first.
+</p>
+
+<p>
+Someone started screaming. Someone tried to stand up, but he was
+tied too tightly. The variable blade was on now, set at one
+centimeter. The thickness of the skull.
+</p>
+
+<p>
+Sta-Hi threw his head back and forth wildly as Haf'N'Haf leaned
+towards him. There was no way to read the ruined face's
+expression.
+</p>
+
+<p>
+&ldquo;Hold still, damn you!&rdquo; Kristleen shouted.
+&ldquo;It's no good if we have to knock you out!&rdquo;
+</p>
+
+<p>
+Sta-Hi didn't really hear her. His mind had temporarily snapped.
+He just kept screaming and thrashing his head around. The sound
+of his shrill voice was like a lattice around him. He tried to
+weave the lattice thicker.
+</p>
+
+<p>
+Berdoo went and got a towel from the bathroom.  He wedged it
+around Sta-Hi's neck and under his chin to keep the head
+steady.  Sta-Hi screamed louder, higher.
+</p>
+
+<p>
+&ldquo;Stuff his <em>mayouth</em>,&rdquo; the green-haired girl
+cried. &ldquo;He's yellin and all.&rdquo;
+</p>
+
+<p>
+&ldquo;No,&rdquo; Phil said. &ldquo;The noise is
+like&hellip;part of the trip. Wave with it, baby. The Chinese
+used to do this to monkeys. It's so wiggly when you spoon out
+the speech-centers and the guy's tongue stops moving. Just all
+at&mdash;&rdquo; He stopped and the flesh of his face moved in a
+smile.
+</p>
+</blockquote>
+
+<p>
+Sta-Hi's given name is Stanley Hilary Mooney, Jr. Hearing of
+Sta-Hi's narrow escape (he does escape), Stan Sr.'s reaction is
+this:
+</p>
+
+<blockquote>
+<p>
+Mooney felt trembly all over. He could only see the horrible
+image of his son's dying eyes watching the Little Kidders chew
+up his last thoughts. Mooney's tongue twitched, trying to flick
+away the imagined taste of the brain tissue, tingly with firing
+neurons, tart with transmitter chemicals.
+</p>
+</blockquote>
+
+<p class="back">
+<input type="button" value="Back to text" onclick="history.back()" />
+</p>
+
+<p id="F4_9">
+The full name is the Belousov-Zhabotinsky reaction.  If you put
+certain chemicals in a petri dish with a sprinkling of a
+catalytic powder you actually see the Zhabotinsky reaction
+taking place.  The reaction was first reported in the 1960s.  A
+discussion of it can be found in
+<a href="refs.html#Winfree74">[Winfree74]</a>.
+<a href="refs.html#DewdneyColumn88a">[DewdneyColumn88a]</a>
+discusses a Zhabotinsky style CA called the HodgePodge
+machine&mdash;the Hodge program is based on this column.  See my
+discussions of <a href="rules.html#Hodge">Hodge</a>,
+<a href="rules.html#RainZha">Rainzha</a>, and
+<a href="rules.html#Zhabo">Zhabo</a> in the
+<a href="rules.html"><cite>Rules</cite></a> chapter.
+</p>
+
+<p class="back">
+<input type="button" value="Back to text" onclick="history.back()" />
+</p>
+
+<p id="F4_10" class="subsuper">
+16<sup>9&times;16</sup> is about 2&times;10<sup>176</sup>, or
+more accurately: 247, 330, 401, 473, 104, 534, 060, 502, 521,
+019, 648, 190, 035, 131, 349, 101, 212, 939, 914, 063, 056, 092,
+897, 225, 106, 531, 867, 170, 316, 401, 061, 243, 044, 989, 597,
+671, 426, 016, 139, 339, 351, 365, 034, 306, 741, 209, 967, 546,
+155, 101, 893, 167, 916, 606, 772, 148, 699, 136.
+</p>
+
+<p class="back">
+<input type="button" value="Back to text" onclick="history.back()" />
+</p>
+
+<p id="F4_11">
+See <a href="refs.html#Wolfram86">[Wolfram86]</a>,
+p.&nbsp;95 and
+<a href="refs.html#Langton86">[Langton86]</a>, p.&nbsp;129.
+</p>
+
+<p class="back">
+<input type="button" value="Back to text" onclick="history.back()" />
+</p>
+
+<p id="F4_12">
+This is taken directly from
+<a href="refs.html#Margolus_Toffoli87">[Margolus&amp;Toffoli87]</a>,
+p.&nbsp;123.  Margolus developed this technique as a
+simplification of the so-called HPP lattice gas which was
+introduced in, J. Hardy, O. de Pazzis, &amp; Y. Pomeau,
+&ldquo;Molecular Dynamics of a Classical Lattice Gas,&rdquo;
+<cite>Phys. Rev. A</cite> 13, 1976, pp. 1949&ndash;1960.
+</p>
+
+<p class="back">
+<input type="button" value="Back to text" onclick="history.back()" />
+</p>
+
+<p id="F5_1">
+This quote is from the December, 1949, Illinois lectures, reprinted
+in <a href="refs.html#VonNeumann66">[VonNeumann66]</a>, p.&nbsp;77.
+</p>
+
+<p class="back">
+<input type="button" value="Back to text" onclick="history.back()" />
+</p>
+
+<p id="F5_2">
+This is from the September, 1948, lecture
+<a href="refs.html#VonNeumann51">[VonNeumann51]</a>,
+p.&nbsp;315. This weird scenario is reminiscent of a big scene
+in Kurt Vonnegut, Jr.'s <cite>Sirens of Titan</cite>, where an
+unhappy robot tears himself apart and floats the pieces in a
+lake.
+</p>
+
+<p class="back">
+<input type="button" value="Back to text" onclick="history.back()" />
+</p>
+
+<p id="F5_3">
+<a href="refs.html#[Ulam50]">[Ulam50]</a>, p.&nbsp;336
+</p>
+
+<p class="back">
+<input type="button" value="Back to text" onclick="history.back()" />
+</p>
+
+<p id="F5_4">
+See the three essays coauthored by Ulam in the collection
+<a href="refs.html#Burks70">[Burks70]</a>.
+</p>
+
+<p class="back">
+<input type="button" value="Back to text" onclick="history.back()" />
+</p>
+
+<p id="F5_5">
+See <a href="refs.html#Gardner71">[Gardner71]</a>.
+See also <a href="refs.html#Levy84">[Levy84]</a>
+for a good section about Gosper and the early excitement over
+Life among the users of the PDP-6 computer at the MIT Artificial
+Intelligence Project. On p.&nbsp;147, Levy has a nice quote from
+Gosper, telling how he saw Life as a way
+to
+</p>
+
+<blockquote>
+<p>
+&hellip; basically do new science in a universe where all the
+smart guys haven't already nixed you out two or three hundred
+years ago. It's your life story if you're a mathematician: every
+time you discover something neat, you discover that Gauss or
+Newton knew it in his crib. With LIFE you're the first guy
+there, and there's always fun stuff going on. You can do
+everything from recursive function theory to animal husbandry.
+There's a community of people who are sharing their experiences
+with you. And there's the sense of connection between you and
+the environment. The idea of where's the boundary of a computer.
+Where does the computer leave off and the environment begin?
+</p>
+</blockquote>
+
+<p class="back">
+<input type="button" value="Back to text" onclick="history.back()" />
+</p>
+
+<p id="F5_6">
+See <a href="refs.html#BerlenkampConway_Guy82">[BerlenkampConway&amp;Guy82]</a>,
+Vol.&nbsp;2, or
+<a href="refs.html#Poundstone85">[Poundstone85]</a>.  The
+significance of Conway's proof is not that he shows that
+<em>some</em> cellular automaton can act as a universal
+computer, for von Neumann already proved this in
+<a href="refs.html#VonNeumann66">[VonNeumann66]</a>;
+and for that matter Alvy Ray Smith's Stanford dissertation of
+1970 describes a universal <em>one-dimensional</em> CA
+computer.  The significance of Conway's proof is that he shows
+that the specific rule of the Game of Life can itself act as a
+universal computer.
+</p>
+
+<p class="back">
+<input type="button" value="Back to text" onclick="history.back()" />
+</p>
+
+<p id="F5_7">
+The WebCA rule <a href="rules.html#FredMem">FredMem</a> is the
+Parity rule with seven bits of memory. If you use the color
+palette Mask1 with FredMem you will see the Parity rule.
+</p>
+
+<p class="back">
+<input type="button" value="Back to text" onclick="history.back()" />
+</p>
+
+<p id="F5_8">
+See Robert Wright's article about Fredkin in <cite>The
+Atlantic</cite>, April, 1988.  This article reappears as a
+chapter in Wright's 1988 book, <cite>Three Scientists and Their
+Gods</cite>.
+</p>
+
+<p class="back">
+<input type="button" value="Back to text" onclick="history.back()" />
+</p>
+
+<p id="F5_9">
+This was Stephen Levy, author of <cite>Hackers</cite>.  Levy's
+editor at <cite>Rolling Stone</cite> also found cellular
+automata too esoteric, so it appeared as
+<a href="refs.html#Levy85">[Levy85]</a>
+in the <cite>Whole Earth Review</cite>.
+</p>
+
+<p class="back">
+<input type="button" value="Back to text" onclick="history.back()" />
+</p>
+
+<p id="F5_10">
+The rule they showed me was <a href="rules.html#Critters">Critters</a>,
+<a href="refs.html#Margolus_Toffoli87">[Margolus&amp;Toffoli87]</a>,
+pp.&nbsp;132&ndash;134.
+</p>
+
+<p class="back">
+<input type="button" value="Back to text" onclick="history.back()" />
+</p>
+
+<p id="F5_11">
+On this same trip I went to see the MPP at Goddard; they'd
+invited me there to give a talk on my book <cite>The Fourth
+Dimension</cite>
+<a href="refs.html#Rucker84">[Rucker84]</a>.
+The MPP was a roomful of equipment behind a thick glass window.
+When I asked its keeper if he'd ever run the Game of Life on it,
+he looked at me like I was out of my mind. As far as I could
+make out, NASA uses the MPP to enhance satellite photos. The
+Connection Machine&reg; from Thinking Machines, Inc., of
+Cambridge, Mass., is a much sexier parallel processing machine.
+The Connection Machine has 64,000 processing chips (see
+<a href="refs.html#Hillis88">[Hillis88]</a>).
+Visitors to the cellular automaton conference CA86 at MIT were
+invited over to the Thinking Machines offices to see the
+Connection Machine running cellular automata and simulating a
+wind-tunnel. Stephen Wolfram consulted with Thinking Machines
+for a short while before setting off on his own to build and
+distribute the mathematics program <cite>Mathematica</cite>.
+</p>
+
+<p class="back">
+<input type="button" value="Back to text" onclick="history.back()" />
+</p>
+
+<p id="F5_12">
+Wolfram's papers are collected, along with numerous papers by
+other authors, in the excellent volume,
+<a href="refs.html#Wolfram86">[Wolfram86]</a>.
+</p>
+
+<p class="back">
+<input type="button" value="Back to text" onclick="history.back()" />
+</p>
+
+<p id="F5_13">
+The first few paragraphs of this section are taken from
+<a href="refs.html#Rucker88a">[Rucker88a]</a>.
+</p>
+
+<p class="back">
+<input type="button" value="Back to text" onclick="history.back()" />
+</p>
+
+<p id="F5_14">
+I called the disk <cite>Freestyle CA</cite>, and sold about a
+hundred of them for $10 each via announcements in the magazine
+<cite>Science Fiction Eye</cite>, the newsletter
+<cite>Amygdala</cite>, and the Whole Earth book
+<cite>Signal</cite>.  Since all the <cite>Freestyle CA</cite>
+programs have evolved into radically improved forms in
+<cite>CelLab</cite>, the <cite>Freestyle CA</cite> disk is now
+obsolete and unavailable.
+</p>
+
+<p class="back">
+<input type="button" value="Back to text" onclick="history.back()" />
+</p>
+
+</body>
+</html>

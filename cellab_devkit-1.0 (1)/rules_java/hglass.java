@@ -1,0 +1,29 @@
+/*
+
+    The Hglass rule from page 29 of Margolus and Toffoli.
+
+*/
+
+class Hglass extends ruletable {
+    int jcrule(int oldstate) {
+        int r = 0;
+
+        switch (16 * e + 8 * w + 4 * s + 2 * n + self) {
+            case 1: case 2: case 3: case 11: case 21:
+            case 25: case 29: case 30: case 31:
+                r = 1;
+                break;
+
+            default:
+                r = 0;
+                break;
+        }
+        return r;
+    }
+}
+
+public class hglass {
+    public static void main(String args[]) {
+        (new Hglass()).generateRuleFile("hglass");
+    }
+}
