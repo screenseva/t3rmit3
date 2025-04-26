@@ -1265,7 +1265,19 @@ function initializeAppearanceControls(folder) {
             'Heatmap': 'heatmap',
             'Black & White': 'bw',
             'Forest': 'forest',
-            'Ocean': 'ocean'
+            'Ocean': 'ocean',
+            'VGA': 'vga',
+            'Green Text': 'text',
+            'CGA 0': 'cga0',
+            'CGA 1': 'cga1',
+            'Commodore 64': 'c64',
+            'Game Boy': 'gameboy',
+            'Spectrum': 'spectrum',
+            'Apple II': 'apple2',
+            'ANSI': 'ansi',
+            'Grayscale (4)': 'grayscale',
+            'Sepia': 'sepia',
+            'Amber': 'amber'
         }
     });
 

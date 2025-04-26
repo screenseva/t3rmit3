@@ -36,7 +36,7 @@ export class ConfigManager {
                 minZoom: 0.1,
                 maxZoom: 5.0,
                 defaultPalette: 'default',
-                availablePalettes: ['default', 'heatmap', 'bw', 'forest', 'ocean']
+                availablePalettes: ['default', 'heatmap', 'bw', 'forest', 'ocean', 'vga', 'text', 'cga0', 'cga1', 'c64', 'gameboy', 'spectrum', 'apple2', 'ansi', 'grayscale', 'sepia', 'amber']
             },
             
             // Performance thresholds

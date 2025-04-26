@@ -126,7 +126,115 @@ export const palettes = {
         [STATE_GRAY]: '#B6DBE4',      // Ice blue
         [STATE_DARK_GRAY]: '#5E7C99', // Steel blue
         default: '#FFFFFF'
-    }
+    },
+
+    // VGA text palette
+    'vga': {
+        [STATE_BLACK]: '#000000',
+        [STATE_WHITE]: '#FFFFFF',
+        [STATE_GRAY]: '#AAAAAA',
+        [STATE_DARK_GRAY]: '#00AA00',
+        default: '#FFFFFF'
+    },
+
+    // Text mode green screen
+    'text': {
+        [STATE_BLACK]: '#001100',
+        [STATE_WHITE]: '#00FF00',
+        [STATE_GRAY]: '#008800',
+        [STATE_DARK_GRAY]: '#004400',
+        default: '#001100'
+    },
+
+    // CGA palette 0 (cyan/magenta/white)
+    'cga0': {
+        [STATE_BLACK]: '#000000',
+        [STATE_WHITE]: '#FFFFFF',
+        [STATE_GRAY]: '#55FFFF',
+        [STATE_DARK_GRAY]: '#FF55FF',
+        default: '#FFFFFF'
+    },
+
+    // CGA palette 1 (red/green/yellow)
+    'cga1': {
+        [STATE_BLACK]: '#000000',
+        [STATE_WHITE]: '#AAAA00',
+        [STATE_GRAY]: '#00AA00',
+        [STATE_DARK_GRAY]: '#AA0000',
+        default: '#AAAA00'
+    },
+
+    // Commodore 64 palette subset
+    'c64': {
+        [STATE_BLACK]: '#000000',
+        [STATE_WHITE]: '#FFFFFF',
+        [STATE_GRAY]: '#7F7F7F',
+        [STATE_DARK_GRAY]: '#55FF55',
+        default: '#FFFFFF'
+    },
+
+    // Game Boy 4-tone green
+    'gameboy': {
+        [STATE_BLACK]: '#0F380F',
+        [STATE_WHITE]: '#9BBC0F',
+        [STATE_GRAY]: '#8BAC0F',
+        [STATE_DARK_GRAY]: '#306230',
+        default: '#9BBC0F'
+    },
+
+    // ZX Spectrum palette subset
+    'spectrum': {
+        [STATE_BLACK]: '#000000',
+        [STATE_WHITE]: '#FFFFFF',
+        [STATE_GRAY]: '#D70000',
+        [STATE_DARK_GRAY]: '#0000D7',
+        default: '#FFFFFF'
+    },
+
+    // Apple II hi-res 4-tone
+    'apple2': {
+        [STATE_BLACK]: '#000000',
+        [STATE_WHITE]: '#FFFFFF',
+        [STATE_GRAY]: '#00FF00',
+        [STATE_DARK_GRAY]: '#FF00FF',
+        default: '#FFFFFF'
+    },
+
+    // ANSI terminal
+    'ansi': {
+        [STATE_BLACK]: '#000000',
+        [STATE_WHITE]: '#FFFFFF',
+        [STATE_GRAY]: '#00FF00',
+        [STATE_DARK_GRAY]: '#FF0000',
+        default: '#FFFFFF'
+    },
+
+    // 4-tone grayscale
+    'grayscale': {
+        [STATE_BLACK]: '#000000',
+        [STATE_WHITE]: '#FFFFFF',
+        [STATE_GRAY]: '#AAAAAA',
+        [STATE_DARK_GRAY]: '#555555',
+        default: '#FFFFFF'
+    },
+
+    // Sepia quad
+    'sepia': {
+        [STATE_BLACK]: '#332200',
+        [STATE_WHITE]: '#EEDDCC',
+        [STATE_GRAY]: '#AA8855',
+        [STATE_DARK_GRAY]: '#664400',
+        default: '#EEDDCC'
+    },
+
+    // Amber CRT
+    'amber': {
+        [STATE_BLACK]: '#000000',
+        [STATE_WHITE]: '#FFDF40',
+        [STATE_GRAY]: '#FF9F00',
+        [STATE_DARK_GRAY]: '#FFBF00',
+        default: '#FFDF40'
+    },
 };
 
 // You might also want a function to get the color for a state from a palette name
