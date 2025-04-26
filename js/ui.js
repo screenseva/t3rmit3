@@ -332,15 +332,18 @@ function initializeImageControls(folder) {
  * @param {File} file - The uploaded image file
  */
 function handleImageUpload(file) {
-    if (!file.type.startsWith('image/')) {
-        console.error('Invalid file type');
+    if (!file || !file.type.startsWith('image/')) {
+        console.error('Invalid file type. Please upload an image.');
         return;
     }
 
     const reader = new FileReader();
-    reader.onload = (e) => {
+    reader.onload = function(e) {
+        // Store image data in localStorage for later restoration
+        localStorage.setItem('lastUploadedImage', e.target.result);
+
         const img = new Image();
-        img.onload = () => {
+        img.onload = function() {
             try {
                 // Store the image for potential reuse
                 setLastUploadedImage(file);
@@ -760,7 +763,7 @@ function generateRandomRule(seededRandom) {
         rule[`state${currentState}Next`] = transition.nextState;
         rule[`state${currentState}Turn`] = transition.turn;
     });
-
+    
     return rule;
 }
 
@@ -786,127 +789,98 @@ function applyRulePreset(presetName) {
 }
 
 /**
- * Save current custom rule configuration with a name
- * @param {string} name - Name to save the rule under
+ * Save a custom rule with its seed and name
+ * @param {string} name - Name of the rule
+ * @param {number} seed - Seed used to generate the rule
+ * @param {Object} ruleParams - The rule parameters
+ * @returns {boolean} Success status
  */
-function saveCustomRule(name) {
-    if (!name || name.trim() === '') {
-        alert('Please enter a name for the rule');
-        return;
-    }
-    
-    // Save the current rule configuration
-    UIState.savedRules[name] = { ...customRuleParams };
-    
-    // Save to localStorage if available
+function saveCustomRule(name, seed, ruleParams) {
     try {
-        localStorage.setItem('turmite_savedRules', JSON.stringify(UIState.savedRules));
-    } catch (e) {
-        console.warn('Could not save rules to localStorage:', e);
+        const savedRules = JSON.parse(localStorage.getItem('turmite_custom_rules') || '{}');
+        savedRules[name] = {
+            seed: seed,
+            params: { ...ruleParams },
+            timestamp: Date.now()
+        };
+        localStorage.setItem('turmite_custom_rules', JSON.stringify(savedRules));
+        console.log(`Rule saved: ${name} (seed: ${seed})`);
+        return true;
+    } catch (error) {
+        console.error('Failed to save rule:', error);
+        return false;
     }
-    
-    console.log(`Rule saved: ${name}`);
-    return name;
 }
 
 /**
- * Load a previously saved custom rule configuration
+ * Load a custom rule by name
  * @param {string} name - Name of the rule to load
+ * @returns {Object|null} The rule data or null if not found
  */
 function loadCustomRule(name) {
-    if (UIState.savedRules[name]) {
-        const rule = UIState.savedRules[name];
-        Object.keys(rule).forEach(key => {
-            customRuleParams[key] = rule[key];
-        });
-        updateCustomRule();
-        if (pane) pane.refresh();
-        if (PARAMS.rule === 'custom' && !PARAMS.running) {
-            forceFullRedraw();
-        }
-        console.log(`Loaded rule: ${name}`);
-    } else {
-        console.error(`Rule not found: ${name}`);
-    }
-}
-
-/**
- * Load saved rules from localStorage
- */
-function loadSavedRules() {
     try {
-        const storedRules = localStorage.getItem('turmite_savedRules');
-        if (storedRules) {
-            UIState.savedRules = JSON.parse(storedRules);
-            console.log(`Loaded ${Object.keys(UIState.savedRules).length} saved rules`);
-        }
-    } catch (e) {
-        console.warn('Could not load saved rules from localStorage:', e);
+        const savedRules = JSON.parse(localStorage.getItem('turmite_custom_rules') || '{}');
+        return savedRules[name] || null;
+    } catch (error) {
+        console.error('Failed to load rule:', error);
+        return null;
     }
 }
 
 /**
- * Calculate metrics for the current rule configuration
- * @returns {Object} Metrics object with characteristics of the rule
+ * Delete a custom rule by name
+ * @param {string} name - Name of the rule to delete
+ * @returns {boolean} Success status
  */
-function calculateRuleMetrics() {
-    const metrics = {
-        turnSum: customRuleParams.state0Turn + customRuleParams.state1Turn + 
-                customRuleParams.state2Turn + customRuleParams.state3Turn,
-        stateVariety: new Set([
-            customRuleParams.state0Next, 
-            customRuleParams.state1Next, 
-            customRuleParams.state2Next, 
-            customRuleParams.state3Next
-        ]).size,
-        patternType: 'Unknown'
-    };
-    
-    // Determine pattern type based on rule characteristics
-    if (metrics.turnSum === 0 && metrics.stateVariety >= 3) {
-        metrics.patternType = 'Balanced (likely creates bounded patterns)';
-    } else if (Math.abs(metrics.turnSum) >= 3) {
-        metrics.patternType = 'Spiral-dominant (likely creates expanding spirals)';
-    } else if (metrics.stateVariety <= 2) {
-        metrics.patternType = 'Limited state (likely creates simple patterns)';
-    } else if (customRuleParams.state0Turn === 0 || customRuleParams.state1Turn === 0) {
-        metrics.patternType = 'Highway-prone (likely creates long straight paths)';
-    } else {
-        metrics.patternType = 'Complex (unpredictable behavior)';
+function deleteCustomRule(name) {
+    try {
+        const savedRules = JSON.parse(localStorage.getItem('turmite_custom_rules') || '{}');
+        if (!(name in savedRules)) return false;
+        delete savedRules[name];
+        localStorage.setItem('turmite_custom_rules', JSON.stringify(savedRules));
+        console.log(`Rule deleted: ${name}`);
+        return true;
+    } catch (error) {
+        console.error('Failed to delete rule:', error);
+        return false;
     }
-    
-    return metrics;
 }
 
-// Store the last uploaded image for refresh functionality
-export function setLastUploadedImage(file) {
-    UIState.lastUploadedImage = file;
-    // Store image data in localStorage
-    const reader = new FileReader();
-    reader.onload = (e) => {
-        try {
-            localStorage.setItem('lastUploadedImage', e.target.result);
-            console.log('Image saved to localStorage');
-        } catch (error) {
-            console.warn('Failed to save image to localStorage:', error);
-        }
-    };
-    reader.readAsDataURL(file);
+/**
+ * Rename a custom rule
+ * @param {string} oldName - Current name of the rule
+ * @param {string} newName - New name for the rule
+ * @returns {boolean} Success status
+ */
+function renameCustomRule(oldName, newName) {
+    try {
+        const savedRules = JSON.parse(localStorage.getItem('turmite_custom_rules') || '{}');
+        if (!(oldName in savedRules) || newName in savedRules) return false;
+        savedRules[newName] = savedRules[oldName];
+        delete savedRules[oldName];
+        localStorage.setItem('turmite_custom_rules', JSON.stringify(savedRules));
+        console.log(`Rule renamed: ${oldName} → ${newName}`);
+        return true;
+    } catch (error) {
+        console.error('Failed to rename rule:', error);
+        return false;
+    }
 }
 
-// Restore the last uploaded image after refresh
-function restoreLastUploadedImage() {
-    const imageData = localStorage.getItem('lastUploadedImage');
-    if (imageData) {
-        console.log('Found saved image, restoring...');
-        // Convert base64 string back to a file
-        fetch(imageData)
-            .then(res => res.blob())
-            .then(blob => {
-                const file = new File([blob], 'restored_image.png', { type: 'image/png' });
-                handleImageUpload(file);
-            })
-            .catch(error => console.error('Failed to restore image:', error));
+/**
+ * Get list of saved custom rules
+ * @returns {Array} Array of rule names and their timestamps
+ */
+function getSavedRules() {
+    try {
+        const savedRules = JSON.parse(localStorage.getItem('turmite_custom_rules') || '{}');
+        return Object.entries(savedRules).map(([name, data]) => ({
+            name,
+            timestamp: data.timestamp
+        })).sort((a, b) => b.timestamp - a.timestamp);
+    } catch (error) {
+        console.error('Failed to get saved rules:', error);
+        return [];
     }
 }
 
@@ -922,27 +896,27 @@ function initializeSimulationControls(folder, pixiApp) {
         min: 1,
         max: 20,
         step: 1
-    }).on('change', (ev) => {
+        }).on('change', (ev) => {
         updateTurmiteCount(ev.value);
     });
 
     // Simulation Speed
     folder.addBinding(PARAMS, 'speed', { 
-        label: 'Speed', 
-        min: 1, 
-        max: 60, 
+            label: 'Speed', 
+            min: 1, 
+            max: 60, 
         step: 1
-    }).on('change', (ev) => {
+        }).on('change', (ev) => {
         if (pixiApp?.ticker) {
-            pixiApp.ticker.maxFPS = ev.value;
-        }
-    });
+                pixiApp.ticker.maxFPS = ev.value;
+            }
+        });
 
     // Steps per Frame
     folder.addBinding(PARAMS, 'simStepsPerFrame', { 
-        label: 'Steps/Frame', 
-        min: 1, 
-        max: 12, 
+            label: 'Steps/Frame', 
+            min: 1, 
+            max: 12, 
         step: 1
     });
 }
@@ -956,132 +930,72 @@ function initializeRuleControls(folder) {
     const ruleControls = document.createElement('div');
     Object.assign(ruleControls.style, {
         display: 'grid',
-        gridTemplateColumns: '1fr auto auto auto',
-        gap: '4px',
+        gridTemplateColumns: '1fr auto auto',
+        gap: '8px',
         alignItems: 'center',
-        padding: '4px'
+        padding: '8px 12px',
+        marginBottom: '-14px'  // Half of the desired spacing
     });
 
-    // Rule Type Selection
-    const ruleSelect = document.createElement('select');
-    Object.assign(ruleSelect.style, {
+    // Saved rules select - Now the primary rule selector
+    const savedRuleSelect = document.createElement('select');
+    Object.assign(savedRuleSelect.style, {
         ...commonStyles,
         width: '100%',
-        padding: '2px 4px',
-        borderRadius: '2px',
+        padding: '6px 8px',
+        borderRadius: '4px',
         border: '1px solid #444',
         backgroundColor: '#1a1a1a',
-        height: '20px'
+        height: '28px'
     });
 
-    // Add basic rules - only include rules that exist in simulation.js
-    const basicRules = {
-        'langton': 'Langton\'s Ant',
-        'custom': 'Custom Rule'
-    };
-
-    Object.entries(basicRules).forEach(([value, text]) => {
-        const option = document.createElement('option');
-        option.value = value;
-        option.text = text;
-        ruleSelect.appendChild(option);
+    // Seed display and controls container
+    const seedContainer = document.createElement('div');
+    Object.assign(seedContainer.style, {
+        display: 'flex',
+        gap: '8px',
+        alignItems: 'center',
+        padding: '0 4px'
     });
-
-    // Custom Rule Toggle
-    const customToggle = document.createElement('input');
-    customToggle.type = 'checkbox';
-    Object.assign(customToggle.style, {
-        margin: '0',
-        width: '14px',
-        height: '14px',
-        cursor: 'pointer',
-        accentColor: '#1a1a1a'
-    });
-    customToggle.title = 'Enable Custom Rule';
-
-    // Initialize rule state
-    const initialRule = PARAMS.rule || 'langton';
-    PARAMS.rule = initialRule;
-    ruleSelect.value = initialRule;
-    customToggle.checked = initialRule === 'custom';
-    ruleSelect.disabled = initialRule === 'custom';
-
-    // Function to restore image if needed
-    const restoreImageAfterRuleChange = () => {
-        if (isImageLoaded) {
-            const imageData = localStorage.getItem('lastUploadedImage');
-            if (imageData) {
-                console.log('Restoring image after rule change...');
-                fetch(imageData)
-                    .then(res => res.blob())
-                    .then(blob => {
-                        const file = new File([blob], 'restored_image.png', { type: 'image/png' });
-                        handleImageUpload(file);
-                    })
-                    .catch(error => {
-                        console.error('Failed to restore image after rule change:', error);
-                        // If image restore fails, reset to current rule
-                        setActiveRule(PARAMS.rule);
-                    });
-            }
-        }
-    };
-
-    // Function to handle rule changes
-    const handleRuleChange = (newRule, skipImageRestore = false) => {
-        const wasRunning = PARAMS.running;
-        PARAMS.running = false;
-
-        if (newRule !== PARAMS.rule) {
-            PARAMS.rule = newRule;
-            setActiveRule(newRule);
-            
-            customToggle.checked = newRule === 'custom';
-            ruleSelect.disabled = newRule === 'custom';
-            ruleSelect.value = newRule;
-
-            if (!skipImageRestore) {
-                restoreImageAfterRuleChange();
-            }
-        }
-
-        PARAMS.running = wasRunning;
-        updatePlaybackButtonStates();
-    };
-
-    // Rule select change handler
-    ruleSelect.addEventListener('change', (e) => {
-        handleRuleChange(e.target.value);
-    });
-
-    // Custom toggle change handler
-    customToggle.addEventListener('change', (e) => {
-        handleRuleChange(e.target.checked ? 'custom' : 'langton');
-    });
-
-    // Add elements to container
-    ruleControls.appendChild(ruleSelect);
-    ruleControls.appendChild(customToggle);
 
     // Seed display
     const seedSpan = document.createElement('span');
     Object.assign(seedSpan.style, {
         ...commonStyles,
-        padding: '2px 4px',
+        padding: '4px 8px',
         backgroundColor: '#1a1a1a',
-        borderRadius: '2px',
-        width: '50px',
+        borderRadius: '4px',
+        width: '60px',
         textAlign: 'center',
         border: '1px solid #444',
-        height: '16px',
-        lineHeight: '16px'
+        height: '20px',
+        lineHeight: '20px',
+        cursor: 'pointer'
     });
     seedSpan.textContent = Math.floor(Math.random() * 1000000);
-    ruleControls.appendChild(seedSpan);
+    seedSpan.title = 'Click to copy seed';
+
+    // Add click-to-copy functionality for seed
+    seedSpan.onclick = () => {
+        navigator.clipboard.writeText(seedSpan.textContent)
+            .then(() => {
+                const originalTitle = seedSpan.title;
+                seedSpan.title = 'Copied!';
+                setTimeout(() => {
+                    seedSpan.title = originalTitle;
+                }, 1000);
+            })
+            .catch(err => console.error('Failed to copy seed:', err));
+    };
 
     // Random button
     const randomBtn = document.createElement('button');
-    Object.assign(randomBtn.style, buttonStyle);
+    Object.assign(randomBtn.style, {
+        ...buttonStyle,
+        width: '28px',
+        height: '28px',
+        borderRadius: '4px'
+    });
     randomBtn.innerHTML = icons.dice;
     randomBtn.title = 'Generate Random Rule';
     randomBtn.onmouseover = () => {
@@ -1091,7 +1005,7 @@ function initializeRuleControls(folder) {
         randomBtn.style.backgroundColor = '#2a2a2a';
     };
     randomBtn.onclick = () => {
-        handleRuleChange('custom', true); // Skip image restore on random generation
+        handleRuleChange('custom', true);
         
         const seededRandom = function() {
             const seed = parseInt(seedSpan.textContent);
@@ -1122,16 +1036,208 @@ function initializeRuleControls(folder) {
         
         // Update seed for next generation
         seedSpan.textContent = Math.floor(Math.random() * 1000000);
+        savedRuleSelect.value = 'custom';
         
-        if (isImageLoaded) {
-            restoreImageAfterRuleChange();
-        } else {
-            forceFullRedraw();
-        }
+        // Refresh the image
+        refreshImageWithCurrentRule();
     };
+
+    // Function to handle rule changes
+    const handleRuleChange = (selectedRule, skipImageRestore = false) => {
+        const wasRunning = PARAMS.running;
+        PARAMS.running = false;
+
+        if (selectedRule === 'custom') {
+            PARAMS.rule = 'custom';
+            setActiveRule('custom');
+        } else if (selectedRule === 'langton') {
+            PARAMS.rule = 'langton';
+            setActiveRule('langton');
+                    } else {
+            const ruleData = loadCustomRule(selectedRule);
+            if (ruleData) {
+                PARAMS.rule = 'custom';
+                setActiveRule('custom');
+                seedSpan.textContent = ruleData.seed;
+                Object.assign(customRuleParams, ruleData.params);
+                    updateCustomRule();
+            }
+        }
+
+        if (!skipImageRestore && isImageLoaded) {
+            restoreImageAfterRuleChange();
+        }
+
+        PARAMS.running = wasRunning;
+        updatePlaybackButtonStates();
+    };
+
+    function updateSavedRulesList() {
+        const savedRules = getSavedRules();
+        savedRuleSelect.innerHTML = `
+            <option value="custom">Custom Rule</option>
+            <option value="langton">Langton's Ant</option>
+            <option disabled>──────────</option>
+        `;
+        savedRules.forEach(({ name, timestamp }) => {
+            const option = document.createElement('option');
+            option.value = name;
+            option.text = name;
+            option.title = new Date(timestamp).toLocaleString();
+            savedRuleSelect.appendChild(option);
+        });
+        // Set default to custom
+        savedRuleSelect.value = 'custom';
+    }
+
+    savedRuleSelect.onchange = () => {
+        handleRuleChange(savedRuleSelect.value);
+    };
+
+    // Add elements to containers
+    seedContainer.appendChild(seedSpan);
+    ruleControls.appendChild(savedRuleSelect);
+    ruleControls.appendChild(seedContainer);
     ruleControls.appendChild(randomBtn);
 
+    // Add container to folder
     folder.element.appendChild(ruleControls);
+
+    // Save/Load Container
+    const saveLoadContainer = document.createElement('div');
+    Object.assign(saveLoadContainer.style, {
+        display: 'grid',
+        gridTemplateColumns: '180px auto auto auto',
+        gap: '8px',
+        alignItems: 'center',
+        padding: '8px 12px',
+        marginTop: '6px'    // Half of the desired spacing
+    });
+
+    // Rule name input
+    const nameInput = document.createElement('input');
+    Object.assign(nameInput.style, {
+        ...commonStyles,
+        padding: '2px 6px',
+        borderRadius: '4px',
+        border: '1px solid #444',
+        backgroundColor: '#1a1a1a',
+        height: '24px',
+        fontSize: '12px',
+        width: '180px',
+        boxSizing: 'border-box'
+    });
+    nameInput.placeholder = 'Rule name';
+
+    // Save button
+    const saveBtn = document.createElement('button');
+    const enhancedButtonStyle = {
+        ...buttonStyle,
+        width: '28px',
+        height: '28px',
+        borderRadius: '4px',
+        margin: '0 2px'
+    };
+    Object.assign(saveBtn.style, enhancedButtonStyle);
+    saveBtn.innerHTML = icons.save;
+    saveBtn.title = 'Save Rule';
+    saveBtn.onclick = () => {
+        const name = nameInput.value.trim();
+        if (!name) {
+            alert('Please enter a name for the rule');
+            return;
+        }
+        
+        const seed = parseInt(seedSpan.textContent);
+        if (saveCustomRule(name, seed, customRuleParams)) {
+            nameInput.value = '';
+            updateSavedRulesList();
+            savedRuleSelect.value = name;
+        } else {
+            alert('Failed to save rule');
+        }
+    };
+
+    // Edit name button
+    const editBtn = document.createElement('button');
+    Object.assign(editBtn.style, enhancedButtonStyle);
+    editBtn.innerHTML = '✎';
+    editBtn.title = 'Edit Rule Name';
+    editBtn.onclick = () => {
+        const selectedRule = savedRuleSelect.value;
+        
+        // Handle built-in rules
+        if (selectedRule === 'custom') {
+            alert('Cannot rename the default Custom Rule');
+            return;
+        }
+        if (selectedRule === 'langton') {
+            alert('Cannot rename Langton\'s Ant rule');
+            return;
+        }
+        
+        // Get the current rule name from the dropdown
+        const currentName = savedRuleSelect.options[savedRuleSelect.selectedIndex].text;
+        const newName = prompt('Enter new name:', currentName);
+        
+        if (newName && newName.trim()) {
+            const trimmedNewName = newName.trim();
+            
+            // Check if the new name is a reserved name
+            if (trimmedNewName.toLowerCase() === 'custom' || 
+                trimmedNewName.toLowerCase() === 'langton' || 
+                trimmedNewName.toLowerCase() === 'langton\'s ant') {
+                alert('Cannot use reserved rule names (Custom, Langton)');
+                return;
+            }
+            
+            // Check if the name is actually different
+            if (trimmedNewName !== currentName) {
+                if (renameCustomRule(currentName, trimmedNewName)) {
+                    updateSavedRulesList();
+                    savedRuleSelect.value = trimmedNewName;
+                } else {
+                    alert('Failed to rename rule. The name might already be in use.');
+                }
+            }
+        }
+    };
+
+    // Delete button
+    const deleteBtn = document.createElement('button');
+    Object.assign(deleteBtn.style, enhancedButtonStyle);
+    deleteBtn.innerHTML = icons.delete;
+    deleteBtn.title = 'Delete Rule';
+    deleteBtn.onclick = () => {
+        const selectedRule = savedRuleSelect.value;
+        if (!selectedRule || selectedRule === 'custom' || selectedRule === 'langton') {
+            alert('Please select a saved rule to delete');
+            return;
+        }
+        
+        if (confirm(`Delete rule "${selectedRule}"?`)) {
+            if (deleteCustomRule(selectedRule)) {
+                updateSavedRulesList();
+                savedRuleSelect.value = 'custom';
+                handleRuleChange('custom');
+            } else {
+                alert('Failed to delete rule');
+            }
+        }
+    };
+
+    // Add elements to save/load container
+    saveLoadContainer.appendChild(nameInput);
+    saveLoadContainer.appendChild(saveBtn);
+    saveLoadContainer.appendChild(editBtn);
+    saveLoadContainer.appendChild(deleteBtn);
+
+    // Add container to folder
+    folder.element.appendChild(saveLoadContainer);
+
+    // Initialize saved rules list and set default to custom
+    updateSavedRulesList();
+    handleRuleChange('custom', true);
 }
 
 /**
@@ -1161,8 +1267,8 @@ function initializeAppearanceControls(folder) {
             '8x': 8,
             '16x': 16
         }
-    }).on('change', () => {
-        forceFullRedraw();
+            }).on('change', () => {
+                    forceFullRedraw();
     });
 }
 
@@ -1200,7 +1306,7 @@ function initializeCanvasControls(folder, pixiApp) {
 
     // Canvas size controls in a subfolder
     const sizeFolder = folder.addFolder({
-        title: 'Canvas Size',
+            title: 'Canvas Size',
         expanded: false
     });
 
@@ -1237,20 +1343,109 @@ function initializeCanvasControls(folder, pixiApp) {
 
     // View controls
     const viewFolder = folder.addFolder({
-        title: 'View',
+            title: 'View',
         expanded: true
-    });
+        });
 
     // Zoom control
-    viewFolder.addBinding(PARAMS, 'zoom', {
+        viewFolder.addBinding(PARAMS, 'zoom', {
         label: 'Zoom',
-        min: 0.1,
-        max: 5,
+            min: 0.1,
+            max: 5,
         step: 0.1
-    });
+        });
 
     // Follow turmite toggle
-    viewFolder.addBinding(PARAMS, 'followTurmite', {
+        viewFolder.addBinding(PARAMS, 'followTurmite', {
         label: 'Follow'
     });
+}
+
+// Store the last uploaded image for refresh functionality
+export function setLastUploadedImage(file) {
+    UIState.lastUploadedImage = file;
+    // Store image data in localStorage
+    const reader = new FileReader();
+    reader.onload = (e) => {
+        try {
+            localStorage.setItem('lastUploadedImage', e.target.result);
+            console.log('Image saved to localStorage');
+        } catch (error) {
+            console.warn('Failed to save image to localStorage:', error);
+        }
+    };
+    reader.readAsDataURL(file);
+}
+
+// Restore the last uploaded image after refresh
+function restoreLastUploadedImage() {
+    const imageData = localStorage.getItem('lastUploadedImage');
+    if (imageData) {
+        console.log('Found saved image, restoring...');
+        // Convert base64 string back to a file
+        fetch(imageData)
+            .then(res => res.blob())
+            .then(blob => {
+                const file = new File([blob], 'restored_image.png', { type: 'image/png' });
+                handleImageUpload(file);
+            })
+            .catch(error => console.error('Failed to restore image:', error));
+    }
+}
+
+/**
+ * Refreshes the image with current rule settings
+ * @returns {Promise} Promise that resolves when image is refreshed
+ */
+function refreshImageWithCurrentRule() {
+    if (!isImageLoaded) {
+        forceFullRedraw();
+        return Promise.resolve();
+    }
+
+    const imageData = localStorage.getItem('lastUploadedImage');
+    if (!imageData) {
+        forceFullRedraw();
+        return Promise.resolve();
+    }
+
+    console.log('Refreshing image with current rule...');
+    return fetch(imageData)
+        .then(res => res.blob())
+        .then(blob => {
+            const file = new File([blob], 'restored_image.png', { type: 'image/png' });
+            return handleImageUpload(file);
+        })
+        .catch(error => {
+            console.error('Failed to refresh image:', error);
+            forceFullRedraw();
+        });
+}
+
+/**
+ * Restores the last uploaded image after a rule change
+ */
+async function restoreImageAfterRuleChange() {
+    try {
+        const imageData = localStorage.getItem('lastUploadedImage');
+        if (!imageData) {
+            console.log('No previous image found to restore');
+            forceFullRedraw();
+            return;
+        }
+
+        // Convert base64 to blob
+        const response = await fetch(imageData);
+        const blob = await response.blob();
+        
+        // Create a File object from the blob
+        const file = new File([blob], 'restored-image.png', { type: 'image/png' });
+        
+        // Process the image using existing handleImageUpload
+        handleImageUpload(file);
+        
+    } catch (error) {
+        console.error('Failed to restore image:', error);
+        forceFullRedraw();
+    }
 }
