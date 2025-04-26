@@ -7,7 +7,10 @@ import {
     DIRECTIONS, NUM_DIRECTIONS,
     STATE_WHITE, STATE_BLACK, STATE_GRAY, STATE_DARK_GRAY, NUM_TILE_STATES,
     MASK_AXONS_STATE, MASK_AXONS_PAST, MASK_AXONS_TIME, MASK_AXONS_MASK, AXONS_WOLF_CODE, AXONS_MAX_TIME
-} from './constants.js';
+} from '../constants.js';
+
+import Grid from './grid.js';
+import Turmite from './turmite.js';
 
 // --- Simulation State Variables ---
 export let grid;
@@ -1086,4 +1089,47 @@ export function updateTurmiteCount(newCount) {
 /** Set the image loaded state */
 export function setImageLoadedState(state) {
     isImageLoaded = state;
-} 
+}
+
+class Simulation {
+    constructor(width, height) {
+        this.grid = new Grid(width, height);
+        this.turmites = [];
+        this.rules = {
+            states: 1,
+            colors: 2,
+            transitions: [
+                { state: 0, color: 0, nextState: 0, nextColor: 1, turn: 1 },
+                { state: 0, color: 1, nextState: 0, nextColor: 0, turn: 3 }
+            ]
+        };
+    }
+
+    addTurmite(x, y, direction = 0) {
+        const turmite = new Turmite(x, y, direction);
+        this.turmites.push(turmite);
+        return turmite;
+    }
+
+    step() {
+        for (const turmite of this.turmites) {
+            turmite.move(this.grid, this.rules);
+        }
+    }
+
+    clear() {
+        this.grid.clear();
+        this.turmites = [];
+    }
+
+    resize(width, height) {
+        this.grid.resize(width, height);
+        // Remove turmites that are now outside the grid
+        this.turmites = this.turmites.filter(turmite => {
+            const { x, y } = turmite.getPosition();
+            return x >= 0 && x < width && y >= 0 && y < height;
+        });
+    }
+}
+
+export default Simulation; 

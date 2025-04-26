@@ -7,7 +7,7 @@ import {
     DIRECTIONS,
     // Add state constants needed for drawing
     STATE_WHITE, STATE_BLACK, STATE_GRAY, STATE_DARK_GRAY
-} from './constants.js';
+} from '../constants.js';
 import {
     updateSimulation,           // Called by gameLoop
     getSimulationState,         // Needed for drawing
@@ -24,7 +24,7 @@ import {
     // getIndex - Removed, renderer shouldn't need grid index logic
     // getCellState - Removed, renderer gets full grid from getSimulationState
     // getMiteDirection - Imported above
-} from './simulation.js';
+} from '../simulation/simulation.js';
 import { getColor } from './palettes.js'; 
 
 // --- PixiJS App and Stage Variables ---

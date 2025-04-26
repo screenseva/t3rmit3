@@ -1,4 +1,4 @@
-import { PARAMS, BASE_CELL_SIZE, STATE_WHITE, STATE_GRAY, STATE_DARK_GRAY, STATE_BLACK } from './constants.js';
+import { PARAMS, BASE_CELL_SIZE, STATE_WHITE, STATE_GRAY, STATE_DARK_GRAY, STATE_BLACK } from '../constants.js';
 import {
     initializeGrid,
     setCellState,       // To populate grid
@@ -8,9 +8,9 @@ import {
     setDynamicCellSize,  // Import the new setter
     findBestStartPosition, // Import edge detection function
     isImageLoaded       // Import image loaded flag
-} from './simulation.js';
-import { resizeRenderer, rebuildChunksForSimulationState } from './renderer.js';
-import { updatePlayPauseButtons } from './ui.js';
+} from '../simulation/simulation.js';
+import { resizeRenderer, rebuildChunksForSimulationState } from '../rendering/renderer.js';
+import { updatePlayPauseButtons } from '../../ui/components/ui.js';
 
 /**
  * Callback function for the image file input.

@@ -10,8 +10,8 @@ import {
     STATE_GRAY,
     STATE_DARK_GRAY,
     BASE_CELL_SIZE
-} from './constants.js';
-import { palettes } from './palettes.js';
+} from '../../core/constants.js';
+import { palettes } from '../../core/rendering/palettes.js';
 import { 
     rules, 
     setActiveRule, 
@@ -29,12 +29,12 @@ import {
     getTurmitePositions,
     dynamicCellSize,
     setImageLoadedState
-} from './simulation.js';
+} from '../../core/simulation/simulation.js';
 import { 
     applyCanvasSize, 
     copyCanvasToClipboard, 
     rebuildChunksForSimulationState
-} from './renderer.js';
+} from '../../core/rendering/renderer.js';
 // Removed: handleImageFile import (listener added in main.js)
 
 // Dither.js configuration

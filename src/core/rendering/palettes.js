@@ -1,7 +1,7 @@
 // palettes.js
 // Defines different color palettes for rendering cell states.
 
-import { STATE_BLACK, STATE_WHITE, STATE_GRAY, STATE_DARK_GRAY } from './constants.js';
+import { STATE_BLACK, STATE_WHITE, STATE_GRAY, STATE_DARK_GRAY } from '../constants.js';
 
 export const palettes = {
     // Default palette matching the original hardcoded colors
