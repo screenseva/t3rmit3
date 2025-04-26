@@ -3,12 +3,12 @@
 // --- Grid Size --- (Base size, actual grid dimensions depend on canvas)
 export const BASE_CELL_SIZE = 10; // Base size for drawing at 1x zoom
 
-// --- State Representation (8 bits) ---
-export const MASK_TURMITE_PRESENCE = 0xC0; // 11000000
-export const MITE_PRESENT_VAL = 0x80;     // 10000000
-export const MASK_DIRECTION = 0x1C;       // 00011100
-export const SHIFT_DIRECTION = 2;
-export const MASK_TILE_STATE = 0x03;      // 00000011
+// --- State Representation (16 bits) ---
+export const MASK_TURMITE_PRESENCE = 0x8000; // 1000 0000 0000 0000
+export const MITE_PRESENT_VAL = 0x8000;
+export const MASK_DIRECTION = 0x7000;       // 0111 0000 0000 0000
+export const SHIFT_DIRECTION = 12;
+export const MASK_TILE_STATE = 0x00FF;      // 0000 0000 1111 1111
 
 // --- Directions Map (0-7 clockwise) ---
 export const DIRECTIONS = [
@@ -17,12 +17,16 @@ export const DIRECTIONS = [
 ];
 export const NUM_DIRECTIONS = 8;
 
-// --- Tile States (0-3) ---
+// --- Tile States (0-7) ---
 export const STATE_WHITE = 0;
 export const STATE_BLACK = 1;
 export const STATE_GRAY = 2;
 export const STATE_DARK_GRAY = 3;
-export const NUM_TILE_STATES = 4;
+export const STATE_LIGHT_GRAY = 4;
+export const STATE_RED = 5;
+export const STATE_GREEN = 6;
+export const STATE_BLUE = 7;
+export const NUM_TILE_STATES = 256;
 
 // --- Parameter Object (Defaults) ---
 export const PARAMS = {
@@ -48,7 +52,10 @@ export const PARAMS = {
     canvasHeight: 600,
     turmiteStepSize: 1,
     palette: 'default',
-    numTurmites: 5
+    paletteBitDepth: 4,
+    numTurmites: 5,
+    neighborhood: 1,
+    showSavedRules: true
 };
 
 // --- Axons Rule Constants ---

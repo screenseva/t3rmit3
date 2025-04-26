@@ -227,6 +227,8 @@ export const rules = {
         2: { turn: 1, nextTileState: STATE_DARK_GRAY },
         3: { turn: -1, nextTileState: STATE_WHITE }
     },
+    'rainbow8': {},
+    'cycle16': {},
     'custom': {
         0: { turn: customRuleParams.state0Turn, nextTileState: customRuleParams.state0Next },
         1: { turn: customRuleParams.state1Turn, nextTileState: customRuleParams.state1Next },
@@ -361,7 +363,14 @@ export const rules = {
                 }
             }
         }
-    }
+    },
+    'majority3x3': (function(){
+         const obj={};
+         for(let s=0;s<NUM_TILE_STATES;s++){
+             obj[s]={ turn:0, nextTileState: majorityOfNeighbors };
+         }
+         return obj;
+    })(),
 };
 export let activeRule = rules[PARAMS.rule];
 
@@ -803,7 +812,7 @@ export function updateSimulation() {
         }
 
         // 6. Update grid cells (no collision)
-        updateGridCellsForMove(currentX, currentY, nextX, nextY, newDirection, nextTileState);
+        updateGridCellsForMove(currentX, currentY, nextX, nextY, newDirection, nextTileState, currentDir);
 
         // 7. Update turmite position
         turmite.x = nextX;
@@ -830,6 +839,14 @@ function getTurmiteInfo(x, y) {
 
 function applyRule(currentTileState, currentX, currentY) {
     let ruleAction = activeRule[currentTileState];
+    // If rule lacks explicit entry for this tile state, try cyclic mapping
+    if (!ruleAction) {
+        const definedStates = Object.keys(activeRule).map(Number);
+        if (definedStates.length > 0) {
+            const fallbackKey = currentTileState % definedStates.length;
+            ruleAction = activeRule[fallbackKey];
+        }
+    }
     let nextTileState, turnDirection;
     if (ruleAction) {
         if (PARAMS.rule === 'random_walk') {
@@ -848,8 +865,8 @@ function applyRule(currentTileState, currentX, currentY) {
                 downLeft: getCellTileState((currentX - 1 + internalGridWidth) % internalGridWidth, (currentY + 1) % internalGridHeight),
                 downRight: getCellTileState((currentX + 1) % internalGridWidth, (currentY + 1) % internalGridHeight)
             };
-            nextTileState = typeof ruleAction.nextTileState === 'function' 
-                ? ruleAction.nextTileState(currentTileState, neighbors)
+            nextTileState = typeof ruleAction.nextTileState === 'function'
+                ? ruleAction.nextTileState(currentTileState, currentX, currentY, neighbors)
                 : ruleAction.nextTileState;
         }
     } else {
@@ -876,7 +893,7 @@ function handleCollision(nextX, nextY, currentX, currentY, currentDir, nextTileS
     return null;
 }
 
-function updateGridCellsForMove(currentX, currentY, nextX, nextY, newDirection, nextTileStateForCurrentCell) {
+function updateGridCellsForMove(currentX, currentY, nextX, nextY, newDirection, nextTileState, previousDirection) {
     const step = PARAMS.turmiteStepSize;
 
     // Update the block of cells the turmite is LEAVING
@@ -889,11 +906,22 @@ function updateGridCellsForMove(currentX, currentY, nextX, nextY, newDirection, 
             // Don't erase the turmite if it's landing on a cell it just vacated (step=1 case)
             if (leaveX === nextX && leaveY === nextY) continue;
 
+            // Only clear the turmite if *we* are still the one on that cell. If another turmite already stepped onto
+            // this location earlier in the same tick, its direction will differ from our previousDirection.
+            const existingState = grid[leaveIndex];
+            if (isMitePresent(existingState)) {
+                const dirInCell = getMiteDirection(existingState);
+                if (dirInCell !== previousDirection) {
+                    // Another turmite occupies the cell now; skip clearing
+                    continue;
+                }
+            }
+
             // Encode the new tile state, ensuring no turmite presence bit
-            let newStateForLeaveCell = encodeCellState(false, 0, nextTileStateForCurrentCell);
+            let newStateForLeaveCell = encodeCellState(false, 0, nextTileState);
 
             // Update only if state actually changes
-            if (grid[leaveIndex] !== newStateForLeaveCell) {
+            if (existingState !== newStateForLeaveCell) {
                 grid[leaveIndex] = newStateForLeaveCell;
                 dirtyCells.add(leaveIndex);
             }
@@ -1132,4 +1160,115 @@ class Simulation {
     }
 }
 
-export default Simulation; 
+export default Simulation;
+
+/** Returns an array of tile states in a (2r+1)x(2r+1) square around (x,y) */
+export function getNeighborhood(x, y, r = PARAMS.neighborhood || 1) {
+    const cells = [];
+    for (let dy = -r; dy <= r; dy++) {
+        for (let dx = -r; dx <= r; dx++) {
+            const nx = (x + dx + internalGridWidth) % internalGridWidth;
+            const ny = (y + dy + internalGridHeight) % internalGridHeight;
+            cells.push(getCellTileState(nx, ny));
+        }
+    }
+    return cells;
+}
+
+function majorityState(x,y){
+    const cells=getNeighborhood(x,y,PARAMS.neighborhood||1);
+    const counts=new Array(NUM_TILE_STATES).fill(0);
+    cells.forEach(s=>counts[s]++);
+    return counts.indexOf(Math.max(...counts));
+}
+
+function majorityOfNeighbors(currentState, x, y) {
+    const cells = getNeighborhood(x, y, PARAMS.neighborhood || 1);
+    const counts = new Array(NUM_TILE_STATES).fill(0);
+    cells.forEach(s => counts[s & MASK_TILE_STATE]++);
+    return counts.indexOf(Math.max(...counts));
+}
+
+// -------- Rule Table Helpers -------- //
+
+/**
+ * Ensure a rule table has entries for all states 0‥255.
+ * Any missing key gets a copy of key % baseCount (where baseCount is the
+ * number of explicitly-defined keys). Numeric nextTileStates are clamped to
+ * 0‥255. Returns a *new* object so originals remain untouched.
+ */
+function completeRuleTable(ruleObj) {
+    const completed = {};
+    const explicitKeys = Object.keys(ruleObj).map(Number);
+    if (explicitKeys.length === 0) return {};
+    explicitKeys.forEach(k => {
+        const act = { ...ruleObj[k] };
+        if (typeof act.nextTileState === 'number') {
+            act.nextTileState = (act.nextTileState + NUM_TILE_STATES) % NUM_TILE_STATES;
+        }
+        completed[k] = act;
+    });
+    const baseKeys = explicitKeys.sort((a,b)=>a-b);
+    const baseCount = baseKeys.length;
+    for (let s = 0; s < NUM_TILE_STATES; s++) {
+        if (!(s in completed)) {
+            const srcKey = baseKeys[s % baseCount];
+            completed[s] = { ...completed[srcKey] }; // shallow copy ok
+        }
+    }
+    return completed;
+}
+
+function validateRuleTable(name, ruleObj) {
+    Object.entries(ruleObj).forEach(([k, act]) => {
+        const keyNum = Number(k);
+        if (isNaN(keyNum) || keyNum < 0 || keyNum >= NUM_TILE_STATES) {
+            console.error(`Rule ${name}: invalid key ${k}`);
+        }
+        if (typeof act.turn !== 'number' || act.turn < -2 || act.turn > 2) {
+            console.warn(`Rule ${name}: unusual turn ${act.turn} at state ${k}`);
+        }
+        if (typeof act.nextTileState === 'number' && (act.nextTileState < 0 || act.nextTileState >= NUM_TILE_STATES)) {
+            console.warn(`Rule ${name}: nextTileState ${act.nextTileState} out of range at state ${k}`);
+        }
+    });
+}
+
+// Pre-validate shipped rules once at module load
+Object.entries(rules).forEach(([n,r])=>validateRuleTable(n,r));
+
+// --- Rule Engine ---
+// (rules object defined above)
+// ... existing code ...
+
+activeRule = completeRuleTable(rules[PARAMS.rule]);
+
+// ... existing code ...
+
+activeRule = completeRuleTable(rules.custom);
+
+// ... existing code ...
+
+// -----------------------------------------------------------
+// Dynamic color-cycle rule generator to reduce boilerplate
+function createColorCycleRule(numStates, alternating = true) {
+    const rule = {};
+    for (let s = 0; s < numStates; s++) {
+        const turnVal = alternating ? (s % 2 === 0 ? 1 : -1) : 1;
+        rule[s] = {
+            turn: turnVal,
+            nextTileState: (s + 1) % numStates
+        };
+    }
+    return rule;
+}
+
+// Replace rainbow8 and cycle16 with dynamically generated versions
+rules.rainbow8 = createColorCycleRule(8, true);
+rules.cycle16  = createColorCycleRule(16, true);
+
+// If currently active rule is one of these, update the reference
+if (PARAMS.rule === 'rainbow8' || PARAMS.rule === 'cycle16') {
+    activeRule = rules[PARAMS.rule];
+}
+// ... existing code ... 

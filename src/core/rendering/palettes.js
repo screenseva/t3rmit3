@@ -237,8 +237,18 @@ export const palettes = {
     },
 };
 
+// 8-colour VGA palette as array (index 0-7)
+export const vga8 = ['#000000','#AA0000','#00AA00','#AAAA00','#0000AA','#AA00AA','#00AAAA','#AAAAAA'];
+
+// 16-colour VGA palette as array (index 0-15)
+export const vga16 = ['#000000','#0000AA','#00AA00','#00AAAA','#AA0000','#AA00AA','#AA5500','#AAAAAA','#555555','#5555FF','#55FF55','#55FFFF','#FF5555','#FF55FF','#FFFF55','#FFFFFF'];
+
 // You might also want a function to get the color for a state from a palette name
 export function getColor(paletteName, state) {
-    const palette = palettes[paletteName] || palettes['default']; // Fallback to default
-    return palette[state] || palette['default'] || '#FF00FF'; // Return state color or palette default or global default
+    const pal = palettes[paletteName];
+    if (Array.isArray(pal)) {
+        return pal[state % pal.length];
+    }
+    const palette = pal || palettes['default'];
+    return palette[state] || palette['default'] || '#FF00FF';
 } 

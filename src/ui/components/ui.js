@@ -194,6 +194,60 @@ const UI_HELP = {
 const RULES_KEY = 'turmite_custom_rules';
 const COOKIE_RULES_KEY = 'turmite_custom_rules_global';
 
+// Map rules to required neighborhood radius
+const RULE_NEIGHBORHOOD = {
+    'langton': 1,
+    'spiral': 1,
+    'chaos': 1,
+    'symmetrical': 1,
+    'filling': 1,
+    'crystal': 1,
+    'highway': 1,
+    'maze': 1,
+    'mandala': 1,
+    'snowflake': 1,
+    'celtic_knot':1,
+    'arabesque':1,
+    'fractal':1,
+    'rainbow8':1,
+    'cycle16':1,
+    'majority3x3':3
+};
+
+// ---------- Custom Rule Helpers / Validation ---------- //
+
+// Collect built-in rule names plus protected identifiers
+const RESERVED_RULE_NAMES = new Set([
+    'custom',
+    'langton',
+    "langton's ant",
+    // Merge in any built-in rules dynamically
+    ...Object.keys(rules || {})
+].map(n => n.toLowerCase()));
+
+// Normalize a rule name (trim whitespace)
+function normalizeRuleName(name) {
+    return (name || '').trim();
+}
+
+// Case-insensitive lookup helper
+function ruleNameExists(name, savedRulesObj) {
+    const search = name.toLowerCase();
+    return Object.keys(savedRulesObj).some(k => k.toLowerCase() === search);
+}
+
+// Deep-clone utility (structuredClone polyfill fallback)
+function deepClone(obj) {
+    if (typeof structuredClone === 'function') return structuredClone(obj);
+    return JSON.parse(JSON.stringify(obj));
+}
+
+// ------------------------------------------------------ //
+
+// Declare toggle-UI globals safely
+let isCompactMode = false;
+let compactModeBtn = null;
+
 // Utility: set a cookie (shared across ports)
 function setCookie(name, value, days = 365) {
     const expires = new Date(Date.now() + days * 864e5).toUTCString();
@@ -370,20 +424,29 @@ function handleImageUpload(file) {
                 const maxWidth = window.innerWidth - padding;
                 const maxHeight = window.innerHeight - padding;
                 
-                // Calculate grid dimensions to match image pixels
-                const gridWidth = img.width;
-                const gridHeight = img.height;
+                // --- Down-scale the image *if necessary* so that the entire grid can
+                // be displayed inside the viewport with at least 1-pixel cells. --- //
 
-                console.log(`Processing image with dimensions: ${gridWidth}x${gridHeight}`);
+                // Desired maximum grid size (in cells) so that cellSize>=1 fits window
+                const downscaleFactor = Math.min(1, maxWidth / img.width, maxHeight / img.height);
 
-                // Calculate canvas dimensions to fit the window while maintaining aspect ratio
+                const gridWidth = Math.floor(img.width * downscaleFactor);
+                const gridHeight = Math.floor(img.height * downscaleFactor);
+
+                console.log(`Processing image with original dimensions: ${img.width}x${img.height}`);
+                console.log(`Scaled grid dimensions: ${gridWidth}x${gridHeight} (downscale factor ~ ${downscaleFactor.toFixed(3)})`);
+
+                // Compute an *integer* canvas scaling factor so that the grid fills as much
+                // of the window as possible without exceeding it.
                 const scaleX = maxWidth / gridWidth;
                 const scaleY = maxHeight / gridHeight;
-                const scale = Math.min(scaleX, scaleY);
-                
-                // Update canvas dimensions
-                PARAMS.canvasWidth = Math.floor(gridWidth * scale);
-                PARAMS.canvasHeight = Math.floor(gridHeight * scale);
+                let canvasScale = Math.floor(Math.min(scaleX, scaleY));
+                if (canvasScale < 1) canvasScale = 1; // Safety
+
+                PARAMS.canvasWidth = gridWidth * canvasScale;
+                PARAMS.canvasHeight = gridHeight * canvasScale;
+
+                const scale = canvasScale; // For logging / debug
                 
                 // Create a temporary canvas for image processing
                 const tempCanvas = document.createElement('canvas');
@@ -395,10 +458,11 @@ function handleImageUpload(file) {
                 tempCtx.imageSmoothingEnabled = true;
                 tempCtx.imageSmoothingQuality = 'high';
                 
-                // Draw image at original size
-                tempCtx.drawImage(img, 0, 0, gridWidth, gridHeight);
-                
-                // Get image data
+                // If the image was down-scaled, draw it scaled into the temp canvas
+                // so that subsequent pixel sampling matches the reduced grid size.
+                tempCtx.drawImage(img, 0, 0, img.width, img.height, 0, 0, gridWidth, gridHeight);
+
+                // Get image data (already down-scaled if applicable)
                 const imageData = tempCtx.getImageData(0, 0, gridWidth, gridHeight);
                 
                 console.log(`Initializing grid with dimensions: ${gridWidth}x${gridHeight}`);
@@ -717,7 +781,11 @@ function toggleCompactMode() {
         
         // In Tweakpane 4.0, we need to update the button's title property
         compactModeBtn.dispose();
-        compactModeBtn = pane.addButton({ title: newTitle });
+        compactModeBtn = UIState.pane.addButton({ title: newTitle });
+        compactModeBtn.on('click', toggleCompactMode);
+    } else {
+        // First-time creation
+        compactModeBtn = UIState.pane.addButton({ title: 'Compact Mode' });
         compactModeBtn.on('click', toggleCompactMode);
     }
 }
@@ -786,7 +854,7 @@ function applyRulePreset(presetName) {
             customRuleParams[key] = preset[key];
         });
         updateCustomRule();
-        if (pane) pane.refresh();
+        if (UIState.pane) UIState.pane.refresh();
         if (PARAMS.rule === 'custom' && !PARAMS.running) {
             forceFullRedraw();
         }
@@ -804,15 +872,29 @@ function applyRulePreset(presetName) {
  * @returns {boolean} Success status
  */
 function saveCustomRule(name, seed, ruleParams) {
+    const trimmed = normalizeRuleName(name);
+    if (!trimmed) return false;
+    if (RESERVED_RULE_NAMES.has(trimmed.toLowerCase())) {
+        alert('Cannot overwrite a built-in or reserved rule name.');
+        return false;
+    }
     try {
         const savedRules = JSON.parse(localStorage.getItem('turmite_custom_rules') || '{}');
-        savedRules[name] = {
+
+        // Check duplicate (case-insensitive)
+        if (ruleNameExists(trimmed, savedRules)) {
+            if (!confirm(`Rule "${trimmed}" exists. Overwrite?`)) {
+                return false;
+            }
+        }
+
+        savedRules[trimmed] = {
             seed: seed,
-            params: { ...ruleParams },
+            params: deepClone(ruleParams), // deep copy
             timestamp: Date.now()
         };
         localStorage.setItem('turmite_custom_rules', JSON.stringify(savedRules));
-        console.log(`Rule saved: ${name} (seed: ${seed})`);
+        console.log(`Rule saved: ${trimmed} (seed: ${seed})`);
         persistRulesToCookie();
         return true;
     } catch (error) {
@@ -863,13 +945,27 @@ function deleteCustomRule(name) {
  * @returns {boolean} Success status
  */
 function renameCustomRule(oldName, newName) {
+    const trimmedNew = normalizeRuleName(newName);
+    if (!trimmedNew) return false;
+    if (RESERVED_RULE_NAMES.has(trimmedNew.toLowerCase())) {
+        alert('Cannot use reserved/built-in rule names.');
+        return false;
+    }
     try {
         const savedRules = JSON.parse(localStorage.getItem('turmite_custom_rules') || '{}');
-        if (!(oldName in savedRules) || newName in savedRules) return false;
-        savedRules[newName] = savedRules[oldName];
-        delete savedRules[oldName];
+        if (!ruleNameExists(oldName, savedRules)) return false;
+        if (ruleNameExists(trimmedNew, savedRules)) {
+            alert('Target name already exists.');
+            return false;
+        }
+
+        // Find actual key names for case-insensitive match
+        let realOldKey = Object.keys(savedRules).find(k => k.toLowerCase() === oldName.toLowerCase());
+        savedRules[trimmedNew] = savedRules[realOldKey];
+        delete savedRules[realOldKey];
+
         localStorage.setItem('turmite_custom_rules', JSON.stringify(savedRules));
-        console.log(`Rule renamed: ${oldName} → ${newName}`);
+        console.log(`Rule renamed: ${realOldKey} → ${trimmedNew}`);
         persistRulesToCookie();
         return true;
     } catch (error) {
@@ -929,6 +1025,15 @@ function initializeSimulationControls(folder, pixiApp) {
             min: 1, 
             max: 12, 
         step: 1
+    });
+
+    // Neighborhood radius (1=>3x3, 2=>5x5, 3=>7x7)
+    folder.addBinding(PARAMS, 'neighborhood', {
+        label: 'Neighborhood',
+        options: { '1 (3x3)': 1, '2 (5x5)': 2, '3 (7x7)': 3 }
+    }).on('change', () => {
+        console.log('Neighborhood radius set to', PARAMS.neighborhood);
+        if(typeof updateSavedRulesList==='function') updateSavedRulesList();
     });
 }
 
@@ -1064,14 +1169,24 @@ function initializeRuleControls(folder) {
         } else if (selectedRule === 'langton') {
             PARAMS.rule = 'langton';
             setActiveRule('langton');
-                    } else {
+        } else if (rules[selectedRule]) { // Built-in rule table present
+            PARAMS.rule = selectedRule;
+            setActiveRule(selectedRule);
+        } else if (rulePresets[selectedRule]) { // Apply preset into custom rule
+            applyRulePreset(selectedRule);
+            PARAMS.rule = 'custom';
+            setActiveRule('custom');
+        } else {
+            // Assume it is a saved custom rule
             const ruleData = loadCustomRule(selectedRule);
             if (ruleData) {
                 PARAMS.rule = 'custom';
                 setActiveRule('custom');
                 seedSpan.textContent = ruleData.seed;
                 Object.assign(customRuleParams, ruleData.params);
-                    updateCustomRule();
+                updateCustomRule();
+            } else {
+                console.warn('Rule not found:', selectedRule);
             }
         }
 
@@ -1086,25 +1201,60 @@ function initializeRuleControls(folder) {
     function updateSavedRulesList() {
         const savedRules = getSavedRules();
         persistRulesToCookie();
-        savedRuleSelect.innerHTML = `
-            <option value="custom">Custom Rule</option>
-            <option value="langton">Langton's Ant</option>
-            <option disabled>──────────</option>
-        `;
-        savedRules.forEach(({ name, timestamp }) => {
-            const option = document.createElement('option');
-            option.value = name;
-            option.text = name;
-            option.title = new Date(timestamp).toLocaleString();
-            savedRuleSelect.appendChild(option);
+
+        const allowedRules = Object.entries(RULE_NEIGHBORHOOD)
+            .filter(([name, r]) => r === PARAMS.neighborhood)
+            .map(([name]) => name);
+
+        savedRuleSelect.innerHTML = '<option value="custom">Custom Rule</option>';
+
+        // Built-in rules section
+        allowedRules.forEach(rn => {
+            const opt = document.createElement('option');
+            opt.value = rn;
+            opt.text = rn;
+            savedRuleSelect.appendChild(opt);
         });
-        // Set default to custom
-        savedRuleSelect.value = 'custom';
+
+        // Saved custom rules section (optional)
+        if (PARAMS.showSavedRules && savedRules.length) {
+            const divider = document.createElement('option');
+            divider.disabled = true;
+            divider.text = '── Saved Rules ──';
+            savedRuleSelect.appendChild(divider);
+
+            savedRules.forEach(({ name, timestamp }) => {
+                const option = document.createElement('option');
+                option.value = name;
+                option.text = name;
+                option.title = new Date(timestamp).toLocaleString();
+                savedRuleSelect.appendChild(option);
+            });
+        }
+
+        // Ensure current selection is valid
+        if (![...savedRuleSelect.options].some(opt => opt.value === savedRuleSelect.value)) {
+            savedRuleSelect.value = 'custom';
+        }
     }
 
     savedRuleSelect.onchange = () => {
         handleRuleChange(savedRuleSelect.value);
     };
+
+    // Checkbox to toggle saved rules visibility
+    const toggleContainer=document.createElement('label');
+    Object.assign(toggleContainer.style,{display:'flex',alignItems:'center',gap:'4px',color:'#ccc',fontSize:'11px'});
+    const toggleChk=document.createElement('input');
+    toggleChk.type='checkbox';
+    toggleChk.checked=PARAMS.showSavedRules;
+    toggleChk.onchange=()=>{
+        PARAMS.showSavedRules=toggleChk.checked;
+        updateSavedRulesList();
+    };
+    const toggleTxt=document.createElement('span'); toggleTxt.textContent='Saved';
+    toggleContainer.appendChild(toggleChk); toggleContainer.appendChild(toggleTxt);
+    seedContainer.appendChild(toggleContainer);
 
     // Add elements to containers
     seedContainer.appendChild(seedSpan);
@@ -1257,32 +1407,39 @@ function initializeRuleControls(folder) {
  * @param {object} folder - The appearance folder
  */
 function initializeAppearanceControls(folder) {
-    // Color palette selection
+    // Bit depth selector
+    folder.addBinding(PARAMS, 'paletteBitDepth', {
+        label: 'Bits',
+        options: { '2-bit':4,'4-bit':16,'8-bit':256 }
+    }).on('change', () => UIState.pane.refresh());
+
+    // Palette selector filtered by bit depth
+    const paletteOptions = {
+        4: {
+            '  VGA 4': 'vga',
+            '  CGA 0': 'cga0',
+            '  CGA 1': 'cga1',
+            '  Game Boy': 'gameboy',
+            '  Black & White': 'bw',
+            '  Grayscale (4)': 'grayscale',
+            '  Sepia': 'sepia',
+            '  Amber': 'amber'
+        },
+        16: {
+            '  VGA 16': 'vga16'
+        },
+        256: {
+            '  WebSafe 216': 'web216' // placeholder
+        }
+    };
+
     folder.addBinding(PARAMS, 'palette', {
         label: 'Colors',
-        options: {
-            'Default': 'default',
-            'Heatmap': 'heatmap',
-            'Black & White': 'bw',
-            'Forest': 'forest',
-            'Ocean': 'ocean',
-            'VGA': 'vga',
-            'Green Text': 'text',
-            'CGA 0': 'cga0',
-            'CGA 1': 'cga1',
-            'Commodore 64': 'c64',
-            'Game Boy': 'gameboy',
-            'Spectrum': 'spectrum',
-            'Apple II': 'apple2',
-            'ANSI': 'ansi',
-            'Grayscale (4)': 'grayscale',
-            'Sepia': 'sepia',
-            'Amber': 'amber'
-        }
-    });
+        options: paletteOptions[PARAMS.paletteBitDepth] || {}
+    }).on('change', () => forceFullRedraw());
 
     // Turmite size
-    folder.addBinding(PARAMS, 'turmiteStepSize', {
+    const sizeBinding = folder.addBinding(PARAMS, 'turmiteStepSize', {
         label: 'Size',
         options: {
             '1x': 1,
@@ -1291,9 +1448,17 @@ function initializeAppearanceControls(folder) {
             '8x': 8,
             '16x': 16
         }
-            }).on('change', () => {
-                    forceFullRedraw();
+    }).on('change', () => {
+        forceFullRedraw();
     });
+
+    // Ensure any binding that changes customRuleParams triggers a live update
+    if (UIState.customRuleFolder) {
+        UIState.customRuleFolder.on('change', () => {
+            updateCustomRule();
+            if (!PARAMS.running) forceFullRedraw();
+        });
+    }
 }
 
 /**

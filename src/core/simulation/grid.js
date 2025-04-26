@@ -5,7 +5,7 @@ export class Grid {
     constructor(width, height) {
         this.width = width;
         this.height = height;
-        this.cells = new Array(width * height).fill(0);
+        this.cells = new Uint16Array(width * height);
         this.turmites = [];
     }
 
@@ -98,7 +98,7 @@ export class Grid {
      * @param {number} newHeight - New grid height
      */
     resize(newWidth, newHeight) {
-        const newCells = new Array(newWidth * newHeight).fill(0);
+        const newCells = new Uint16Array(newWidth * newHeight);
         
         // Copy existing cells
         const minWidth = Math.min(this.width, newWidth);
