@@ -282,35 +282,7 @@ function initializeImageControls(folder) {
     fileInput.id = 'image-upload-input';
     document.body.appendChild(fileInput);
 
-    // Image controls
-    const imageFolder = folder.addFolder({
-        title: 'Image Options',
-        expanded: true
-    });
-
-    // Dithering algorithm selection
-    imageFolder.addBinding(PARAMS, 'ditherAlgorithm', {
-        label: 'Dithering',
-        options: {
-            'Floyd-Steinberg': 'FloydSteinberg',
-            'Atkinson': 'Atkinson'
-        }
-    });
-
-    // Dithering threshold
-    imageFolder.addBinding(PARAMS, 'ditherThreshold', {
-        label: 'Threshold',
-        min: 0,
-        max: 255,
-        step: 1
-    });
-
-    // Invert colors toggle
-    imageFolder.addBinding(PARAMS, 'invertImage', {
-        label: 'Invert Colors'
-    });
-
-    // Upload button
+    // Only include the Upload Image button (all other image options removed)
     folder.addButton({
         title: 'Upload Image'
     }).on('click', () => {
@@ -489,10 +461,6 @@ export function initializeUI(pixiApp) {
                 title: 'Appearance',
                 expanded: false
             }),
-            canvas: UIState.pane.addFolder({
-                title: 'Canvas',
-                expanded: false
-            }),
             image: UIState.pane.addFolder({
                 title: 'Image',
                 expanded: false
@@ -503,7 +471,6 @@ export function initializeUI(pixiApp) {
         initializeSimulationControls(folders.simulation, pixiApp);
         initializeRuleControls(folders.rules);
         initializeAppearanceControls(folders.appearance);
-        initializeCanvasControls(folders.canvas, pixiApp);
         initializeImageControls(folders.image);
 
         // Restore last uploaded image if exists
@@ -1273,95 +1240,9 @@ function initializeAppearanceControls(folder) {
 }
 
 /**
- * Initializes canvas controls for size and view
- * @param {object} folder - The canvas folder
- * @param {object} pixiApp - The PIXI.Application instance
+ * Store the last uploaded image for refresh functionality
+ * @param {File} file - The uploaded image file
  */
-function initializeCanvasControls(folder, pixiApp) {
-    // Set initial canvas size to window size
-    const updateCanvasToWindowSize = () => {
-        // Calculate size while maintaining aspect ratio
-        const padding = 40; // Padding from window edges
-        const maxWidth = window.innerWidth - padding;
-        const maxHeight = window.innerHeight - padding;
-        
-        // Update PARAMS
-        PARAMS.canvasWidth = maxWidth;
-        PARAMS.canvasHeight = maxHeight;
-        
-        // Apply new size
-        applyCanvasSize(maxWidth, maxHeight);
-        rebuildChunksForSimulationState();
-    };
-
-    // Initial size setup
-    updateCanvasToWindowSize();
-
-    // Add window resize listener
-    window.addEventListener('resize', () => {
-        if (!isImageLoaded) { // Only auto-resize if no image is loaded
-            updateCanvasToWindowSize();
-        }
-    });
-
-    // Canvas size controls in a subfolder
-    const sizeFolder = folder.addFolder({
-            title: 'Canvas Size',
-        expanded: false
-    });
-
-    // Width control
-    sizeFolder.addBinding(PARAMS, 'canvasWidth', {
-        label: 'Width',
-        min: 100,
-        max: 3840, // Support for 4K screens
-        step: 10
-    });
-
-    // Height control
-    sizeFolder.addBinding(PARAMS, 'canvasHeight', {
-        label: 'Height',
-        min: 100,
-        max: 2160, // Support for 4K screens
-        step: 10
-    });
-
-    // Apply size button
-    sizeFolder.addButton({
-        title: 'Apply Size'
-    }).on('click', () => {
-        applyCanvasSize(PARAMS.canvasWidth, PARAMS.canvasHeight);
-        rebuildChunksForSimulationState();
-    });
-
-    // Reset to window size button
-    sizeFolder.addButton({
-        title: 'Reset to Window Size'
-    }).on('click', () => {
-        updateCanvasToWindowSize();
-    });
-
-    // View controls
-    const viewFolder = folder.addFolder({
-            title: 'View',
-        expanded: true
-        });
-
-    // Zoom control
-        viewFolder.addBinding(PARAMS, 'zoom', {
-        label: 'Zoom',
-            min: 0.1,
-            max: 5,
-        step: 0.1
-        });
-
-    // Follow turmite toggle
-        viewFolder.addBinding(PARAMS, 'followTurmite', {
-        label: 'Follow'
-    });
-}
-
-// Store the last uploaded image for refresh functionality
 export function setLastUploadedImage(file) {
     UIState.lastUploadedImage = file;
     // Store image data in localStorage
