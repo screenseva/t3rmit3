@@ -5,37 +5,30 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Turmite Simulation (PixiJS)</title>
+    
     <!-- Libraries -->
-    <!-- REMOVED: <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.7.0/p5.js"></script> -->
-    <!-- REMOVED: <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.7.0/addons/p5.dom.min.js"></script> -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/7.4.2/pixi.min.js"></script>
+    
     <!-- Font Awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
     <!-- Import map for ES modules -->
     <script type="importmap">
-      {
+    {
         "imports": {
-          "tweakpane": "https://cdn.jsdelivr.net/npm/tweakpane@4.0.5/dist/tweakpane.min.js"
+            "tweakpane": "https://cdn.jsdelivr.net/npm/tweakpane@4.0.5/dist/tweakpane.min.js"
         }
-      }
+    }
     </script>
+    
+    <!-- Styles -->
     <link rel="stylesheet" href="css/style.css">
-    <!-- Import map for modules (optional, good practice) -->
-    <!-- <script type="importmap">
-      {
-        "imports": {
-          "pixi.js": "https://cdnjs.cloudflare.com/ajax/libs/pixi.js/7.4.2/pixi.min.js",
-          "tweakpane": "https://cdn.jsdelivr.net/npm/tweakpane@3.1.9/dist/tweakpane.min.js"
-        }
-      }
-    </script> -->
 </head>
 <body>
     <!-- PixiJS canvas will be added here by renderer.js -->
     <!-- UI controls (Tweakpane) will be added here by ui.js -->
-
+    
     <!-- Main entry point - Load as module -->
     <script type="module" src="js/sketch.js"></script>
-
 </body>
 </html>

@@ -31,7 +31,7 @@ export const PARAMS = {
     pattern: 'empty',
     speed: 30, // Target rendering FPS for ticker
     simStepsPerFrame: 1, // Steps per render frame
-    running: true,
+    running: false,
     isCustomRule: false, // Toggle for custom rule mode
 
     // Visualization Params
@@ -48,4 +48,13 @@ export const PARAMS = {
     canvasHeight: 600,
     turmiteStepSize: 1,
     palette: 'default',
-}; 
+    numTurmites: 5
+};
+
+// --- Axons Rule Constants ---
+export const MASK_AXONS_STATE = 0x01;      // 00000001
+export const MASK_AXONS_PAST = 0x02;       // 00000010
+export const MASK_AXONS_TIME = 0x7C;       // 01111100
+export const MASK_AXONS_MASK = 0x80;       // 10000000
+export const AXONS_WOLF_CODE = 178;        // Rule constant
+export const AXONS_MAX_TIME = 31;          // Maximum time value (5 bits) 

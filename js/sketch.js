@@ -11,60 +11,73 @@ console.log("Initializing application...");
 // Initialize Renderer
 const pixiApp = initializeRenderer(PARAMS);
 
-// Initialize UI, passing Pixi App instance
-const uiElements = initializeUI(pixiApp);
-
-// Add listener to the file input IF UI initialization was successful
-if (uiElements && uiElements.fileInputElement && typeof handleImageFile === 'function') {
-    const { pane, fileInputElement } = uiElements; // Destructure return object
-
-    fileInputElement.addEventListener('change', (event) => {
-        const file = event.target.files[0]; // Get the raw File object
-        if (file) {
-            // Store reference to the file for refresh capability
-            if (typeof setLastUploadedImage === 'function') {
-                setLastUploadedImage(file);
-                console.log("Image file stored for refresh capability");
+// Initialize UI with proper error handling
+let uiElements = null;
+try {
+    // Ensure PARAMS is properly initialized before creating UI
+    if (!PARAMS) {
+        throw new Error('PARAMS object not properly initialized');
+    }
+    
+    // Initialize UI with the PixiJS app instance
+    uiElements = initializeUI(pixiApp);
+    
+    if (!uiElements || !uiElements.pane) {
+        throw new Error('UI initialization failed to return proper elements');
+    }
+    
+    // Add file input listener if available
+    if (uiElements.fileInputElement && typeof handleImageFile === 'function') {
+        const { fileInputElement } = uiElements;
+        
+        fileInputElement.addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            if (file) {
+                if (typeof setLastUploadedImage === 'function') {
+                    setLastUploadedImage(file);
+                }
+                handleImageFile(file, uiElements.pane);
+                event.target.value = null;
             }
-            
-            // Directly call handleImageFile with the raw File object and pane
-            handleImageFile(file, pane);
-            // Reset the input value to allow uploading the same file again
-            event.target.value = null;
-        }
-    });
-} else if (!uiElements || !uiElements.fileInputElement) {
-    console.warn("File input element not returned from initializeUI or UI init failed.");
-} else {
-    console.error("handleImageFile function not imported correctly.");
+        });
+    }
+} catch (error) {
+    console.error('Error during UI initialization:', error);
+    // Create a simple error message for the user
+    const errorDiv = document.createElement('div');
+    errorDiv.style.position = 'fixed';
+    errorDiv.style.top = '10px';
+    errorDiv.style.right = '10px';
+    errorDiv.style.padding = '10px';
+    errorDiv.style.backgroundColor = '#ff4444';
+    errorDiv.style.color = 'white';
+    errorDiv.style.borderRadius = '5px';
+    errorDiv.textContent = 'Error initializing UI controls. Please refresh the page.';
+    document.body.appendChild(errorDiv);
 }
-
-console.log("Application initialized.");
 
 // --- Add Resize Listener --- //
 window.addEventListener('resize', () => {
-    console.log("Window resized...");
     // Update PARAMS with new dimensions
     PARAMS.canvasWidth = window.innerWidth;
     PARAMS.canvasHeight = window.innerHeight;
 
-    // Tell the renderer to apply the new size
+    // Apply new canvas size
     if (typeof applyCanvasSize === 'function') {
         applyCanvasSize();
-    } else {
-        // This case indicates an issue with imports/exports if renderer.js is loaded
-        console.error("applyCanvasSize function is not available!");
-    }
-    
-    // Optional: Refresh Tweakpane if UI elements depend on canvas size
-    if (uiElements && uiElements.pane) {
-        // Debounce this if it causes performance issues on rapid resize
-        // uiElements.pane.refresh(); 
+        
+        // Refresh UI if available
+        if (uiElements?.pane) {
+            uiElements.pane.refresh();
+        }
     }
 });
 
-// Make the handleImageFile function accessible globally for the refresh button
+// Make handleImageFile accessible globally for the refresh button
 window.handleImageFile = handleImageFile;
+
+// Export for potential use in other modules
+export { pixiApp, uiElements };
 
 // Note: This uses ES Module imports. You'll need to serve these files
 // from a local server and load sketch.js in your HTML using <script type="module">.
