@@ -190,6 +190,47 @@ const UI_HELP = {
     followTurmite: "Camera follows the turmite as it moves"
 };
 
+// Cross-port persistence keys
+const RULES_KEY = 'turmite_custom_rules';
+const COOKIE_RULES_KEY = 'turmite_custom_rules_global';
+
+// Utility: set a cookie (shared across ports)
+function setCookie(name, value, days = 365) {
+    const expires = new Date(Date.now() + days * 864e5).toUTCString();
+    document.cookie = `${name}=${encodeURIComponent(value)}; expires=${expires}; path=/`;
+}
+
+// Utility: get a cookie value
+function getCookie(name) {
+    return document.cookie.split('; ').find(row => row.startsWith(name + '='))?.split('=')[1];
+}
+
+// Sync rules from cookie to localStorage if local copy is missing/empty
+(function syncRulesFromCookie() {
+    try {
+        const local = localStorage.getItem(RULES_KEY);
+        if (!local || local === '{}' || local === 'null') {
+            const cookieVal = getCookie(COOKIE_RULES_KEY);
+            if (cookieVal) {
+                localStorage.setItem(RULES_KEY, decodeURIComponent(cookieVal));
+                console.log('[Turmite] Restored rules from cookie (cross-port)');
+            }
+        }
+    } catch (err) {
+        console.warn('[Turmite] Failed to sync rules from cookie:', err);
+    }
+})();
+
+// Helper to persist current rules JSON into the cookie
+function persistRulesToCookie() {
+    try {
+        const data = localStorage.getItem(RULES_KEY) || '{}';
+        setCookie(COOKIE_RULES_KEY, data);
+    } catch (err) {
+        console.warn('[Turmite] Failed to persist rules cookie:', err);
+    }
+}
+
 /**
  * Applies dithering to image data
  * @param {ImageData} imageData - The image data to process
@@ -772,6 +813,7 @@ function saveCustomRule(name, seed, ruleParams) {
         };
         localStorage.setItem('turmite_custom_rules', JSON.stringify(savedRules));
         console.log(`Rule saved: ${name} (seed: ${seed})`);
+        persistRulesToCookie();
         return true;
     } catch (error) {
         console.error('Failed to save rule:', error);
@@ -806,6 +848,7 @@ function deleteCustomRule(name) {
         delete savedRules[name];
         localStorage.setItem('turmite_custom_rules', JSON.stringify(savedRules));
         console.log(`Rule deleted: ${name}`);
+        persistRulesToCookie();
         return true;
     } catch (error) {
         console.error('Failed to delete rule:', error);
@@ -827,6 +870,7 @@ function renameCustomRule(oldName, newName) {
         delete savedRules[oldName];
         localStorage.setItem('turmite_custom_rules', JSON.stringify(savedRules));
         console.log(`Rule renamed: ${oldName} → ${newName}`);
+        persistRulesToCookie();
         return true;
     } catch (error) {
         console.error('Failed to rename rule:', error);
@@ -1041,6 +1085,7 @@ function initializeRuleControls(folder) {
 
     function updateSavedRulesList() {
         const savedRules = getSavedRules();
+        persistRulesToCookie();
         savedRuleSelect.innerHTML = `
             <option value="custom">Custom Rule</option>
             <option value="langton">Langton's Ant</option>
