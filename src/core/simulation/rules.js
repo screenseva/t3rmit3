@@ -60,7 +60,7 @@ export class Rules {
         const rules = new Rules();
         
         // Add transitions for each state
-        for (let state = 0; state < 4; state++) {
+        for (let state = 0; state < 8; state++) {
             rules.addTransition(
                 state,
                 0,

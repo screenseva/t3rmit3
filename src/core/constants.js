@@ -54,7 +54,6 @@ export const PARAMS = {
     palette: 'default',
     paletteBitDepth: 4,
     numTurmites: 5,
-    neighborhood: 1,
     showSavedRules: true
 };
 

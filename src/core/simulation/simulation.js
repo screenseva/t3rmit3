@@ -5,7 +5,7 @@ import {
     BASE_CELL_SIZE, // Needed for pattern generation?
     MASK_TURMITE_PRESENCE, MITE_PRESENT_VAL, MASK_DIRECTION, SHIFT_DIRECTION, MASK_TILE_STATE,
     DIRECTIONS, NUM_DIRECTIONS,
-    STATE_WHITE, STATE_BLACK, STATE_GRAY, STATE_DARK_GRAY, NUM_TILE_STATES,
+    STATE_WHITE, STATE_BLACK, STATE_GRAY, STATE_DARK_GRAY, STATE_LIGHT_GRAY, STATE_RED, STATE_GREEN, STATE_BLUE, NUM_TILE_STATES,
     MASK_AXONS_STATE, MASK_AXONS_PAST, MASK_AXONS_TIME, MASK_AXONS_MASK, AXONS_WOLF_CODE, AXONS_MAX_TIME
 } from '../constants.js';
 
@@ -39,7 +39,15 @@ export const customRuleParams = {
     state2Turn: 1,
     state2Next: STATE_DARK_GRAY,
     state3Turn: -1,
-    state3Next: STATE_GRAY
+    state3Next: STATE_GRAY,
+    state4Turn: 1,
+    state4Next: STATE_LIGHT_GRAY,
+    state5Turn: -1,
+    state5Next: STATE_RED,
+    state6Turn: 1,
+    state6Next: STATE_GREEN,
+    state7Turn: -1,
+    state7Next: STATE_BLUE
 };
 
 // --- Rule Presets ---
@@ -52,7 +60,15 @@ export const rulePresets = {
         state2Turn: 1,
         state2Next: STATE_DARK_GRAY,
         state3Turn: -1,
-        state3Next: STATE_GRAY
+        state3Next: STATE_GRAY,
+        state4Turn: 1,
+        state4Next: STATE_LIGHT_GRAY,
+        state5Turn: -1,
+        state5Next: STATE_RED,
+        state6Turn: 1,
+        state6Next: STATE_GREEN,
+        state7Turn: -1,
+        state7Next: STATE_BLUE
     },
     'spiral': {
         state0Turn: 1,
@@ -60,19 +76,35 @@ export const rulePresets = {
         state1Turn: -1,
         state1Next: STATE_WHITE,
         state2Turn: 1,
-        state2Next: STATE_WHITE,
-        state3Turn: 1,
-        state3Next: STATE_WHITE
+        state2Next: STATE_DARK_GRAY,
+        state3Turn: -1,
+        state3Next: STATE_GRAY,
+        state4Turn: 1,
+        state4Next: STATE_LIGHT_GRAY,
+        state5Turn: -1,
+        state5Next: STATE_RED,
+        state6Turn: 1,
+        state6Next: STATE_GREEN,
+        state7Turn: -1,
+        state7Next: STATE_BLUE
     },
     'chaos': {
         state0Turn: 2,
         state0Next: STATE_BLACK,
         state1Turn: -2,
-        state1Next: STATE_GRAY,
+        state1Next: STATE_WHITE,
         state2Turn: 1,
         state2Next: STATE_DARK_GRAY,
         state3Turn: -1,
-        state3Next: STATE_WHITE
+        state3Next: STATE_GRAY,
+        state4Turn: 2,
+        state4Next: STATE_LIGHT_GRAY,
+        state5Turn: -2,
+        state5Next: STATE_RED,
+        state6Turn: 1,
+        state6Next: STATE_GREEN,
+        state7Turn: -1,
+        state7Next: STATE_BLUE
     },
     'symmetrical': {
         state0Turn: 1,
@@ -80,9 +112,17 @@ export const rulePresets = {
         state1Turn: -1,
         state1Next: STATE_WHITE,
         state2Turn: 1,
-        state2Next: STATE_BLACK,
+        state2Next: STATE_DARK_GRAY,
         state3Turn: -1,
-        state3Next: STATE_WHITE
+        state3Next: STATE_GRAY,
+        state4Turn: 1,
+        state4Next: STATE_LIGHT_GRAY,
+        state5Turn: -1,
+        state5Next: STATE_RED,
+        state6Turn: 1,
+        state6Next: STATE_GREEN,
+        state7Turn: -1,
+        state7Next: STATE_BLUE
     },
     'filling': {
         state0Turn: 0,
@@ -92,7 +132,15 @@ export const rulePresets = {
         state2Turn: -1,
         state2Next: STATE_WHITE,
         state3Turn: 0,
-        state3Next: STATE_DARK_GRAY
+        state3Next: STATE_DARK_GRAY,
+        state4Turn: 1,
+        state4Next: STATE_LIGHT_GRAY,
+        state5Turn: -1,
+        state5Next: STATE_RED,
+        state6Turn: 1,
+        state6Next: STATE_GREEN,
+        state7Turn: -1,
+        state7Next: STATE_BLUE
     },
     'crystal': {
         state0Turn: 1,
@@ -102,7 +150,15 @@ export const rulePresets = {
         state2Turn: -1,
         state2Next: STATE_DARK_GRAY,
         state3Turn: 2,
-        state3Next: STATE_WHITE
+        state3Next: STATE_WHITE,
+        state4Turn: 1,
+        state4Next: STATE_LIGHT_GRAY,
+        state5Turn: -1,
+        state5Next: STATE_RED,
+        state6Turn: 1,
+        state6Next: STATE_GREEN,
+        state7Turn: -1,
+        state7Next: STATE_BLUE
     },
     'highway': {
         state0Turn: 0,
@@ -112,7 +168,15 @@ export const rulePresets = {
         state2Turn: -1,
         state2Next: STATE_WHITE,
         state3Turn: 0,
-        state3Next: STATE_DARK_GRAY
+        state3Next: STATE_DARK_GRAY,
+        state4Turn: 1,
+        state4Next: STATE_LIGHT_GRAY,
+        state5Turn: -1,
+        state5Next: STATE_RED,
+        state6Turn: 1,
+        state6Next: STATE_GREEN,
+        state7Turn: -1,
+        state7Next: STATE_BLUE
     },
     'maze': {
         state0Turn: 2,
@@ -122,7 +186,15 @@ export const rulePresets = {
         state2Turn: 0,
         state2Next: STATE_WHITE,
         state3Turn: 1,
-        state3Next: STATE_DARK_GRAY
+        state3Next: STATE_DARK_GRAY,
+        state4Turn: 2,
+        state4Next: STATE_LIGHT_GRAY,
+        state5Turn: -1,
+        state5Next: STATE_RED,
+        state6Turn: 0,
+        state6Next: STATE_GREEN,
+        state7Turn: 1,
+        state7Next: STATE_BLUE
     },
     'mandala': {
         state0Turn: 2,
@@ -132,7 +204,15 @@ export const rulePresets = {
         state2Turn: 1,
         state2Next: STATE_DARK_GRAY,
         state3Turn: -2,
-        state3Next: STATE_WHITE
+        state3Next: STATE_WHITE,
+        state4Turn: 2,
+        state4Next: STATE_LIGHT_GRAY,
+        state5Turn: -1,
+        state5Next: STATE_RED,
+        state6Turn: 1,
+        state6Next: STATE_GREEN,
+        state7Turn: -2,
+        state7Next: STATE_BLUE
     },
     'snowflake': {
         state0Turn: 2,
@@ -142,7 +222,15 @@ export const rulePresets = {
         state2Turn: 1,
         state2Next: STATE_GRAY,
         state3Turn: -1,
-        state3Next: STATE_DARK_GRAY
+        state3Next: STATE_DARK_GRAY,
+        state4Turn: 2,
+        state4Next: STATE_LIGHT_GRAY,
+        state5Turn: -2,
+        state5Next: STATE_RED,
+        state6Turn: 1,
+        state6Next: STATE_GREEN,
+        state7Turn: -1,
+        state7Next: STATE_BLUE
     },
     'celtic_knot': {
         state0Turn: 1,
@@ -152,7 +240,15 @@ export const rulePresets = {
         state2Turn: -2,
         state2Next: STATE_DARK_GRAY,
         state3Turn: -1,
-        state3Next: STATE_WHITE
+        state3Next: STATE_WHITE,
+        state4Turn: 1,
+        state4Next: STATE_LIGHT_GRAY,
+        state5Turn: 2,
+        state5Next: STATE_RED,
+        state6Turn: -2,
+        state6Next: STATE_GREEN,
+        state7Turn: -1,
+        state7Next: STATE_BLUE
     },
     'arabesque': {
         state0Turn: 2,
@@ -162,7 +258,15 @@ export const rulePresets = {
         state2Turn: -1,
         state2Next: STATE_DARK_GRAY,
         state3Turn: -2,
-        state3Next: STATE_WHITE
+        state3Next: STATE_WHITE,
+        state4Turn: 2,
+        state4Next: STATE_LIGHT_GRAY,
+        state5Turn: 1,
+        state5Next: STATE_RED,
+        state6Turn: -1,
+        state6Next: STATE_GREEN,
+        state7Turn: -2,
+        state7Next: STATE_BLUE
     },
     'fractal': {
         state0Turn: 2,
@@ -172,7 +276,15 @@ export const rulePresets = {
         state2Turn: 1,
         state2Next: STATE_WHITE,
         state3Turn: -1,
-        state3Next: STATE_GRAY
+        state3Next: STATE_GRAY,
+        state4Turn: 2,
+        state4Next: STATE_LIGHT_GRAY,
+        state5Turn: -2,
+        state5Next: STATE_RED,
+        state6Turn: 1,
+        state6Next: STATE_GREEN,
+        state7Turn: -1,
+        state7Next: STATE_BLUE
     },
     'axons': {
         name: 'Axons',
@@ -189,43 +301,71 @@ export const rules = {
         0: { turn: 1, nextTileState: STATE_BLACK },
         1: { turn: -1, nextTileState: STATE_WHITE },
         2: { turn: 1, nextTileState: STATE_DARK_GRAY },
-        3: { turn: -1, nextTileState: STATE_GRAY }
+        3: { turn: -1, nextTileState: STATE_GRAY },
+        4: { turn: 1, nextTileState: STATE_LIGHT_GRAY },
+        5: { turn: -1, nextTileState: STATE_RED },
+        6: { turn: 1, nextTileState: STATE_GREEN },
+        7: { turn: -1, nextTileState: STATE_BLUE }
     },
-    'complex_pattern': { // Placeholder
+    'complex_pattern': {
         0: { turn: 1, nextTileState: STATE_BLACK },
-        1: { turn: 0, nextTileState: STATE_GRAY },
+        1: { turn: 0, nextTileState: STATE_WHITE },
         2: { turn: -1, nextTileState: STATE_DARK_GRAY },
-        3: { turn: 1, nextTileState: STATE_WHITE }
+        3: { turn: 1, nextTileState: STATE_GRAY },
+        4: { turn: -1, nextTileState: STATE_LIGHT_GRAY },
+        5: { turn: 1, nextTileState: STATE_RED },
+        6: { turn: -1, nextTileState: STATE_GREEN },
+        7: { turn: 1, nextTileState: STATE_BLUE }
     },
-    'spiral': { // Simple 2-state
+    'spiral': {
         0: { turn: 1, nextTileState: STATE_BLACK },
         1: { turn: -1, nextTileState: STATE_WHITE },
-        2: { turn: 1, nextTileState: STATE_WHITE },
-        3: { turn: 1, nextTileState: STATE_WHITE }
+        2: { turn: 1, nextTileState: STATE_DARK_GRAY },
+        3: { turn: -1, nextTileState: STATE_GRAY },
+        4: { turn: 1, nextTileState: STATE_LIGHT_GRAY },
+        5: { turn: -1, nextTileState: STATE_RED },
+        6: { turn: 1, nextTileState: STATE_GREEN },
+        7: { turn: -1, nextTileState: STATE_BLUE }
     },
     'random_walk': {
-        0: { turn: 0, nextTileState: STATE_BLACK }, // Turn handled in applyRule
-        1: { turn: 0, nextTileState: STATE_GRAY },
+        0: { turn: 0, nextTileState: STATE_BLACK },
+        1: { turn: 0, nextTileState: STATE_WHITE },
         2: { turn: 0, nextTileState: STATE_DARK_GRAY },
-        3: { turn: 0, nextTileState: STATE_WHITE }
+        3: { turn: 0, nextTileState: STATE_GRAY },
+        4: { turn: 0, nextTileState: STATE_LIGHT_GRAY },
+        5: { turn: 0, nextTileState: STATE_RED },
+        6: { turn: 0, nextTileState: STATE_GREEN },
+        7: { turn: 0, nextTileState: STATE_BLUE }
     },
     'highway': {
         0: { turn: 0, nextTileState: STATE_BLACK },
         1: { turn: 1, nextTileState: STATE_GRAY },
         2: { turn: -1, nextTileState: STATE_WHITE },
-        3: { turn: 0, nextTileState: STATE_DARK_GRAY }
+        3: { turn: 0, nextTileState: STATE_DARK_GRAY },
+        4: { turn: 1, nextTileState: STATE_LIGHT_GRAY },
+        5: { turn: -1, nextTileState: STATE_RED },
+        6: { turn: 1, nextTileState: STATE_GREEN },
+        7: { turn: -1, nextTileState: STATE_BLUE }
     },
     'zigzag': {
         0: { turn: 1, nextTileState: STATE_BLACK },
         1: { turn: -1, nextTileState: STATE_WHITE },
         2: { turn: 1, nextTileState: STATE_DARK_GRAY },
-        3: { turn: -1, nextTileState: STATE_GRAY }
+        3: { turn: -1, nextTileState: STATE_GRAY },
+        4: { turn: 1, nextTileState: STATE_LIGHT_GRAY },
+        5: { turn: -1, nextTileState: STATE_RED },
+        6: { turn: 1, nextTileState: STATE_GREEN },
+        7: { turn: -1, nextTileState: STATE_BLUE }
     },
     'art_drawer': {
         0: { turn: 2, nextTileState: STATE_BLACK },
         1: { turn: -2, nextTileState: STATE_GRAY },
         2: { turn: 1, nextTileState: STATE_DARK_GRAY },
-        3: { turn: -1, nextTileState: STATE_WHITE }
+        3: { turn: -1, nextTileState: STATE_WHITE },
+        4: { turn: 2, nextTileState: STATE_LIGHT_GRAY },
+        5: { turn: -2, nextTileState: STATE_RED },
+        6: { turn: 1, nextTileState: STATE_GREEN },
+        7: { turn: -1, nextTileState: STATE_BLUE }
     },
     'rainbow8': {},
     'cycle16': {},
@@ -233,7 +373,11 @@ export const rules = {
         0: { turn: customRuleParams.state0Turn, nextTileState: customRuleParams.state0Next },
         1: { turn: customRuleParams.state1Turn, nextTileState: customRuleParams.state1Next },
         2: { turn: customRuleParams.state2Turn, nextTileState: customRuleParams.state2Next },
-        3: { turn: customRuleParams.state3Turn, nextTileState: customRuleParams.state3Next }
+        3: { turn: customRuleParams.state3Turn, nextTileState: customRuleParams.state3Next },
+        4: { turn: customRuleParams.state4Turn, nextTileState: customRuleParams.state4Next },
+        5: { turn: customRuleParams.state5Turn, nextTileState: customRuleParams.state5Next },
+        6: { turn: customRuleParams.state6Turn, nextTileState: customRuleParams.state6Next },
+        7: { turn: customRuleParams.state7Turn, nextTileState: customRuleParams.state7Next }
     },
     'axons': {
         0: { 
@@ -362,15 +506,132 @@ export const rules = {
                     return (mask << 7) | ((time + 1) << 2) | newState;
                 }
             }
+        },
+        4: { 
+            turn: 0, 
+            nextTileState: (currentState, neighbors) => {
+                // Same logic as state 0
+                const currentBit = currentState & MASK_AXONS_STATE;
+                const pastBit = (currentState & MASK_AXONS_PAST) >> 1;
+                const time = (currentState & MASK_AXONS_TIME) >> 2;
+                const mask = (currentState & MASK_AXONS_MASK) >> 7;
+                
+                const sum = (
+                    (neighbors.left & MASK_AXONS_STATE) +
+                    (neighbors.right & MASK_AXONS_STATE) +
+                    (neighbors.up & MASK_AXONS_STATE) +
+                    (neighbors.down & MASK_AXONS_STATE) +
+                    (neighbors.upLeft & MASK_AXONS_STATE) +
+                    (neighbors.upRight & MASK_AXONS_STATE) +
+                    (neighbors.downLeft & MASK_AXONS_STATE) +
+                    (neighbors.downRight & MASK_AXONS_STATE) +
+                    currentBit
+                );
+                
+                const newBit = (AXONS_WOLF_CODE >> sum) & 1;
+                const newState = (currentBit << 1) | (newBit ^ pastBit);
+                
+                if (time === AXONS_MAX_TIME) {
+                    return (mask << 7) | newState | mask;
+                } else {
+                    return (mask << 7) | ((time + 1) << 2) | newState;
+                }
+            }
+        },
+        5: { 
+            turn: 0, 
+            nextTileState: (currentState, neighbors) => {
+                // Same logic as state 0
+                const currentBit = currentState & MASK_AXONS_STATE;
+                const pastBit = (currentState & MASK_AXONS_PAST) >> 1;
+                const time = (currentState & MASK_AXONS_TIME) >> 2;
+                const mask = (currentState & MASK_AXONS_MASK) >> 7;
+                
+                const sum = (
+                    (neighbors.left & MASK_AXONS_STATE) +
+                    (neighbors.right & MASK_AXONS_STATE) +
+                    (neighbors.up & MASK_AXONS_STATE) +
+                    (neighbors.down & MASK_AXONS_STATE) +
+                    (neighbors.upLeft & MASK_AXONS_STATE) +
+                    (neighbors.upRight & MASK_AXONS_STATE) +
+                    (neighbors.downLeft & MASK_AXONS_STATE) +
+                    (neighbors.downRight & MASK_AXONS_STATE) +
+                    currentBit
+                );
+                
+                const newBit = (AXONS_WOLF_CODE >> sum) & 1;
+                const newState = (currentBit << 1) | (newBit ^ pastBit);
+                
+                if (time === AXONS_MAX_TIME) {
+                    return (mask << 7) | newState | mask;
+                } else {
+                    return (mask << 7) | ((time + 1) << 2) | newState;
+                }
+            }
+        },
+        6: { 
+            turn: 0, 
+            nextTileState: (currentState, neighbors) => {
+                // Same logic as state 0
+                const currentBit = currentState & MASK_AXONS_STATE;
+                const pastBit = (currentState & MASK_AXONS_PAST) >> 1;
+                const time = (currentState & MASK_AXONS_TIME) >> 2;
+                const mask = (currentState & MASK_AXONS_MASK) >> 7;
+                
+                const sum = (
+                    (neighbors.left & MASK_AXONS_STATE) +
+                    (neighbors.right & MASK_AXONS_STATE) +
+                    (neighbors.up & MASK_AXONS_STATE) +
+                    (neighbors.down & MASK_AXONS_STATE) +
+                    (neighbors.upLeft & MASK_AXONS_STATE) +
+                    (neighbors.upRight & MASK_AXONS_STATE) +
+                    (neighbors.downLeft & MASK_AXONS_STATE) +
+                    (neighbors.downRight & MASK_AXONS_STATE) +
+                    currentBit
+                );
+                
+                const newBit = (AXONS_WOLF_CODE >> sum) & 1;
+                const newState = (currentBit << 1) | (newBit ^ pastBit);
+                
+                if (time === AXONS_MAX_TIME) {
+                    return (mask << 7) | newState | mask;
+                } else {
+                    return (mask << 7) | ((time + 1) << 2) | newState;
+                }
+            }
+        },
+        7: { 
+            turn: 0, 
+            nextTileState: (currentState, neighbors) => {
+                // Same logic as state 0
+                const currentBit = currentState & MASK_AXONS_STATE;
+                const pastBit = (currentState & MASK_AXONS_PAST) >> 1;
+                const time = (currentState & MASK_AXONS_TIME) >> 2;
+                const mask = (currentState & MASK_AXONS_MASK) >> 7;
+                
+                const sum = (
+                    (neighbors.left & MASK_AXONS_STATE) +
+                    (neighbors.right & MASK_AXONS_STATE) +
+                    (neighbors.up & MASK_AXONS_STATE) +
+                    (neighbors.down & MASK_AXONS_STATE) +
+                    (neighbors.upLeft & MASK_AXONS_STATE) +
+                    (neighbors.upRight & MASK_AXONS_STATE) +
+                    (neighbors.downLeft & MASK_AXONS_STATE) +
+                    (neighbors.downRight & MASK_AXONS_STATE) +
+                    currentBit
+                );
+                
+                const newBit = (AXONS_WOLF_CODE >> sum) & 1;
+                const newState = (currentBit << 1) | (newBit ^ pastBit);
+                
+                if (time === AXONS_MAX_TIME) {
+                    return (mask << 7) | newState | mask;
+                } else {
+                    return (mask << 7) | ((time + 1) << 2) | newState;
+                }
+            }
         }
-    },
-    'majority3x3': (function(){
-         const obj={};
-         for(let s=0;s<NUM_TILE_STATES;s++){
-             obj[s]={ turn:0, nextTileState: majorityOfNeighbors };
-         }
-         return obj;
-    })(),
+    }
 };
 export let activeRule = rules[PARAMS.rule];
 
@@ -427,62 +688,17 @@ export function updateCustomRule() {
         0: { turn: customRuleParams.state0Turn, nextTileState: customRuleParams.state0Next },
         1: { turn: customRuleParams.state1Turn, nextTileState: customRuleParams.state1Next },
         2: { turn: customRuleParams.state2Turn, nextTileState: customRuleParams.state2Next },
-        3: { turn: customRuleParams.state3Turn, nextTileState: customRuleParams.state3Next }
+        3: { turn: customRuleParams.state3Turn, nextTileState: customRuleParams.state3Next },
+        4: { turn: customRuleParams.state4Turn, nextTileState: customRuleParams.state4Next },
+        5: { turn: customRuleParams.state5Turn, nextTileState: customRuleParams.state5Next },
+        6: { turn: customRuleParams.state6Turn, nextTileState: customRuleParams.state6Next },
+        7: { turn: customRuleParams.state7Turn, nextTileState: customRuleParams.state7Next }
     };
     
     // If custom rule is active, update the active rule reference
     if (PARAMS.rule === 'custom') {
         activeRule = rules.custom;
     }
-}
-
-/** Helper function to detect if a cell is on an edge */
-function isEdgeCell(x, y) {
-    if (x < 0 || x >= internalGridWidth || y < 0 || y >= internalGridHeight) return false;
-    
-    const currentState = getCellTileState(x, y);
-    let edgeStrength = 0;
-    let neighborCount = 0;
-    let maxContrast = 0;
-    
-    // First, check if we're on a non-empty cell
-    if (currentState === STATE_WHITE) return false;
-    
-    // Check horizontal and vertical neighbors first (more weight)
-    const directions = [
-        {dx: -1, dy: 0},  // left
-        {dx: 1, dy: 0},   // right
-        {dx: 0, dy: -1},  // up
-        {dx: 0, dy: 1},   // down
-        {dx: -1, dy: -1}, // diagonal
-        {dx: 1, dy: -1},  // diagonal
-        {dx: -1, dy: 1},  // diagonal
-        {dx: 1, dy: 1}    // diagonal
-    ];
-    
-    for (const dir of directions) {
-        const nx = (x + dir.dx + internalGridWidth) % internalGridWidth;
-        const ny = (y + dir.dy + internalGridHeight) % internalGridHeight;
-        const neighborState = getCellTileState(nx, ny);
-        
-        // Calculate contrast
-        const contrast = Math.abs(currentState - neighborState);
-        maxContrast = Math.max(maxContrast, contrast);
-        
-        // Weight orthogonal neighbors more heavily
-        const weight = (dir.dx === 0 || dir.dy === 0) ? 2 : 1;
-        
-        if (contrast > 0) {
-            edgeStrength += contrast * weight;
-            neighborCount++;
-        }
-    }
-    
-    // Calculate average edge strength, weighted by neighbor count
-    const avgEdgeStrength = edgeStrength / (neighborCount || 1);
-    
-    // Return true if we have strong edges or multiple moderate edges
-    return maxContrast > 1 || (neighborCount >= 3 && avgEdgeStrength > 0.75);
 }
 
 /** Find the best starting position for a single turmite (for backward compatibility) */
@@ -1162,41 +1378,7 @@ class Simulation {
 
 export default Simulation;
 
-/** Returns an array of tile states in a (2r+1)x(2r+1) square around (x,y) */
-export function getNeighborhood(x, y, r = PARAMS.neighborhood || 1) {
-    const cells = [];
-    for (let dy = -r; dy <= r; dy++) {
-        for (let dx = -r; dx <= r; dx++) {
-            const nx = (x + dx + internalGridWidth) % internalGridWidth;
-            const ny = (y + dy + internalGridHeight) % internalGridHeight;
-            cells.push(getCellTileState(nx, ny));
-        }
-    }
-    return cells;
-}
-
-function majorityState(x,y){
-    const cells=getNeighborhood(x,y,PARAMS.neighborhood||1);
-    const counts=new Array(NUM_TILE_STATES).fill(0);
-    cells.forEach(s=>counts[s]++);
-    return counts.indexOf(Math.max(...counts));
-}
-
-function majorityOfNeighbors(currentState, x, y) {
-    const cells = getNeighborhood(x, y, PARAMS.neighborhood || 1);
-    const counts = new Array(NUM_TILE_STATES).fill(0);
-    cells.forEach(s => counts[s & MASK_TILE_STATE]++);
-    return counts.indexOf(Math.max(...counts));
-}
-
-// -------- Rule Table Helpers -------- //
-
-/**
- * Ensure a rule table has entries for all states 0‥255.
- * Any missing key gets a copy of key % baseCount (where baseCount is the
- * number of explicitly-defined keys). Numeric nextTileStates are clamped to
- * 0‥255. Returns a *new* object so originals remain untouched.
- */
+// Remove getNeighborhood and related functions
 function completeRuleTable(ruleObj) {
     const completed = {};
     const explicitKeys = Object.keys(ruleObj).map(Number);
@@ -1218,36 +1400,6 @@ function completeRuleTable(ruleObj) {
     }
     return completed;
 }
-
-function validateRuleTable(name, ruleObj) {
-    Object.entries(ruleObj).forEach(([k, act]) => {
-        const keyNum = Number(k);
-        if (isNaN(keyNum) || keyNum < 0 || keyNum >= NUM_TILE_STATES) {
-            console.error(`Rule ${name}: invalid key ${k}`);
-        }
-        if (typeof act.turn !== 'number' || act.turn < -2 || act.turn > 2) {
-            console.warn(`Rule ${name}: unusual turn ${act.turn} at state ${k}`);
-        }
-        if (typeof act.nextTileState === 'number' && (act.nextTileState < 0 || act.nextTileState >= NUM_TILE_STATES)) {
-            console.warn(`Rule ${name}: nextTileState ${act.nextTileState} out of range at state ${k}`);
-        }
-    });
-}
-
-// Pre-validate shipped rules once at module load
-Object.entries(rules).forEach(([n,r])=>validateRuleTable(n,r));
-
-// --- Rule Engine ---
-// (rules object defined above)
-// ... existing code ...
-
-activeRule = completeRuleTable(rules[PARAMS.rule]);
-
-// ... existing code ...
-
-activeRule = completeRuleTable(rules.custom);
-
-// ... existing code ...
 
 // -----------------------------------------------------------
 // Dynamic color-cycle rule generator to reduce boilerplate

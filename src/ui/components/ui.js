@@ -9,6 +9,10 @@ import {
     STATE_BLACK,
     STATE_GRAY,
     STATE_DARK_GRAY,
+    STATE_LIGHT_GRAY,
+    STATE_RED,
+    STATE_GREEN,
+    STATE_BLUE,
     BASE_CELL_SIZE
 } from '../../core/constants.js';
 import { palettes } from '../../core/rendering/palettes.js';
@@ -152,11 +156,15 @@ const UI_CONFIG = {
 };
 
 // Color mapping for states to use in the UI
-const stateColors = {
+export const stateColors = {
     [STATE_WHITE]: '#ffffff',
     [STATE_BLACK]: '#000000',
     [STATE_GRAY]: '#aaaaaa',
-    [STATE_DARK_GRAY]: '#555555'
+    [STATE_DARK_GRAY]: '#555555',
+    [STATE_LIGHT_GRAY]: '#dddddd',
+    [STATE_RED]: '#ff0000',
+    [STATE_GREEN]: '#00ff00',
+    [STATE_BLUE]: '#0000ff'
 };
 
 // Helpful metrics and recommendations for rule parameters
@@ -193,26 +201,6 @@ const UI_HELP = {
 // Cross-port persistence keys
 const RULES_KEY = 'turmite_custom_rules';
 const COOKIE_RULES_KEY = 'turmite_custom_rules_global';
-
-// Map rules to required neighborhood radius
-const RULE_NEIGHBORHOOD = {
-    'langton': 1,
-    'spiral': 1,
-    'chaos': 1,
-    'symmetrical': 1,
-    'filling': 1,
-    'crystal': 1,
-    'highway': 1,
-    'maze': 1,
-    'mandala': 1,
-    'snowflake': 1,
-    'celtic_knot':1,
-    'arabesque':1,
-    'fractal':1,
-    'rainbow8':1,
-    'cycle16':1,
-    'majority3x3':3
-};
 
 // ---------- Custom Rule Helpers / Validation ---------- //
 
@@ -808,7 +796,7 @@ function generateRandomRule(seededRandom) {
     ];
 
     // Define possible state transitions
-    const numStates = 4; // Total number of states
+    const numStates = 8; // Total number of states
     const stateTransitions = [];
     
     // Generate all possible state combinations
@@ -1027,13 +1015,18 @@ function initializeSimulationControls(folder, pixiApp) {
         step: 1
     });
 
-    // Neighborhood radius (1=>3x3, 2=>5x5, 3=>7x7)
-    folder.addBinding(PARAMS, 'neighborhood', {
-        label: 'Neighborhood',
-        options: { '1 (3x3)': 1, '2 (5x5)': 2, '3 (7x7)': 3 }
+    // Turmite size
+    folder.addBinding(PARAMS, 'turmiteStepSize', {
+        label: 'Size',
+        options: {
+            '1x': 1,
+            '2x': 2,
+            '4x': 4,
+            '8x': 8,
+            '16x': 16
+        }
     }).on('change', () => {
-        console.log('Neighborhood radius set to', PARAMS.neighborhood);
-        if(typeof updateSavedRulesList==='function') updateSavedRulesList();
+        forceFullRedraw();
     });
 }
 
@@ -1138,13 +1131,21 @@ function initializeRuleControls(folder) {
                 state0: rule.state0Turn,
                 state1: rule.state1Turn,
                 state2: rule.state2Turn,
-                state3: rule.state3Turn
+                state3: rule.state3Turn,
+                state4: rule.state4Turn,
+                state5: rule.state5Turn,
+                state6: rule.state6Turn,
+                state7: rule.state7Turn
             },
             transitions: {
                 state0: rule.state0Next,
                 state1: rule.state1Next,
                 state2: rule.state2Next,
-                state3: rule.state3Next
+                state3: rule.state3Next,
+                state4: rule.state4Next,
+                state5: rule.state5Next,
+                state6: rule.state6Next,
+                state7: rule.state7Next
             }
         });
         
@@ -1202,14 +1203,10 @@ function initializeRuleControls(folder) {
         const savedRules = getSavedRules();
         persistRulesToCookie();
 
-        const allowedRules = Object.entries(RULE_NEIGHBORHOOD)
-            .filter(([name, r]) => r === PARAMS.neighborhood)
-            .map(([name]) => name);
-
         savedRuleSelect.innerHTML = '<option value="custom">Custom Rule</option>';
 
         // Built-in rules section
-        allowedRules.forEach(rn => {
+        Object.keys(rules).forEach(rn => {
             const opt = document.createElement('option');
             opt.value = rn;
             opt.text = rn;
@@ -1407,50 +1404,97 @@ function initializeRuleControls(folder) {
  * @param {object} folder - The appearance folder
  */
 function initializeAppearanceControls(folder) {
-    // Bit depth selector
-    folder.addBinding(PARAMS, 'paletteBitDepth', {
-        label: 'Bits',
-        options: { '2-bit':4,'4-bit':16,'8-bit':256 }
-    }).on('change', () => UIState.pane.refresh());
+    // Hardcode 8-bit mode
+    PARAMS.paletteBitDepth = 8;
 
-    // Palette selector filtered by bit depth
+    // Palette selector with 8-bit palettes only
     const paletteOptions = {
-        4: {
-            '  VGA 4': 'vga',
-            '  CGA 0': 'cga0',
-            '  CGA 1': 'cga1',
-            '  Game Boy': 'gameboy',
-            '  Black & White': 'bw',
-            '  Grayscale (4)': 'grayscale',
-            '  Sepia': 'sepia',
-            '  Amber': 'amber'
-        },
-        16: {
-            '  VGA 16': 'vga16'
-        },
-        256: {
-            '  WebSafe 216': 'web216' // placeholder
-        }
+        '  VGA 8': 'vga8',
+        '  Windows 8': 'win8',
+        '  Mac 8': 'mac8',
+        '  Solarized': 'solarized8',
+        '  Nord': 'nord8',
+        '  Dracula': 'dracula8',
+        '  Gruvbox': 'gruvbox8',
+        '  Monokai': 'monokai8',
+        '  Ocean': 'ocean8',
+        '  Sunset': 'sunset8',
+        '  Forest': 'forest8',
+        '  Fire': 'fire8',
+        '  Winter': 'winter8',
+        '  Pastel': 'pastel8',
+        '  Neon': 'neon8',
+        '  Earth': 'earth8',
+        '  Retro': 'retro8'
     };
 
+    // Create container for palette preview
+    const previewContainer = document.createElement('div');
+    Object.assign(previewContainer.style, {
+        display: 'grid',
+        gridTemplateColumns: 'repeat(4, 1fr)',
+        gap: '2px',
+        marginTop: '8px',
+        marginBottom: '8px',
+        padding: '4px',
+        backgroundColor: '#1a1a1a',
+        borderRadius: '4px'
+    });
+
+    // Function to update the palette preview
+    function updatePalettePreview() {
+        previewContainer.innerHTML = '';
+        const paletteName = PARAMS.palette;
+        const palette = palettes[paletteName];
+        
+        if (Array.isArray(palette)) {
+            // For array-based palettes (8-bit)
+            palette.forEach((color, index) => {
+                const colorBox = document.createElement('div');
+                Object.assign(colorBox.style, {
+                    width: '100%',
+                    height: '20px',
+                    backgroundColor: color,
+                    borderRadius: '2px',
+                    cursor: 'pointer',
+                    position: 'relative'
+                });
+                
+                // Add tooltip with hex color
+                colorBox.title = color;
+                
+                // Add click to copy functionality
+                colorBox.onclick = () => {
+                    navigator.clipboard.writeText(color)
+                        .then(() => {
+                            const originalTitle = colorBox.title;
+                            colorBox.title = 'Copied!';
+                            setTimeout(() => {
+                                colorBox.title = originalTitle;
+                            }, 1000);
+                        })
+                        .catch(err => console.error('Failed to copy color:', err));
+                };
+                
+                previewContainer.appendChild(colorBox);
+            });
+        }
+    }
+
+    // Add palette selector
     folder.addBinding(PARAMS, 'palette', {
         label: 'Colors',
-        options: paletteOptions[PARAMS.paletteBitDepth] || {}
-    }).on('change', () => forceFullRedraw());
-
-    // Turmite size
-    const sizeBinding = folder.addBinding(PARAMS, 'turmiteStepSize', {
-        label: 'Size',
-        options: {
-            '1x': 1,
-            '2x': 2,
-            '4x': 4,
-            '8x': 8,
-            '16x': 16
-        }
+        options: paletteOptions
     }).on('change', () => {
         forceFullRedraw();
+        updatePalettePreview();
     });
+
+    // Add the preview container to the folder
+    folder.element.appendChild(previewContainer);
+
+    // Initialize the preview
+    updatePalettePreview();
 
     // Ensure any binding that changes customRuleParams triggers a live update
     if (UIState.customRuleFolder) {
@@ -1551,4 +1595,158 @@ async function restoreImageAfterRuleChange() {
         console.error('Failed to restore image:', error);
         forceFullRedraw();
     }
+}
+
+function initializeCustomRuleControls(folder) {
+    // State 0 controls
+    folder.addBinding(customRuleParams, 'state0Turn', {
+        label: 'State 0 Turn',
+        options: { 'Left': -1, 'None': 0, 'Right': 1, 'U-Turn': 2 }
+    });
+    folder.addBinding(customRuleParams, 'state0Next', {
+        label: 'State 0 Next',
+        options: {
+            'White': STATE_WHITE,
+            'Black': STATE_BLACK,
+            'Gray': STATE_GRAY,
+            'Dark Gray': STATE_DARK_GRAY,
+            'Light Gray': STATE_LIGHT_GRAY,
+            'Red': STATE_RED,
+            'Green': STATE_GREEN,
+            'Blue': STATE_BLUE
+        }
+    });
+
+    // State 1 controls
+    folder.addBinding(customRuleParams, 'state1Turn', {
+        label: 'State 1 Turn',
+        options: { 'Left': -1, 'None': 0, 'Right': 1, 'U-Turn': 2 }
+    });
+    folder.addBinding(customRuleParams, 'state1Next', {
+        label: 'State 1 Next',
+        options: {
+            'White': STATE_WHITE,
+            'Black': STATE_BLACK,
+            'Gray': STATE_GRAY,
+            'Dark Gray': STATE_DARK_GRAY,
+            'Light Gray': STATE_LIGHT_GRAY,
+            'Red': STATE_RED,
+            'Green': STATE_GREEN,
+            'Blue': STATE_BLUE
+        }
+    });
+
+    // State 2 controls
+    folder.addBinding(customRuleParams, 'state2Turn', {
+        label: 'State 2 Turn',
+        options: { 'Left': -1, 'None': 0, 'Right': 1, 'U-Turn': 2 }
+    });
+    folder.addBinding(customRuleParams, 'state2Next', {
+        label: 'State 2 Next',
+        options: {
+            'White': STATE_WHITE,
+            'Black': STATE_BLACK,
+            'Gray': STATE_GRAY,
+            'Dark Gray': STATE_DARK_GRAY,
+            'Light Gray': STATE_LIGHT_GRAY,
+            'Red': STATE_RED,
+            'Green': STATE_GREEN,
+            'Blue': STATE_BLUE
+        }
+    });
+
+    // State 3 controls
+    folder.addBinding(customRuleParams, 'state3Turn', {
+        label: 'State 3 Turn',
+        options: { 'Left': -1, 'None': 0, 'Right': 1, 'U-Turn': 2 }
+    });
+    folder.addBinding(customRuleParams, 'state3Next', {
+        label: 'State 3 Next',
+        options: {
+            'White': STATE_WHITE,
+            'Black': STATE_BLACK,
+            'Gray': STATE_GRAY,
+            'Dark Gray': STATE_DARK_GRAY,
+            'Light Gray': STATE_LIGHT_GRAY,
+            'Red': STATE_RED,
+            'Green': STATE_GREEN,
+            'Blue': STATE_BLUE
+        }
+    });
+
+    // State 4 controls
+    folder.addBinding(customRuleParams, 'state4Turn', {
+        label: 'State 4 Turn',
+        options: { 'Left': -1, 'None': 0, 'Right': 1, 'U-Turn': 2 }
+    });
+    folder.addBinding(customRuleParams, 'state4Next', {
+        label: 'State 4 Next',
+        options: {
+            'White': STATE_WHITE,
+            'Black': STATE_BLACK,
+            'Gray': STATE_GRAY,
+            'Dark Gray': STATE_DARK_GRAY,
+            'Light Gray': STATE_LIGHT_GRAY,
+            'Red': STATE_RED,
+            'Green': STATE_GREEN,
+            'Blue': STATE_BLUE
+        }
+    });
+
+    // State 5 controls
+    folder.addBinding(customRuleParams, 'state5Turn', {
+        label: 'State 5 Turn',
+        options: { 'Left': -1, 'None': 0, 'Right': 1, 'U-Turn': 2 }
+    });
+    folder.addBinding(customRuleParams, 'state5Next', {
+        label: 'State 5 Next',
+        options: {
+            'White': STATE_WHITE,
+            'Black': STATE_BLACK,
+            'Gray': STATE_GRAY,
+            'Dark Gray': STATE_DARK_GRAY,
+            'Light Gray': STATE_LIGHT_GRAY,
+            'Red': STATE_RED,
+            'Green': STATE_GREEN,
+            'Blue': STATE_BLUE
+        }
+    });
+
+    // State 6 controls
+    folder.addBinding(customRuleParams, 'state6Turn', {
+        label: 'State 6 Turn',
+        options: { 'Left': -1, 'None': 0, 'Right': 1, 'U-Turn': 2 }
+    });
+    folder.addBinding(customRuleParams, 'state6Next', {
+        label: 'State 6 Next',
+        options: {
+            'White': STATE_WHITE,
+            'Black': STATE_BLACK,
+            'Gray': STATE_GRAY,
+            'Dark Gray': STATE_DARK_GRAY,
+            'Light Gray': STATE_LIGHT_GRAY,
+            'Red': STATE_RED,
+            'Green': STATE_GREEN,
+            'Blue': STATE_BLUE
+        }
+    });
+
+    // State 7 controls
+    folder.addBinding(customRuleParams, 'state7Turn', {
+        label: 'State 7 Turn',
+        options: { 'Left': -1, 'None': 0, 'Right': 1, 'U-Turn': 2 }
+    });
+    folder.addBinding(customRuleParams, 'state7Next', {
+        label: 'State 7 Next',
+        options: {
+            'White': STATE_WHITE,
+            'Black': STATE_BLACK,
+            'Gray': STATE_GRAY,
+            'Dark Gray': STATE_DARK_GRAY,
+            'Light Gray': STATE_LIGHT_GRAY,
+            'Red': STATE_RED,
+            'Green': STATE_GREEN,
+            'Blue': STATE_BLUE
+        }
+    });
 }

@@ -1,4 +1,4 @@
-import { PARAMS, BASE_CELL_SIZE, STATE_WHITE, STATE_GRAY, STATE_DARK_GRAY, STATE_BLACK } from '../constants.js';
+import { PARAMS, BASE_CELL_SIZE, STATE_WHITE, STATE_GRAY, STATE_DARK_GRAY, STATE_BLACK, STATE_LIGHT_GRAY, STATE_RED, STATE_GREEN, STATE_BLUE } from '../constants.js';
 import {
     initializeGrid,
     setCellState,       // To populate grid
@@ -77,16 +77,24 @@ export function handleImageFile(file, pane) {
                         const g = pixels[i + 1];
                         const b = pixels[i + 2];
                         
-                        // Convert RGB to grayscale using weighted values for better perception
-                        const grayscale = (0.299 * r + 0.587 * g + 0.114 * b);
+                        // Convert RGB to grayscale and map to tile states
+                        const grayscale = (r + g + b) / 3;
                         let tileState;
                         
-                        if (grayscale < 64) {
+                        if (grayscale < 32) {
                             tileState = STATE_BLACK;
-                        } else if (grayscale < 128) {
+                        } else if (grayscale < 64) {
                             tileState = STATE_DARK_GRAY;
-                        } else if (grayscale < 192) {
+                        } else if (grayscale < 96) {
                             tileState = STATE_GRAY;
+                        } else if (grayscale < 128) {
+                            tileState = STATE_LIGHT_GRAY;
+                        } else if (grayscale < 160) {
+                            tileState = STATE_RED;
+                        } else if (grayscale < 192) {
+                            tileState = STATE_GREEN;
+                        } else if (grayscale < 224) {
+                            tileState = STATE_BLUE;
                         } else {
                             tileState = STATE_WHITE;
                         }
@@ -156,12 +164,20 @@ export function populateGridFromImage(imageData, width, height) {
             const grayscale = (r + g + b) / 3;
             let tileState;
             
-            if (grayscale < 64) {
+            if (grayscale < 32) {
                 tileState = STATE_BLACK;
-            } else if (grayscale < 128) {
+            } else if (grayscale < 64) {
                 tileState = STATE_DARK_GRAY;
-            } else if (grayscale < 192) {
+            } else if (grayscale < 96) {
                 tileState = STATE_GRAY;
+            } else if (grayscale < 128) {
+                tileState = STATE_LIGHT_GRAY;
+            } else if (grayscale < 160) {
+                tileState = STATE_RED;
+            } else if (grayscale < 192) {
+                tileState = STATE_GREEN;
+            } else if (grayscale < 224) {
+                tileState = STATE_BLUE;
             } else {
                 tileState = STATE_WHITE;
             }
