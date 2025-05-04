@@ -20,10 +20,10 @@ function setup() {
     PARAMS.simStepsPerFrame = 1;
     PARAMS.running = true;
     PARAMS.palette = 'default';
-    PARAMS.turmiteStepSize = 1;
+    PARAMS.turmiteStepSize = 4;
     PARAMS.zoom = 1.0;
     PARAMS.followTurmite = false;
-    PARAMS.numTurmites = 1;
+    PARAMS.numTurmites = 10;
 
     // Initialize the renderer
     const app = initializeRenderer({

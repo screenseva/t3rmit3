@@ -725,7 +725,7 @@ export function findBestStartPositions(numTurmites = 5) {
     
     // Keep track of used positions to maintain distance between turmites
     const usedPositions = new Set();
-    const minDistance = Math.max(10, Math.min(internalGridWidth, internalGridHeight) / 6);
+    const minDistance = Math.max(20, Math.min(internalGridWidth, internalGridHeight) / 4);
     
     // Create a grid of potential starting positions
     const gridSize = Math.ceil(Math.sqrt(numTurmites * 2)); // Multiply by 2 to have more options

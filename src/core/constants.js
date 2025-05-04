@@ -50,10 +50,10 @@ export const PARAMS = {
     // Canvas Size Params
     canvasWidth: 800,
     canvasHeight: 600,
-    turmiteStepSize: 1,
+    turmiteStepSize: 4,
     palette: 'default',
     paletteBitDepth: 4,
-    numTurmites: 5,
+    numTurmites: 10,
     showSavedRules: true
 };
 

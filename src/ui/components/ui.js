@@ -1407,25 +1407,43 @@ function initializeAppearanceControls(folder) {
     // Hardcode 8-bit mode
     PARAMS.paletteBitDepth = 8;
 
-    // Palette selector with 8-bit palettes only
+    // Palette selector with all available palettes
     const paletteOptions = {
+        '  Default': 'default',
+        '  Black & White': 'bw',
+        '  Forest': 'forest',
+        '  Ocean': 'ocean',
+        '  Sunset': 'sunset',
+        '  Neon': 'neon',
+        '  Earth': 'earth',
+        '  Fire': 'fire',
+        '  Winter': 'winter',
+        '  Pastel': 'pastel',
+        '  Retro': 'retro',
+        '  Heatmap': 'heatmap',
+        '  CGA 0': 'cga0',
+        '  CGA 1': 'cga1',
+        '  C64': 'c64',
+        '  Game Boy': 'gameboy',
+        '  ZX Spectrum': 'spectrum',
+        '  Apple II': 'apple2',
+        '  ANSI': 'ansi',
+        '  Grayscale': 'grayscale',
+        '  Sepia': 'sepia',
+        '  Amber': 'amber',
         '  VGA 8': 'vga8',
         '  Windows 8': 'win8',
         '  Mac 8': 'mac8',
-        '  Solarized': 'solarized8',
-        '  Nord': 'nord8',
-        '  Dracula': 'dracula8',
-        '  Gruvbox': 'gruvbox8',
-        '  Monokai': 'monokai8',
-        '  Ocean': 'ocean8',
-        '  Sunset': 'sunset8',
-        '  Forest': 'forest8',
-        '  Fire': 'fire8',
-        '  Winter': 'winter8',
-        '  Pastel': 'pastel8',
-        '  Neon': 'neon8',
-        '  Earth': 'earth8',
-        '  Retro': 'retro8'
+        '  Solarized': 'solarized',
+        '  Nord': 'nord',
+        '  Dracula': 'dracula',
+        '  Gruvbox': 'gruvbox',
+        '  Monokai': 'monokai',
+        '  Material': 'material',
+        '  Tokyo': 'tokyo',
+        '  Mocha': 'mocha',
+        '  One Dark': 'onedark',
+        '  Ayu': 'ayu'
     };
 
     // Create container for palette preview
@@ -1450,6 +1468,49 @@ function initializeAppearanceControls(folder) {
         if (Array.isArray(palette)) {
             // For array-based palettes (8-bit)
             palette.forEach((color, index) => {
+                const colorBox = document.createElement('div');
+                Object.assign(colorBox.style, {
+                    width: '100%',
+                    height: '20px',
+                    backgroundColor: color,
+                    borderRadius: '2px',
+                    cursor: 'pointer',
+                    position: 'relative'
+                });
+                
+                // Add tooltip with hex color
+                colorBox.title = color;
+                
+                // Add click to copy functionality
+                colorBox.onclick = () => {
+                    navigator.clipboard.writeText(color)
+                        .then(() => {
+                            const originalTitle = colorBox.title;
+                            colorBox.title = 'Copied!';
+                            setTimeout(() => {
+                                colorBox.title = originalTitle;
+                            }, 1000);
+                        })
+                        .catch(err => console.error('Failed to copy color:', err));
+                };
+                
+                previewContainer.appendChild(colorBox);
+            });
+        } else {
+            // For object-based palettes
+            const states = [
+                STATE_WHITE,
+                STATE_BLACK,
+                STATE_GRAY,
+                STATE_DARK_GRAY,
+                STATE_LIGHT_GRAY,
+                STATE_RED,
+                STATE_GREEN,
+                STATE_BLUE
+            ];
+            
+            states.forEach(state => {
+                const color = palette[state] || palette.default;
                 const colorBox = document.createElement('div');
                 Object.assign(colorBox.style, {
                     width: '100%',
