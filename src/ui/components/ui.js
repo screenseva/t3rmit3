@@ -1015,6 +1015,15 @@ function initializeSimulationControls(folder, pixiApp) {
         step: 1
     });
 
+    // Steps per Turmite (new control)
+    folder.addBinding(PARAMS, 'stepsPerTurmite', {
+        label: 'Steps/Turmite',
+        min: 1,
+        max: 10,
+        step: 1,
+        tooltip: 'Number of steps each turmite takes per frame (1-10)'
+    });
+
     // Turmite size
     folder.addBinding(PARAMS, 'turmiteStepSize', {
         label: 'Size',

@@ -755,10 +755,52 @@ export function findBestStartPositions(numTurmites = 5) {
     
     // Keep track of used positions to maintain distance between turmites
     const usedPositions = new Set();
-    const minDistance = Math.max(20, Math.min(internalGridWidth, internalGridHeight) / 4);
+    const minDistance = Math.max(10, Math.min(internalGridWidth, internalGridHeight) / 6);
     
-    // Create a grid of potential starting positions
-    const gridSize = Math.ceil(Math.sqrt(numTurmites * 2)); // Multiply by 2 to have more options
+    // First check if we're dealing with an image (for edge detection)
+    if (isImageLoaded) {
+        console.log("Using edge detection for turmite placement...");
+        const edgePoints = detectEdges();
+        
+        if (edgePoints.length > 0) {
+            // We found some edges, use them for placement
+            console.log(`Found ${edgePoints.length} edge points for turmite placement`);
+            
+            // Helper function to check if position is far enough from used positions
+            const isFarEnough = (x, y) => {
+                for (const pos of usedPositions) {
+                    const [px, py] = pos.split(',').map(Number);
+                    const dx = Math.min(Math.abs(x - px), internalGridWidth - Math.abs(x - px));
+                    const dy = Math.min(Math.abs(y - py), internalGridHeight - Math.abs(y - py));
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    if (distance < minDistance) return false;
+                }
+                return true;
+            };
+            
+            // Take top edge points, maintaining minimum distance
+            for (const point of edgePoints) {
+                if (positions.length >= numTurmites) break;
+                
+                if (isFarEnough(point.x, point.y) && !isTurmitePresent(point.x, point.y)) {
+                    positions.push({ x: point.x, y: point.y });
+                    usedPositions.add(`${point.x},${point.y}`);
+                }
+            }
+            
+            // If we found enough positions using edge detection, return them
+            if (positions.length >= numTurmites) {
+                console.log(`Successfully placed ${positions.length} turmites on edge points`);
+                return positions;
+            }
+            
+            // Otherwise, continue with the fallback placement strategy
+            console.log(`Could only place ${positions.length} turmites on edges, need ${numTurmites - positions.length} more`);
+        }
+    }
+    
+    // Create a grid of potential starting positions (fallback method)
+    const gridSize = Math.ceil(Math.sqrt((numTurmites - positions.length) * 2)); // Multiply by 2 to have more options
     const cellWidth = Math.floor(internalGridWidth / gridSize);
     const cellHeight = Math.floor(internalGridHeight / gridSize);
     
@@ -844,6 +886,76 @@ export function findBestStartPositions(numTurmites = 5) {
     
     console.log(`Found ${positions.length} starting positions for turmites`);
     return positions;
+}
+
+/**
+ * Detects edges in the grid based on color differences between adjacent cells
+ * @returns {Array<{x: number, y: number, score: number}>} Array of edge points with scores
+ */
+function detectEdges() {
+    const edgePoints = [];
+    const threshold = 1; // Minimum difference to consider an edge
+    
+    // Skip edge detection if grid is not initialized
+    if (!grid || internalGridWidth <= 2 || internalGridHeight <= 2) {
+        return edgePoints;
+    }
+    
+    for (let y = 1; y < internalGridHeight - 1; y++) {
+        for (let x = 1; x < internalGridWidth - 1; x++) {
+            const centerState = getTileStateFromCell(getCellState(x, y));
+            
+            // Check neighboring cells (4-directional)
+            const neighbors = [
+                getTileStateFromCell(getCellState(x+1, y)),
+                getTileStateFromCell(getCellState(x-1, y)),
+                getTileStateFromCell(getCellState(x, y+1)),
+                getTileStateFromCell(getCellState(x, y-1))
+            ];
+            
+            // Calculate edge score based on differences with neighbors
+            let edgeScore = 0;
+            for (const neighborState of neighbors) {
+                if (neighborState !== centerState) {
+                    edgeScore += 1;
+                }
+            }
+            
+            // Only consider points with enough edge strength
+            if (edgeScore >= threshold) {
+                // Calculate density to avoid clustering too many turmites in one area
+                // Look at a slightly larger neighborhood
+                let neighborhoodDensity = 0;
+                const checkRadius = 5;
+                const maxDensity = checkRadius * 8; // Max theoretical number of different neighbors
+                
+                // Check a larger neighborhood for variety
+                for (let ny = Math.max(0, y - checkRadius); ny <= Math.min(internalGridHeight - 1, y + checkRadius); ny++) {
+                    for (let nx = Math.max(0, x - checkRadius); nx <= Math.min(internalGridWidth - 1, x + checkRadius); nx++) {
+                        if (nx === x && ny === y) continue;
+                        
+                        if (getTileStateFromCell(getCellState(nx, ny)) !== centerState) {
+                            neighborhoodDensity++;
+                        }
+                    }
+                }
+                
+                // Higher score for points with higher edge strength and neighborhood diversity
+                const finalScore = (edgeScore / 4) * 0.6 + (neighborhoodDensity / maxDensity) * 0.4;
+                
+                edgePoints.push({
+                    x, 
+                    y,
+                    score: finalScore
+                });
+            }
+        }
+    }
+    
+    // Sort by score, highest first
+    edgePoints.sort((a, b) => b.score - a.score);
+    
+    return edgePoints;
 }
 
 /** Initializes or resets the grid and turmite state. */
@@ -1028,7 +1140,7 @@ export function updateSimulation() {
     let collisionCount = 0;
     const maxCollisionLogs = 5; // Limit collision logs per frame
     
-    // Update each turmite
+    // Each turmite takes a single step per simulation update
     for (let i = 0; i < turmites.length; i++) {
         const turmite = turmites[i];
         
@@ -1038,7 +1150,7 @@ export function updateSimulation() {
             // If turmite info is invalid, remove the turmite
             turmites.splice(i, 1);
             i--; // Adjust index since we removed an element
-            continue;
+            continue; // Skip to next turmite
         }
 
         const { x: currentX, y: currentY, dir: currentDir, tileState: currentTileState } = miteInfo;
@@ -1054,11 +1166,13 @@ export function updateSimulation() {
             tilesModified++;
         }
 
-        // 4. Calculate next potential position using step size
+        // 4. Calculate next potential position using wider step size (1-10 cells per step)
         let move = DIRECTIONS[newDirection];
-        let step = PARAMS.turmiteStepSize;
-        let nextX = (currentX + move.dx * step + internalGridWidth) % internalGridWidth;
-        let nextY = (currentY + move.dy * step + internalGridHeight) % internalGridHeight;
+        let moveDistance = Math.max(1, Math.min(10, PARAMS.stepsPerTurmite));
+        
+        // Calculate final position after the longer move
+        let nextX = (currentX + move.dx * moveDistance + internalGridWidth) % internalGridWidth;
+        let nextY = (currentY + move.dy * moveDistance + internalGridHeight) % internalGridHeight;
         
         // 5. Use spatial mapping for faster collision detection
         const nextKey = getSpatialKey(nextX, nextY);
@@ -1069,11 +1183,41 @@ export function updateSimulation() {
             }
             handleCollision(currentX, currentY, i, collisionsThisStep);
             collisionCount++;
-            continue;
+            continue; // Skip to next turmite
         }
 
         // 6. Update grid cells (no collision)
-        updateGridCellsForMove(currentX, currentY, nextX, nextY, newDirection, nextTileState, currentDir);
+        // First, update the starting position
+        let leaveIndex = getIndex(currentX, currentY);
+        let newStateForLeaveCell = encodeCellState(false, 0, nextTileState);
+        grid[leaveIndex] = newStateForLeaveCell;
+        dirtyCells.add(leaveIndex);
+        
+        // Then, draw a continuous line of tiles from the starting position to ending position (Bresenham's algorithm)
+        // This ensures we leave a continuous trail even when taking large steps
+        const cells = getLineOfCells(currentX, currentY, nextX, nextY);
+        for (const cell of cells) {
+            // Skip the first and last cells as they're handled separately
+            if ((cell.x === currentX && cell.y === currentY) || (cell.x === nextX && cell.y === nextY)) {
+                continue;
+            }
+            
+            // Set the tile state for each intermediate cell
+            const cellIndex = getIndex(cell.x, cell.y);
+            let cellTileState = getTileStateFromCell(grid[cellIndex]);
+            // Only update if cell doesn't have a turmite on it
+            if (!isMitePresent(grid[cellIndex])) {
+                grid[cellIndex] = encodeCellState(false, 0, nextTileState);
+                dirtyCells.add(cellIndex);
+            }
+        }
+        
+        // Set the turmite at the new position
+        let nextIndex = getIndex(nextX, nextY);
+        let nextCellExistingTileState = getTileStateFromCell(grid[nextIndex]);
+        let newStateForNext = encodeCellState(true, newDirection, nextCellExistingTileState);
+        grid[nextIndex] = newStateForNext;
+        dirtyCells.add(nextIndex);
         
         // 7. Update turmite position and spatial map
         spatialMap.delete(getSpatialKey(currentX, currentY)); // Remove from old position
@@ -1084,6 +1228,92 @@ export function updateSimulation() {
     }
     
     steps++;
+}
+
+/**
+ * Get a line of cells between two points using Bresenham's line algorithm
+ * @param {number} x0 - Starting X coordinate
+ * @param {number} y0 - Starting Y coordinate
+ * @param {number} x1 - Ending X coordinate
+ * @param {number} y1 - Ending Y coordinate
+ * @returns {Array<{x: number, y: number}>} Array of cell coordinates along the line
+ */
+function getLineOfCells(x0, y0, x1, y1) {
+    // Handle wrapping for toroidal grid
+    // Calculate the shortest path, considering grid wrapping
+    let dx = x1 - x0;
+    let dy = y1 - y0;
+    
+    // Check if wrapping would create a shorter path in X direction
+    if (Math.abs(dx) > internalGridWidth / 2) {
+        if (dx > 0) {
+            dx = dx - internalGridWidth;
+        } else {
+            dx = dx + internalGridWidth;
+        }
+    }
+    
+    // Check if wrapping would create a shorter path in Y direction
+    if (Math.abs(dy) > internalGridHeight / 2) {
+        if (dy > 0) {
+            dy = dy - internalGridHeight;
+        } else {
+            dy = dy + internalGridHeight;
+        }
+    }
+    
+    // Target point after considering wrapping
+    const targetX = (x0 + dx + internalGridWidth) % internalGridWidth;
+    const targetY = (y0 + dy + internalGridHeight) % internalGridHeight;
+    
+    // Apply classic Bresenham's algorithm
+    const cells = [];
+    
+    // Add start point
+    cells.push({ x: x0, y: y0 });
+    
+    let x = x0;
+    let y = y0;
+    
+    // Calculate absolute values for indices
+    const absDx = Math.abs(dx);
+    const absDy = Math.abs(dy);
+    
+    // Determine step direction for x and y
+    const sx = dx < 0 ? -1 : 1;
+    const sy = dy < 0 ? -1 : 1;
+    
+    // Determine the decision parameter
+    let err = absDx - absDy;
+    
+    // Continue until we reach the target point
+    while (x !== targetX || y !== targetY) {
+        // Calculate the error for the next step
+        const e2 = 2 * err;
+        
+        // Update x if needed
+        if (e2 > -absDy) {
+            err -= absDy;
+            x = (x + sx + internalGridWidth) % internalGridWidth;
+        }
+        
+        // Update y if needed
+        if (e2 < absDx) {
+            err += absDx;
+            y = (y + sy + internalGridHeight) % internalGridHeight;
+        }
+        
+        // Add the point to our line
+        cells.push({ x, y });
+        
+        // Safety check to prevent infinite loops
+        if (cells.length > internalGridWidth + internalGridHeight) {
+            console.error("Path finding error in Bresenham's algorithm, breaking to prevent infinite loop");
+            break;
+        }
+    }
+    
+    return cells;
 }
 
 // Update getTurmiteInfo to work with specific coordinates
