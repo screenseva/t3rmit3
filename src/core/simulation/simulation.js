@@ -30,6 +30,36 @@ export let internalGridHeight = 0;
 export let dynamicCellSize = BASE_CELL_SIZE; // Size used for rendering, can change
 export let isImageLoaded = false; // Flag to track if grid is image-based
 
+// Initialize spatial hash map for fast collision detection
+let spatialMap = new Map();
+
+/**
+ * Generates a spatial key for a given coordinate
+ * @param {number} x - X coordinate
+ * @param {number} y - Y coordinate
+ * @returns {string} Spatial key
+ */
+function getSpatialKey(x, y) {
+    return `${Math.floor(x)},${Math.floor(y)}`;
+}
+
+/**
+ * Updates the spatial map with current turmite positions
+ * More efficient than checking all pairs of turmites for collisions
+ */
+function updateSpatialMap() {
+    spatialMap.clear();
+    for (let i = 0; i < turmites.length; i++) {
+        const turmite = turmites[i];
+        spatialMap.set(getSpatialKey(turmite.x, turmite.y), i);
+    }
+}
+
+// Helper to check if a position is already occupied by a turmite
+function isPositionOccupied(x, y) {
+    return spatialMap.has(getSpatialKey(x, y));
+}
+
 // --- Custom Rules Parameters ---
 export const customRuleParams = {
     state0Turn: 1,
@@ -990,6 +1020,14 @@ export function setTurmitePosition(x, y, dir) {
 export function updateSimulation() {
     if (!grid || turmites.length === 0) return; // Ensure grid and turmites exist
     
+    // Update spatial map once per frame for optimized collision detection
+    updateSpatialMap();
+    
+    // Track collisions in this step to avoid logging duplicates
+    const collisionsThisStep = new Set();
+    let collisionCount = 0;
+    const maxCollisionLogs = 5; // Limit collision logs per frame
+    
     // Update each turmite
     for (let i = 0; i < turmites.length; i++) {
         const turmite = turmites[i];
@@ -1002,11 +1040,13 @@ export function updateSimulation() {
             i--; // Adjust index since we removed an element
             continue;
         }
-        
+
         const { x: currentX, y: currentY, dir: currentDir, tileState: currentTileState } = miteInfo;
 
         // 2. Apply rule
         const { turnDirection, nextTileState } = applyRule(currentTileState, currentX, currentY);
+        
+        // Update turmite direction
         let newDirection = (currentDir + turnDirection + NUM_DIRECTIONS) % NUM_DIRECTIONS;
 
         // 3. Check for tile modification
@@ -1019,21 +1059,28 @@ export function updateSimulation() {
         let step = PARAMS.turmiteStepSize;
         let nextX = (currentX + move.dx * step + internalGridWidth) % internalGridWidth;
         let nextY = (currentY + move.dy * step + internalGridHeight) % internalGridHeight;
-
-        // 5. Handle Collision
-        const collisionResultDir = handleCollision(nextX, nextY, currentX, currentY, newDirection, nextTileState);
-        if (collisionResultDir !== null) {
-            turmite.dir = collisionResultDir;
+        
+        // 5. Use spatial mapping for faster collision detection
+        const nextKey = getSpatialKey(nextX, nextY);
+        if (spatialMap.has(nextKey)) {
+            // Collision detected - handle it
+            if (collisionCount < maxCollisionLogs) {
+                console.debug(`Collision detected at: ${nextX} ${nextY} - Reversing.`);
+            }
+            handleCollision(currentX, currentY, i, collisionsThisStep);
+            collisionCount++;
             continue;
         }
 
         // 6. Update grid cells (no collision)
         updateGridCellsForMove(currentX, currentY, nextX, nextY, newDirection, nextTileState, currentDir);
-
-        // 7. Update turmite position
+        
+        // 7. Update turmite position and spatial map
+        spatialMap.delete(getSpatialKey(currentX, currentY)); // Remove from old position
         turmite.x = nextX;
         turmite.y = nextY;
         turmite.dir = newDirection;
+        spatialMap.set(getSpatialKey(nextX, nextY), i); // Add to new position
     }
     
     steps++;
@@ -1093,22 +1140,6 @@ function applyRule(currentTileState, currentX, currentY) {
     return { turnDirection, nextTileState };
 }
 
-function handleCollision(nextX, nextY, currentX, currentY, currentDir, nextTileState) {
-    let nextIndex = getIndex(nextX, nextY);
-    if (isMitePresent(grid[nextIndex])) {
-        console.warn("Collision detected at:", nextX, nextY, "- Reversing.");
-        let newDir = (currentDir + Math.floor(NUM_DIRECTIONS / 2)) % NUM_DIRECTIONS;
-        let currentIndex = getIndex(currentX, currentY);
-        let newStateForCurrent = encodeCellState(true, newDir, nextTileState);
-        if (grid[currentIndex] !== newStateForCurrent) {
-             grid[currentIndex] = newStateForCurrent;
-             dirtyCells.add(currentIndex);
-        }
-        return newDir;
-    }
-    return null;
-}
-
 function updateGridCellsForMove(currentX, currentY, nextX, nextY, newDirection, nextTileState, previousDirection) {
     const step = PARAMS.turmiteStepSize;
 
@@ -1152,6 +1183,38 @@ function updateGridCellsForMove(currentX, currentY, nextX, nextY, newDirection, 
         grid[nextIndex] = newStateForNext;
         dirtyCells.add(nextIndex);
     }
+}
+
+/**
+ * Handles collision between turmites efficiently
+ * @param {number} x - X coordinate of collision
+ * @param {number} y - Y coordinate of collision
+ * @param {number} turmiteIndex - Index of current turmite
+ * @param {Set} collisionsThisStep - Set to track collisions this step
+ * @returns {boolean} Whether collision was handled
+ */
+function handleCollision(x, y, turmiteIndex, collisionsThisStep) {
+    const collisionKey = `${x},${y}`;
+    
+    // Track this collision
+    collisionsThisStep.add(collisionKey);
+    
+    // Reverse the direction of the current turmite
+    const turmite = turmites[turmiteIndex];
+    const newDir = (turmite.dir + Math.floor(NUM_DIRECTIONS / 2)) % NUM_DIRECTIONS;
+    turmite.dir = newDir;
+    
+    // Update the grid cell to show new direction
+    const currentIndex = getIndex(turmite.x, turmite.y);
+    const currentTileState = getTileStateFromCell(grid[currentIndex]);
+    const newStateForCell = encodeCellState(true, newDir, currentTileState);
+    
+    if (grid[currentIndex] !== newStateForCell) {
+        grid[currentIndex] = newStateForCell;
+        dirtyCells.add(currentIndex);
+    }
+    
+    return true;
 }
 
 // --- Grid/State Utility Helpers --- //
@@ -1423,4 +1486,4 @@ rules.cycle16  = createColorCycleRule(16, true);
 if (PARAMS.rule === 'rainbow8' || PARAMS.rule === 'cycle16') {
     activeRule = rules[PARAMS.rule];
 }
-// ... existing code ... 
+// ... existing code ...

@@ -1465,80 +1465,116 @@ function initializeAppearanceControls(folder) {
         const paletteName = PARAMS.palette;
         const palette = palettes[paletteName];
         
-        if (Array.isArray(palette)) {
-            // For array-based palettes (8-bit)
-            palette.forEach((color, index) => {
-                const colorBox = document.createElement('div');
-                Object.assign(colorBox.style, {
-                    width: '100%',
-                    height: '20px',
-                    backgroundColor: color,
-                    borderRadius: '2px',
-                    cursor: 'pointer',
-                    position: 'relative'
+        if (!palette) {
+            console.warn(`Palette "${paletteName}" not found, using default`);
+            const errorBox = document.createElement('div');
+            errorBox.textContent = 'Palette not found';
+            errorBox.style.padding = '8px';
+            errorBox.style.color = '#ff5555';
+            previewContainer.appendChild(errorBox);
+            return;
+        }
+        
+        try {
+            if (Array.isArray(palette)) {
+                // For array-based palettes (8-bit)
+                palette.forEach((colorArray, index) => {
+                    // Skip undefined entries with a safe check
+                    if (!colorArray || !Array.isArray(colorArray) || colorArray.length < 3) {
+                        const placeholderBox = document.createElement('div');
+                        placeholderBox.style.width = '100%';
+                        placeholderBox.style.height = '20px';
+                        placeholderBox.style.backgroundColor = '#888888';
+                        placeholderBox.style.borderRadius = '2px';
+                        placeholderBox.title = 'Invalid color';
+                        previewContainer.appendChild(placeholderBox);
+                        return;
+                    }
+                    
+                    // Convert color array to hex string with safety checks
+                    const colorHex = `rgb(${colorArray[0]}, ${colorArray[1]}, ${colorArray[2]})`;
+                    
+                    const colorBox = document.createElement('div');
+                    Object.assign(colorBox.style, {
+                        width: '100%',
+                        height: '20px',
+                        backgroundColor: colorHex,
+                        borderRadius: '2px',
+                        cursor: 'pointer',
+                        position: 'relative'
+                    });
+                    
+                    // Add tooltip with hex color
+                    colorBox.title = colorHex;
+                    
+                    // Add click to copy functionality
+                    colorBox.onclick = () => {
+                        navigator.clipboard.writeText(colorHex)
+                            .then(() => {
+                                const originalTitle = colorBox.title;
+                                colorBox.title = 'Copied!';
+                                setTimeout(() => {
+                                    colorBox.title = originalTitle;
+                                }, 1000);
+                            })
+                            .catch(err => console.error('Failed to copy color:', err));
+                    };
+                    
+                    previewContainer.appendChild(colorBox);
                 });
+            } else {
+                // For object-based palettes
+                const states = [
+                    STATE_WHITE,
+                    STATE_BLACK,
+                    STATE_GRAY,
+                    STATE_DARK_GRAY,
+                    STATE_LIGHT_GRAY,
+                    STATE_RED,
+                    STATE_GREEN,
+                    STATE_BLUE
+                ];
                 
-                // Add tooltip with hex color
-                colorBox.title = color;
-                
-                // Add click to copy functionality
-                colorBox.onclick = () => {
-                    navigator.clipboard.writeText(color)
-                        .then(() => {
-                            const originalTitle = colorBox.title;
-                            colorBox.title = 'Copied!';
-                            setTimeout(() => {
-                                colorBox.title = originalTitle;
-                            }, 1000);
-                        })
-                        .catch(err => console.error('Failed to copy color:', err));
-                };
-                
-                previewContainer.appendChild(colorBox);
-            });
-        } else {
-            // For object-based palettes
-            const states = [
-                STATE_WHITE,
-                STATE_BLACK,
-                STATE_GRAY,
-                STATE_DARK_GRAY,
-                STATE_LIGHT_GRAY,
-                STATE_RED,
-                STATE_GREEN,
-                STATE_BLUE
-            ];
-            
-            states.forEach(state => {
-                const color = palette[state] || palette.default;
-                const colorBox = document.createElement('div');
-                Object.assign(colorBox.style, {
-                    width: '100%',
-                    height: '20px',
-                    backgroundColor: color,
-                    borderRadius: '2px',
-                    cursor: 'pointer',
-                    position: 'relative'
+                states.forEach(state => {
+                    // Check if palette has this state, or use default/fallback
+                    const color = palette && (palette[state] || palette.default) || '#888888';
+                    const colorBox = document.createElement('div');
+                    Object.assign(colorBox.style, {
+                        width: '100%',
+                        height: '20px',
+                        backgroundColor: color,
+                        borderRadius: '2px',
+                        cursor: 'pointer',
+                        position: 'relative'
+                    });
+                    
+                    // Add tooltip with hex color
+                    colorBox.title = color;
+                    
+                    // Add click to copy functionality
+                    colorBox.onclick = () => {
+                        navigator.clipboard.writeText(color)
+                            .then(() => {
+                                const originalTitle = colorBox.title;
+                                colorBox.title = 'Copied!';
+                                setTimeout(() => {
+                                    colorBox.title = originalTitle;
+                                }, 1000);
+                            })
+                            .catch(err => console.error('Failed to copy color:', err));
+                    };
+                    
+                    previewContainer.appendChild(colorBox);
                 });
-                
-                // Add tooltip with hex color
-                colorBox.title = color;
-                
-                // Add click to copy functionality
-                colorBox.onclick = () => {
-                    navigator.clipboard.writeText(color)
-                        .then(() => {
-                            const originalTitle = colorBox.title;
-                            colorBox.title = 'Copied!';
-                            setTimeout(() => {
-                                colorBox.title = originalTitle;
-                            }, 1000);
-                        })
-                        .catch(err => console.error('Failed to copy color:', err));
-                };
-                
-                previewContainer.appendChild(colorBox);
-            });
+            }
+        } catch (error) {
+            console.warn(`Error generating palette preview: ${error.message}`);
+            // Create a fallback preview element
+            const errorBox = document.createElement('div');
+            errorBox.textContent = 'Preview unavailable';
+            errorBox.style.padding = '8px';
+            errorBox.style.color = '#ff5555';
+            previewContainer.appendChild(errorBox);
         }
     }
 
